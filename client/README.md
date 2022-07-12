@@ -9,3 +9,7 @@
 ## 3. 종료
 
 - ctrl-C 두번 하시길 바랍니다.
+
+## 4. swagger 확인
+
+- http://localhost:5000/api-docs/ 로 가시면 해당 api를 확인 할 수 있습니다.
