@@ -43,7 +43,7 @@
 
 <br>
 
-## 🚗 [주요 기능](https://github.com/elicesw2-project2/circuit/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C)
+## 🚗 [주요 기능] (https://www.notion.so/b6d9bea8f4534057b45e9d4df673de82)
 |로그인|
 |--|
 |<img width="956" alt="로그인" src="">|
