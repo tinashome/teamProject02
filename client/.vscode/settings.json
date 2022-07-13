@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true, // 저장시 format
+  "editor.codeActionsOnSave": {
+    // For ESLint
+    "source.fixAll.eslint": true
+  }
+}
