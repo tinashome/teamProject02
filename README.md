@@ -43,7 +43,7 @@
 
 <br>
 
-## 🚗 [주요 기능] (https://www.notion.so/b6d9bea8f4534057b45e9d4df673de82)
+## 🚗 [주요 기능](https://www.notion.so/b6d9bea8f4534057b45e9d4df673de82)
 |로그인|
 |--|
 |<img width="956" alt="로그인" src="">|
