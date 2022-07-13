@@ -1,69 +1,65 @@
-## **서비스 명**
+#  Futsal
+### 풋살장 예약 서비스
 
-- 풋살장 예약 서비스
+<br>
 
-### **서비스 1줄 소개**
+## :white_check_mark: 서비스 소개
+####  👩‍👩‍👧‍👦 풋살장 예약 서비스
+  - 풋살장을 예약할 수 있습니다.
 
-- 풋살을 하고 싶은 모든 사람을 위한 사이트!
-  <br>
+<br>
 
-### **서비스 설명**
+## 🛠️ 기술 스택
 
-##### 1. 기획 의도, 목적
+<p>
+    <img src="https://img.shields.io/badge/React-v18.0.0-blue?logo=Reac"/>
+    <img src="https://img.shields.io/badge/node.js-v16.13.0-green?logo=Node.js"/>
+    <img src="https://img.shields.io/badge/eslint-%5E8.14.0-yellow?logo=eslint"/>
+    <img src="https://img.shields.io/badge/mysql-v2.18.1-%234479A1?logo=Mysql">
+  <img src="https://img.shields.io/badge/Nodemon-v2.0.15-76D04B?logo=Nodemon"/>
+  <img src="https://img.shields.io/badge/Express-v2.0.15-000000?logo=Express"/>
+</p>
 
-- 조사할 문제, 조사할 문제가 흥미로운 이유
+<br>
 
-  1. openAPI 풋살구장 데이터 받기
-  2. 실데이터를 활용
-  3. 후기 (별점) / 후기 순 / 지역순
-  4. 예약 / 매칭 / 랭크 / 공지사항
-  5. 팀등록 / 내 팀 관리
-  6. 일반사용자 - 예약
+## 📌 [기술 및 스크럼 - Notion](https://www.notion.so/b6d9bea8f4534057b45e9d4df673de82)
 
-- 프로젝트 목적 및 필요성 (어떤 사용자의, 어떤 문제를 해결하는지)
-- 프로젝트가 제공하는 기대 효과와 활용 방안
+<br>
 
-##### 2. 웹 서비스의 주제 및, 최종적인 메인 기능과 서브 기능 설명
+## 🚗 [주요 기능](https://github.com/elicesw2-project2/circuit/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C)
+|로그인|
+|--|
+|<img width="956" alt="로그인" src="">|
 
-- 주제:
-- 메인 기능
+<br>
 
-  1. 메인 페이지 → 예약 목록, 예약 등록, 필터링
-  2. 관리자 페이지
+## ⚙️ 프로젝트 구동 방법
+우선 Repository clone 한다.
 
-- 서브 기능
-  1.
-  2.
-  3.
+### 백엔드 환경변수 설정
+back 폴더 아래 .env 파일 생성 후 내용 작성하기
+- .env 예시
 
-##### 3. 프로젝트만의 차별점, 기대 효과
+```javascript
+  DB_HOST = [데이터베이스 host 이름]
+  DB_PORT = [데이터베이스 포트번호]
+  DB_USER = [데이터베이스에 연결할 계정 이름]
+  DB_PASSWORD = [데이터베이스 계정 비밀번호]
+  DB_DB = [데이터베이스 이름]
+```
 
-- 기존 서비스의 단점 -> 본 프로젝트의 장점
-- 본 웹서비스의 사용자가 경험할 효과 및 장점
+### 백엔드 실행
+back 폴더로 이동 후 실행
+```
+  cd back
+  npm install
+  npm start
+```
 
-##### 4. 프로젝트 구성
-
-- 사용 스택
-  - 프론트엔드
-    - React
-    - 이외
-  - 백엔드
-    - Express, Node
-    - 이외
-- 와이어프레임 (Figma 등 링크 삽입)
-  - https://www.figma.com/file/ZuJWF6GLUNvijzzkQmNvNT/%ED%92%8B%EC%82%B4%EC%9E%A5-%EC%98%88%EC%95%BD-%EC%84%9C%EB%B9%84%EC%8A%A4
-- Gather
-  - https://app.gather.town/invite?token=1UkEwhfz3Vb72DnmcxFqNXR2ftpuZ0Zl
-- 스토리보드 및 유저 시나리오
-  - 홈 화면에서 어떤 버튼을 클릭하여 어떤 페이지로 이동할 수 있다.
-  - 이 버튼을 클릭하면 이런 웹 서비스가 실행된다.
-
-##### 5. 구성원 역할
-
-| 이름   | 역할      | 구현 기능          |
-| ------ | --------- | ------------------ |
-| 박찬흠 | Back-End  | Rest API,          |
-| 배창현 | Front-End | 명세서 설계,       |
-| 최형욱 | Front-End | 명세서 설계,       |
-| 이수정 | Front-End | 와이어프레임 설계, |
-| 최수혁 | Front-End | 와이어프레임 설계, |
+### 프론트 실행
+front 폴더로 이동 후 실행
+```
+  cd front
+  npm install
+  npm start #npm run start
+```
