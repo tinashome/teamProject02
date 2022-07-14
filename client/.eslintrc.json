@@ -14,6 +14,7 @@
   },
   "plugins": ["react"],
   "rules": {
-    "react/function-component-definition": "off"
+    "react/function-component-definition": "off", // React 컴포넌트를 함수 표현식으로 만듦.
+    "no-unused-vars": "warn" // 사용하지 않는 변수 error -> warn
   }
 }
