@@ -39,10 +39,6 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
   padding: 50px 150px;
   color: #ffffff;
   background: #3563e9;
