@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import GlobalLayout from './GlobalLayout';
+import Ground from 'pages/Ground';
+import Home from 'pages/Home';
+import Login from 'pages/Login';
+import GlobalLayout from 'router/GlobalLayout';
 
 const Router = () => (
   <BrowserRouter>
@@ -10,6 +11,7 @@ const Router = () => (
       <Route element={<GlobalLayout />}>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/ground' element={<Ground />} />
       </Route>
     </Routes>
   </BrowserRouter>
