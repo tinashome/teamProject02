@@ -2,22 +2,32 @@
   "scripts": {
     "server": "cd server && nodemon server",
     "client": "cd client && npm start",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "npx webpack"
   },
   "dependencies": {
     "@sindresorhus/is": "^5.2.0",
+    "aws-sdk": "^2.1174.0",
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
     "concurrently": "^7.2.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.4",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3-v2": "^2.2.1",
+    "path": "^0.12.7",
+    "qs": "^6.11.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "webpack-cli": "^4.10.0"
   },
   "type": "module"
 }
