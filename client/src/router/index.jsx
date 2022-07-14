@@ -1,15 +1,18 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
+import Login from '../pages/Login';
+import GlobalLayout from './GlobalLayout';
 
-function Router() {
-  return (
-    <BrowserRouter>
-      <Routes>
+const Router = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route element={<GlobalLayout />}>
         <Route path='/' element={<Home />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+        <Route path='/login' element={<Login />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
+);
 
 export default Router;
