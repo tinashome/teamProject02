@@ -1,3 +1,4 @@
+import Title from 'components/atoms/Title';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -74,20 +75,7 @@ const InputContainer = styled.div`
   padding: 0 3rem;
 `;
 
-const Title = styled.span`
-  width: 100%;
-  font-size: 36px;
-  margin-bottom: 3rem;
-  text-align: center;
-
-  &:last-child {
-    color: #3563e9;
-  }
-`;
-
-const Form = styled.form`
-  width: 100%;
-`;
+const Form = styled.form``;
 
 const LoginButton = styled.button`
   width: 100%;

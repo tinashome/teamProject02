@@ -4,7 +4,12 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:react-hook-form/recommended",
+    "prettier"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -12,10 +17,11 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "react-hook-form"],
   "rules": {
     "react/function-component-definition": "off", // React 컴포넌트를 함수 표현식으로 만듦.
     "no-unused-vars": "warn", // 사용하지 않는 변수 error -> warn
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off", // 절대 경로
+    "react/jsx-props-no-spreading": ["warn"] // props로 받은 것 바로 props로 넘기기 허용 -> react-hook-form
   }
 }
