@@ -22,10 +22,12 @@ const Header = () => (
 );
 
 const Container = styled.div`
+  position: fixed;
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 30px 120px;
+  background: #ffffff;
 `;
 
 const ButtonContainer = styled.div``;
