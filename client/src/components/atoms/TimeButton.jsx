@@ -5,6 +5,7 @@ const TimeButton = styled.button `
   height: 40px;
   background: #BAC8FF;
   border-radius: 5px;
+  margin:3px;
 `;
 
 export default TimeButton
