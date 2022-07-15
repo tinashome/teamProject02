@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from 'components/atoms/Button';
+import { Link } from 'react-router-dom';
 
 const GroundCard = ({ ground }) => (
   <Container>
@@ -9,7 +10,9 @@ const GroundCard = ({ ground }) => (
     <GroundName>{ground.groundName}</GroundName>
     <Wrapper>
       <PaymentPoint>{ground.paymentPoint}</PaymentPoint>
-      <ReservationButton type='button'>예약하기</ReservationButton>
+      <Link to={`detail/${ground.shortId}`}>
+        <ReservationButton type='button'>예약하기</ReservationButton>
+      </Link>
     </Wrapper>
   </Container>
 );

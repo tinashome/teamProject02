@@ -1,9 +1,14 @@
 import React from 'react';
 import BannerImage from 'components/atoms/BannerImage';
+import GroundCard from 'components/organisms/GroundCard';
 import banner from 'assets/image/banner.jpeg';
 import styled from 'styled-components';
-
-import GroundCard from 'components/organisms/GroundCard';
+import {
+  FaAngleLeft,
+  FaAngleRight,
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+} from 'react-icons/fa';
 import groundListDummy from './groundListDummy';
 
 const Home = () => (
@@ -20,6 +25,19 @@ const Home = () => (
           <GroundCard ground={ground} />
         ))}
       </GroundList>
+      <PaginationWrapper>
+        <FaAngleDoubleLeft />
+        <FaAngleLeft />
+        <ButtonWrapper>
+          <PageButton>1</PageButton>
+          <PageButton>2</PageButton>
+          <PageButton>3</PageButton>
+          <PageButton>4</PageButton>
+          <PageButton>5</PageButton>
+        </ButtonWrapper>
+        <FaAngleRight />
+        <FaAngleDoubleRight />
+      </PaginationWrapper>
     </Container>
   </>
 );
@@ -41,6 +59,27 @@ const GroundList = styled.section`
   justify-content: center;
   align-items: center;
   margin-bottom: 3rem;
+`;
+
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+
+  svg {
+    margin: 0 0.5rem;
+    cursor: pointer;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  padding: 0 2rem;
+`;
+
+const PageButton = styled.button`
+  font-size: 1.2rem;
+  margin: 0 1em;
 `;
 
 export default Home;
