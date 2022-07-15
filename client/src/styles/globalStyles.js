@@ -34,4 +34,6 @@ export default createGlobalStyle`
     ol {
       list-style: none;
     }
+
+   
 `;
