@@ -1,50 +1,5 @@
 import mongoose from 'mongoose';
 
-/**
- * @swagger
- * components:
- *  schemas:
- *   users:
- *     type: object
- *     required:
- *        - email
- *        - password
- *     properties:
- *       name:
- *         type: string
- *         description: 이름
- *         required: true
- *       email:
- *         type: string
- *         description: 이메일
- *         required: true
- *       password:
- *         type: string
- *         description: 비밀번호
- *         required: true
- *       nickName:
- *         type: string
- *         description: 닉네임
- *         required: true
- *       phoneNumber:
- *         type: string
- *         description: 전화번호
- *       role:
- *         type: string
- *         description: basic-user, admin 넣기
- *         default: "basic-user"
- *       isOAuth:
- *         type: boolean
- *         description: 카카오 권한 확인
- *         default: false
- *       createAt:
- *         type: "string"
- *         format: "date-time"
- *       updateAt:
- *         type: "string"
- *         format: "date-time"
- *
- */
 const UserSchema = new mongoose.Schema(
   {
     email: {
@@ -53,19 +8,17 @@ const UserSchema = new mongoose.Schema(
     },
     name: {
       type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    nickName: {
-      type: String,
-      required: true,
+      required: false,
+      default: null,
     },
     phoneNumber: {
       type: String,
       required: false,
+      default: null,
+    },
+    password: {
+      type: String,
+      required: true,
     },
     role: {
       type: String,
@@ -74,6 +27,16 @@ const UserSchema = new mongoose.Schema(
     },
 
     isOAuth: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    totalPoint: {
+      type: Boolean,
+      required: false,
+      default: 0,
+    },
+    isDeleted: {
       type: Boolean,
       required: false,
       default: false,

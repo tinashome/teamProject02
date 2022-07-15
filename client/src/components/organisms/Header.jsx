@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import HeaderButton from '../atoms/HeaderButton';
-import LoginButton from '../atoms/LoginButton';
+import Button from '../atoms/Button';
 import Logo from '../atoms/Logo';
 
 const Header = () => (
@@ -15,17 +15,19 @@ const Header = () => (
       <HeaderButton>문의 게시판</HeaderButton>
       <HeaderButton>공지사항</HeaderButton>
       <NavLink to='/login'>
-        <LoginButton>로그인</LoginButton>
+        <Button>로그인</Button>
       </NavLink>
     </ButtonContainer>
   </Container>
 );
 
 const Container = styled.div`
+  position: fixed;
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 30px 120px;
+  background: #ffffff;
 `;
 
 const ButtonContainer = styled.div``;
