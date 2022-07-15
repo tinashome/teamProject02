@@ -29,34 +29,39 @@ const GroundSlide = () => (
 );
 
 const Wraps = styled.div`
-  margin: 3% auto;
+  margin: 50px auto;
   width: 100%;
-
-  .slick-prev:before {
-    float:left;
-    width:400px;
-    height:400px;
-    color: black;
-  }
-  .slick-next:before {
-    float:right;
-    width:400px;
-    height:400px;  
-    color: black;
-  }
+  height: 300px;
+  border: solid black;
+  overflow: hidden;
 `;
 
 const Contents = styled.div`
   width: 100%;
-  height: 800px;
+  height: 50%;
   margin: 5px auto;
+
+  .slick-prev:before {
+    float: left;
+    width: 400px;
+    height: 800px;
+    color: black;
+  }
+
+  .slick-next:before {
+    float: right;
+    width: 400px;
+    height: 800px;
+    color: black;
+  }
+  
 `;
 
 const SlideImgs = styled.img`
   display: block;
   margin: 0px auto;
   width: 30%;
-  height: 50%;
+  height: 30%;
 `;
 
 export default GroundSlide;
