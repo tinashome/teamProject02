@@ -4,6 +4,10 @@ import Home from '../pages/Home/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
 import GlobalLayout from './GlobalLayout';
+import MyPage from '../pages/MyPage';
+import PasswordChange from '../pages/PasswordChange';
+import UserInfoChange from '../pages/UserInfoChange';
+import UnRegister from '../pages/UnRegister';
 
 const Router = () => (
   <BrowserRouter>
@@ -12,6 +16,11 @@ const Router = () => (
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path='/myinfo' element={<MyPage />}>
+          <Route path='' element={<UserInfoChange />} />
+          <Route path='password' element={<PasswordChange />} />
+          <Route path='user' element={<UnRegister />} />
+        </Route>
       </Route>
     </Routes>
   </BrowserRouter>
