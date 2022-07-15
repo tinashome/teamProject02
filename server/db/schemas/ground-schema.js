@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const GroundSchema = new mongoose.Schema(
   {
@@ -24,13 +24,14 @@ const GroundSchema = new mongoose.Schema(
         },
         {
           _id: false,
-        }
+        },
       ),
       required: true,
     },
     groundSize: {
       type: String,
       required: false,
+      default: null,
     },
     showerPlace: {
       type: Boolean,
@@ -94,9 +95,9 @@ const GroundSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "grounds",
+    collection: 'grounds',
     timestamps: true,
-  }
+  },
 );
 
 export { GroundSchema };

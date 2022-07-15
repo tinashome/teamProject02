@@ -1,21 +1,22 @@
-import mongoose from "mongoose";
-import { RentalSchema } from "../schemas/rental-schema.js";
+import mongoose from 'mongoose';
+import { RentalSchema } from '../schemas/rental-schema.js';
 
-const Rental = mongoose.model("rentals", RentalSchema);
+const Rental = mongoose.model('rentals', RentalSchema);
 
 export class RentalModel {
   async findById(rentalId) {
     const rental = await Rental.findOne({ _id: rentalId })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: "groundObject",
+        path: 'groundObject',
         select: {
+          _id: 1,
           groundName: 1,
           isDeleted: 0,
           isBooked: 1,
@@ -28,16 +29,17 @@ export class RentalModel {
 
   async findAllByUserId(userId, page, limit) {
     const rentals = await Rental.find({ userObject: userId })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: "groundObject",
+        path: 'groundObject',
         select: {
+          _id: 1,
           groundName: 1,
           isDeleted: 0,
           isBooked: 1,
@@ -45,7 +47,7 @@ export class RentalModel {
         },
       })
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .sort({ _id: -1 })
@@ -56,16 +58,17 @@ export class RentalModel {
 
   async findAllByProductId(productId, page, limit) {
     const rentals = await Rental.find({ productId })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: "groundObject",
+        path: 'groundObject',
         select: {
+          _id: 1,
           groundName: 1,
           isDeleted: 0,
           isBooked: 1,
@@ -85,16 +88,17 @@ export class RentalModel {
 
   async findAll() {
     const rentals = await Rental.find({})
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: "groundObject",
+        path: 'groundObject',
         select: {
+          _id: 1,
           groundName: 1,
           isDeleted: 0,
           isBooked: 1,
@@ -107,16 +111,17 @@ export class RentalModel {
 
   async findByPagination(query, page, limit) {
     const rentals = await Rental.find(query)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: "groundObject",
+        path: 'groundObject',
         select: {
+          _id: 1,
           groundName: 1,
           isDeleted: 0,
           isBooked: 1,
@@ -133,16 +138,17 @@ export class RentalModel {
     const option = { returnOriginal: false };
 
     const updatedrental = await Rental.findOneAndUpdate(filter, update, option)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .populate({
-        path: "userObject",
+        path: 'userObject',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: "groundObject",
+        path: 'groundObject',
         select: {
+          _id: 1,
           groundName: 1,
           isDeleted: 0,
           isBooked: 1,
@@ -158,7 +164,7 @@ export class RentalModel {
     const rental = await Rental.findOneAndUpdate(
       filter,
       { isDeleted: true },
-      option
+      option,
     );
     return rental;
   }
