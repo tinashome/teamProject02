@@ -56,6 +56,7 @@ const Login = () => {
 
 const Container = styled.div`
   display: flex;
+  width: 770px;
   justify-content: center;
   padding: 4rem;
 `;
