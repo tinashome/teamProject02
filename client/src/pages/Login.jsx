@@ -1,6 +1,7 @@
 import Title from 'components/atoms/Title';
+import * as Api from 'api/api';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import image from '../assets/image/soccer1.jpeg';
 import Input from '../components/atoms/Input';
@@ -8,6 +9,7 @@ import Input from '../components/atoms/Input';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -17,9 +19,19 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
     // 로그인 API 요청 로직 작성
+    e.preventDefault();
+    try {
+      const res = await Api.post('auth/signin', { email, password });
+      if (res.status === 200) {
+        const { token, isAdmin } = res.data;
+        localStorage.setItem('token', token);
+        navigate('/');
+      }
+    } catch (err) {
+      alert(err.response.data.reason);
+    }
   };
 
   return (
@@ -34,6 +46,7 @@ const Login = () => {
             onChange={handleChangeEmail}
           />
           <Input
+            type='password'
             placeholder='비밀번호를 입력해주세요'
             value={password}
             onChange={handleChangePassword}

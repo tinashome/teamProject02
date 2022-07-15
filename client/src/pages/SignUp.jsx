@@ -1,7 +1,8 @@
 import Title from 'components/atoms/Title';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import * as Api from 'api/api';
 import Input from '../components/atoms/Input';
 
 const SignUp = () => {
@@ -12,17 +13,12 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const onValid = (data) => {
-    console.log(data);
-    // 회원가입 API 요청 로직 작성
-  };
-
-  const onInvalid = (error) => {
-    console.log(error);
+  const onSubmit = async (data) => {
+    await Api.post('auth/signup', data);
   };
 
   return (
-    <Form onSubmit={handleSubmit(onValid, onInvalid)}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <Title>회원 가입</Title>
 
       <InputTitle>이름</InputTitle>
