@@ -1,23 +1,16 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { getFileStream, upload } from "../services/s3-service.js";
+import { getFileStream, upload } from '../services/s3-service.js';
 
 const uploadRouter = Router();
-
 /**
  * @swagger
- * components:
- *  schemas:
- *   images:
- *     type: object
- *     properties:
- *       image:
- *         type: string
- *         format: binary
- *
+ * tags:
+ *   name: images
+ *   description: s3 이미지 연동
  */
 
-uploadRouter.get("/images/:key", (req, res) => {
+uploadRouter.get('/images/:key', (req, res) => {
   const { key } = req.params;
   const readStream = getFileStream(key);
   readStream.pipe(res);
@@ -35,7 +28,7 @@ uploadRouter.get("/images/:key", (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               imageUrl:
+ *               image:
  *                 type: string
  *                 format: binary
  *     responses:
@@ -44,13 +37,13 @@ uploadRouter.get("/images/:key", (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/images'
+ *               type: object
+ *               properties:
+ *                 type: string
  */
 uploadRouter.post(
-  "/imageUpload",
-  upload.single("image"),
+  '/imageUpload',
+  upload.single('image'),
   async (req, res, next) => {
     const { file } = req;
     console.log(file);
@@ -62,7 +55,7 @@ uploadRouter.post(
       };
       res.send(success);
     }
-  }
+  },
 );
 
 export { uploadRouter };

@@ -1,22 +1,22 @@
-import mongoose from "mongoose";
-import { BannerSchema } from "../schemas/banner-schema.js";
+import mongoose from 'mongoose';
+import { BannerSchema } from '../schemas/banner-schema.js';
 
-const Banner = mongoose.model("banners", BannerSchema);
+const Banner = mongoose.model('banners', BannerSchema);
 
 export class BannerModel {
   async findByTitle(title) {
     const banner = await Banner.findOne({ title })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted");
+      .select('-isDeleted');
     return banner;
   }
 
   async findById(bannerId) {
     const banner = await Banner.findOne({ _id: bannerId })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted");
+      .select('-isDeleted');
     return banner;
   }
 
@@ -25,19 +25,29 @@ export class BannerModel {
     return createdNewBanner;
   }
 
+  async update({ bannerId, update }) {
+    const filter = { _id: bannerId };
+    const option = { returnOriginal: false };
+
+    const updatedBanner = await Banner.findOneAndUpdate(filter, update, option)
+      .where('isDeleted')
+      .equals(false)
+      .select('-isDeleted');
+    return updatedBanner;
+  }
   async findAll() {
     const banners = await Banner.find({})
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted");
+      .select('-isDeleted');
     return banners;
   }
 
   async findByPagination(page, limit) {
     const banners = await Banner.find({})
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .sort({ _id: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
@@ -49,7 +59,7 @@ export class BannerModel {
     const banner = await Banner.findOneAndUpdate(
       filter,
       { isDeleted: true },
-      option
+      option,
     );
     return banner;
   }
