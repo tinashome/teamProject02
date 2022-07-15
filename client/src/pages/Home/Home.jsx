@@ -28,16 +28,17 @@ const Container = styled.div`
   padding: 2rem 10rem;
 `;
 
-const FilterWrapper = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  padding: 1rem 0;
-  margin-bottom: 2rem;
-`;
+// const FilterWrapper = styled.div`
+//   display: flex;
+//   justify-content: space-evenly;
+//   padding: 1rem 0;
+//   margin-bottom: 2rem;
+// `;
 
 const GroundList = styled.section`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   margin-bottom: 3rem;
 `;
