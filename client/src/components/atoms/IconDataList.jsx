@@ -8,28 +8,27 @@ const IconDataList = [
   {
     id: 1,
     icon: <TbSoccerField />,
-    iconName: "21X15(m)", 
+    iconName: '21X15(m)',
   },
   {
     id: 2,
     icon: <MdOutlineShower />,
-    iconName: "샤워실"
+    iconName: '샤워실',
   },
   {
     id: 3,
     icon: <AiFillCar />,
-    iconName: "무료주차"
-
+    iconName: '무료주차',
   },
   {
     id: 4,
     icon: <GiClothes />,
-    iconName:"운동복 대여"
+    iconName: '운동복 대여',
   },
   {
     id: 5,
     icon: <GiRunningShoe />,
-    iconName: "풋살화 대여"
+    iconName: '풋살화 대여',
   },
 ];
 

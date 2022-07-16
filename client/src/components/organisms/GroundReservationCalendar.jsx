@@ -30,8 +30,8 @@ const GroundReservationCalendar = () => {
   );
 };
 const StyleCalendar = styled(Calendar)`
-  width:100%;
-`
+  width: 100%;
+`;
 
 const Container = styled.div`
   width: 100%;
