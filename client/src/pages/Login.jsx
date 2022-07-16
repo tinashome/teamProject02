@@ -1,19 +1,19 @@
 import Title from 'components/atoms/Title';
 import * as Api from 'api/api';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import jwtDecode from 'jwt-decode';
+import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import userState from 'stores/userStore';
-import { useForm } from 'react-hook-form';
+import jwtDecode from 'jwt-decode';
 import image from '../assets/image/soccer1.jpeg';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
   const navigate = useNavigate();
-  const setUserState = useSetRecoilState(userState);
 
+  const setUserInfo = useSetRecoilState(userState);
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (userData) => {
@@ -21,14 +21,15 @@ const Login = () => {
     if (result.status === 200) {
       const { token, isAdmin } = result.data;
       const { userId, name, role, isOAuth } = jwtDecode(token);
-      setUserState({
+      localStorage.setItem('token', token);
+      setUserInfo({
         userId,
         name,
         role,
         isOAuth,
         isAdmin,
+        isLogin: true,
       });
-      localStorage.setItem('token', token);
       navigate('/');
     } else {
       alert('이메일 혹은 비밀번호가 일치하지 않습니다.');

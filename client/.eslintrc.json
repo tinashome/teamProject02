@@ -17,7 +17,8 @@
     "react/function-component-definition": "off", // React 컴포넌트를 함수 표현식으로 만듦.
     "no-unused-vars": "warn", // 사용하지 않는 변수 error -> warn
     "import/no-unresolved": "off", // 절대 경로
-    "react/jsx-props-no-spreading": ["warn"], // props로 받은 것 바로 props로 넘기기 허용 -> react-hook-form
-    "react/prop-types": "off"
+    "react/jsx-props-no-spreading": "off", // props로 받은 것 바로 props로 넘기기 허용 -> react-hook-form
+    "react/prop-types": "off", // props에 type 지정하지 않아도 되게
+    "no-underscore-dangle": "off" // 변수명에 언더바 가능
   }
 }
