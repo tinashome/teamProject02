@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { adminContentState } from 'stores/store';
+import { adminContentState } from 'stores/adminStore';
 import { useRecoilState } from 'recoil';
 
 import AdminDeleteMember from './AdminDeleteMember';
