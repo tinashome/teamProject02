@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import userDataMock from 'pages/Admin/userDataMock';
 import { adminUsers } from 'stores/store';
 import { useRecoilState } from 'recoil';
 import axios from 'axios';
@@ -8,49 +7,13 @@ import axios from 'axios';
 // 관리자페이지본문 메뉴1 회원탈퇴 AdminDeleteMember
 
 const Url = 'https://futsal-api-elice.herokuapp.com/api/user/users';
-// 'https://cors-anywhere.herokuapp.com/https://futsal-api-elice.herokuapp.com/api/user/users';
 
 const AdminDeleteMember = () => {
   const [users, setUsers] = useRecoilState(adminUsers);
-  // const [users, setUsers] = useState('');
-  const signin = () => {
-    axios
-      .post('https://futsal-api-elice.herokuapp.com/api/auth/signin', {
-        email: 'admin@gmail.com',
-        password: '1234',
-      })
-      .then((res) => localStorage.setItem('token', res.data.token));
-  };
-  // signin();
-  const accessToken = localStorage.getItem('token');
-  useEffect(() => {
-    axios
-      .get(Url, {
-        headers: {
-          Authorization: accessToken,
-        },
-      })
-      .then((res) => setUsers(res.data))
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  // setUsers(userDataMock);
+
   const handleClick = (event) => {
-    //   console.log(event.target);
-    //   const bodyData = {
-    //     name: event.target.name,
-    //     email: event.target.id,
-    //     password: '1234',
-    //     phoneNumber: event.target.value,
-    //   };
-    // console.log(bodyData);
-    // axios
-    //   .post('https://futsal-api-elice.herokuapp.com/api/auth/signup', bodyData)
-    //   .then((res) => console.log(res))
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // 회원정보삭제 api요청
+    // alert넣기
     axios.delete(
       `https://futsal-api-elice.herokuapp.com/api/user/users/${event.id}`,
     );
@@ -73,13 +36,7 @@ const AdminDeleteMember = () => {
           <Text>{e.nickName}</Text>
           <Text>{e.phoneNumber}</Text>
           <Text>
-            <Button
-              id={e._id}
-              // name={e.name}
-              // type={e.nickName}
-              // value={e.phoneNumber}
-              onClick={handleClick}
-            >
+            <Button id={e._id} onClick={handleClick}>
               회원삭제
             </Button>
           </Text>
