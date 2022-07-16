@@ -24,11 +24,14 @@ const GroundReservationCalendar = () => {
       </DateNavbar>
 
       <CalendarUI>
-        <Calendar onChange={setSelectDate} value={selectDate} />
+        <StyleCalendar onChange={setSelectDate} value={selectDate} />
       </CalendarUI>
     </Container>
   );
 };
+const StyleCalendar = styled(Calendar)`
+  width:100%;
+`
 
 const Container = styled.div`
   width: 100%;

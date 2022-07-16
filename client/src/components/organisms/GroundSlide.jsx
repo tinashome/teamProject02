@@ -3,65 +3,50 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+
 import image1 from 'mockData/image1.jpg';
 import image2 from 'mockData/image2.jpg';
 import image3 from 'mockData/image3.jpg';
 
 const images = [image1, image2, image3];
+
 const GroundSlide = () => (
-  <Wraps>
-    <Slider
-      dots
-      infinite
-      autoplay
-      speed={500}
-      autoplaySpeed={4000}
-      slidesToShow={1}
-      slidesToScroll={1}
-    >
-      {images.map((data, idx) => (
-        <Contents>
-          <SlideImgs src={data} alt={idx} />
-        </Contents>
-      ))}
-    </Slider>
-  </Wraps>
+  <StyleSlider
+    dots
+    infinite
+    autoplay
+    speed={500}
+    autoplaySpeed={4000}
+    slidesToShow={1}
+    slidesToScroll={1}
+  >
+    {images.map((data, idx) => (
+      <SlideImgs src={data} alt={idx} />
+    ))}
+  </StyleSlider>
 );
 
-const Wraps = styled.div`
-  margin: 50px auto;
+const StyleSlider = styled(Slider)`
   width: 100%;
-  height: 300px;
-  border: solid black;
-  overflow: hidden;
-`;
-
-const Contents = styled.div`
-  width: 100%;
-  height: 50%;
-  margin: 5px auto;
-
-  .slick-prev:before {
-    float: left;
-    width: 400px;
-    height: 800px;
-    color: black;
+  height: 17rem;
+  margin-bottom: 4rem;
+  .slick-prev {
+    left: 3% !important;
+    z-index: 1;
   }
 
-  .slick-next:before {
-    float: right;
-    width: 400px;
-    height: 800px;
-    color: black;
+  .slick-next {
+    right: 3% !important;
+    z-index: 1;
   }
-  
 `;
 
 const SlideImgs = styled.img`
   display: block;
-  margin: 0px auto;
-  width: 30%;
-  height: 30%;
+  margin: auto;
+  width: 100%;
+  height: 17rem;
+  object-fit: cover;
 `;
 
 export default GroundSlide;
