@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import groundInfo from 'mockData/groundInfo';
 import 'react-datepicker/dist/react-datepicker.css';
-import IconDataList from 'components/atoms/IconDataList';
+import IconDataList from 'constants/IconDataList';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 
 const info = groundInfo.groundInfo[0];
