@@ -7,23 +7,29 @@ import { GiClothes, GiRunningShoe } from 'react-icons/gi';
 const IconDataList = [
   {
     id: 1,
-    iconName: <TbSoccerField />,
+    icon: <TbSoccerField />,
+    iconName: "21X15(m)", 
   },
   {
     id: 2,
-    iconName: <MdOutlineShower />,
+    icon: <MdOutlineShower />,
+    iconName: "샤워실"
   },
   {
     id: 3,
-    iconName: <AiFillCar />,
+    icon: <AiFillCar />,
+    iconName: "무료주차"
+
   },
   {
     id: 4,
-    iconName: <GiClothes />,
+    icon: <GiClothes />,
+    iconName:"운동복 대여"
   },
   {
     id: 5,
-    iconName: <GiRunningShoe />,
+    icon: <GiRunningShoe />,
+    iconName: "풋살화 대여"
   },
 ];
 

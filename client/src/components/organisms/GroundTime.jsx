@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from 'react-icons/bi';
+import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 import TimeButton from '../atoms/TimeButton';
 
 const morningTimeValue = [
@@ -26,9 +27,16 @@ const afternoonTimeValue = [
 
 const GroundTime = () => (
   <Container>
-    <TimeText>
-      <BiTimeFive /> 시간 선택
-    </TimeText>
+    <DateTimeNavbar>
+      <TimeText>
+        <BiTimeFive /> 시간 선택
+      </TimeText>
+      <ShowBtn>
+        <BsArrowDownCircle />
+        <BsArrowUpCircle />
+      </ShowBtn>
+    </DateTimeNavbar>
+
     <Title>오전</Title>
     <ButtonContainer>
       {morningTimeValue.map((list) => (
@@ -45,16 +53,14 @@ const GroundTime = () => (
 );
 const TimeText = styled.h1`
   font-size: 20px;
-  text-align: center;
-  border: solid red;
+  text-align: left;
   width: 100%;
-  height: 50px;
+  height: 2rem;
 `;
 
 const Container = styled.div`
   width: 100%;
   height: auto;
-  border: solid black;
 `;
 
 const Title = styled.h2`
@@ -63,10 +69,25 @@ const Title = styled.h2`
 
 const ButtonContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   width: 100%;
-  border: solid black;
-  margin: 5px;
-  gap: 10px 0px;
+  margin: 1rem 0 1rem 1rem;
+  gap: 0.5rem 0;
+`;
+
+const DateTimeNavbar = styled.div`
+  display: flex;
+  width: 100%;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  boder-bottom-color: #0000004d;
+  margin: 2rem 0 1rem 0;
+`;
+
+const ShowBtn = styled.button`
+  font-size: 20px;
+  text-align: right;
+  width: 100%;
+  margin-right: 0.8rem;
 `;
 export default GroundTime;
