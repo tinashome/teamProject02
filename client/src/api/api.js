@@ -11,7 +11,7 @@ async function get(endpoint) {
   return axios.get(baseUrl + endpoint, {
     // JWT 토큰을 헤더에 담아 백엔드 서버에 보냄.
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
 }
