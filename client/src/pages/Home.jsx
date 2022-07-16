@@ -76,7 +76,12 @@ const Home = () => {
             {Array(pagesNum)
               .fill()
               .map((_, i) => (
-                <PageButton onClick={() => setPage(i + 1)}>{i + 1}</PageButton>
+                <PageButton
+                  onClick={() => setPage(i + 1)}
+                  aria-current={page === i + 1 ? 'page' : null}
+                >
+                  {i + 1}
+                </PageButton>
               ))}
           </ButtonWrapper>
           <FaAngleRight />
@@ -152,8 +157,16 @@ const ButtonWrapper = styled.div`
 `;
 
 const PageButton = styled.button`
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 12px;
   margin: 0 1em;
+  border-radius: 50%;
+
+  &[aria-current] {
+    color: #ffffff;
+    background: #3563e9;
+    cursor: revert;
+  }
 `;
 
 export default Home;
