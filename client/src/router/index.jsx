@@ -4,7 +4,7 @@ import Ground from 'pages/Ground';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
-import Admin from '../pages/Admin';
+import Admin from '../pages/Admin/Admin';
 import GlobalLayout from './GlobalLayout';
 import MyPage from '../pages/MyPage';
 import PasswordChange from '../pages/PasswordChange';
