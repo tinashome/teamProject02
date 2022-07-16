@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from 'components/atoms/Button';
+import { Link } from 'react-router-dom';
 
 const GroundCard = ({ ground }) => (
   <Container>
@@ -9,19 +10,21 @@ const GroundCard = ({ ground }) => (
     <GroundName>{ground.groundName}</GroundName>
     <Wrapper>
       <PaymentPoint>{ground.paymentPoint}</PaymentPoint>
-      <ReservationButton type='button'>예약하기</ReservationButton>
+      <Link to={`detail/${ground.shortId}`}>
+        <ReservationButton type='button'>예약하기</ReservationButton>
+      </Link>
     </Wrapper>
   </Container>
 );
 
 const Container = styled.div`
   width: 20%;
+  min-width: fit-content;
   height: 20rem;
   margin: 1rem;
   border: 1px solid #adb5bd;
   border-radius: 4px;
   text-align: center;
-  min-width: fit-content;
 `;
 
 const GroundImage = styled.img`
