@@ -19,12 +19,12 @@ const GroundCard = ({ ground }) => (
 
 const Container = styled.div`
   width: 20%;
+  min-width: fit-content;
   height: 20rem;
   margin: 1rem;
   border: 1px solid #adb5bd;
   border-radius: 4px;
   text-align: center;
-  min-width: fit-content;
 `;
 
 const GroundImage = styled.img`

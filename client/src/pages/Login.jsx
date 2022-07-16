@@ -3,34 +3,35 @@ import * as Api from 'api/api';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import jwtDecode from 'jwt-decode';
+import { useSetRecoilState } from 'recoil';
+import userState from 'stores/userStore';
+import { useForm } from 'react-hook-form';
 import image from '../assets/image/soccer1.jpeg';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const setUserState = useSetRecoilState(userState);
 
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
+  const { register, handleSubmit } = useForm();
 
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    // 로그인 API 요청 로직 작성
-    e.preventDefault();
-    try {
-      const res = await Api.post('auth/signin', { email, password });
-      if (res.status === 200) {
-        const { token, isAdmin } = res.data;
-        localStorage.setItem('token', token);
-        navigate('/');
-      }
-    } catch (err) {
-      alert(err.response.data.reason);
+  const onSubmit = async (userData) => {
+    const result = await Api.post('auth/signin', userData);
+    if (result.status === 200) {
+      const { token, isAdmin } = result.data;
+      const { userId, name, role, isOAuth } = jwtDecode(token);
+      setUserState({
+        userId,
+        name,
+        role,
+        isOAuth,
+        isAdmin,
+      });
+      localStorage.setItem('token', token);
+      navigate('/');
+    } else {
+      alert('이메일 혹은 비밀번호가 일치하지 않습니다.');
     }
   };
 
@@ -39,19 +40,17 @@ const Login = () => {
       <Image src={image} />
       <InputContainer>
         <Title>풋살 예약은 풋닷컴</Title>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Input
             placeholder='이메일을 입력해주세요 :)'
-            value={email}
-            onChange={handleChangeEmail}
+            {...register('email', { required: '이메일을 입력해주세요.' })}
           />
           <Input
             type='password'
             placeholder='비밀번호를 입력해주세요'
-            value={password}
-            onChange={handleChangePassword}
+            {...register('password', { required: '비밀번호를 입력해주세요.' })}
           />
-          <LoginButton type='submit'>로그인</LoginButton>
+          <LoginButton type='submit' value='로그인' />
         </Form>
         <Wrapper>
           <Link to='/signup'>
@@ -90,10 +89,11 @@ const InputContainer = styled.div`
 
 const Form = styled.form``;
 
-const LoginButton = styled.button`
+const LoginButton = styled.input`
   width: 100%;
   padding: 12px 16px;
   margin-bottom: 0.5rem;
+  border: none;
   border-radius: 4px;
   font-size: 18px;
   color: white;

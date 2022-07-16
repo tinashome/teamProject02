@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // .env에서 백엔드 포트번호를 설정해야 함.
-const backendPort = process.env.REACT_APP_BACKEND_PORT || 5000;
+// const backendPort = process.env.REACT_APP_BACKEND_PORT || 5000;
 // const baseUrl = `http://${window.location.hostname}:${backendPort}`;
 const baseUrl = `https://futsal-api-elice.herokuapp.com/api/`;
 
@@ -11,7 +11,7 @@ async function get(endpoint) {
   return axios.get(baseUrl + endpoint, {
     // JWT 토큰을 헤더에 담아 백엔드 서버에 보냄.
     headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`,
     },
   });
 }
@@ -27,7 +27,7 @@ async function post(endpoint, data) {
   return axios.post(baseUrl + endpoint, bodyData, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
 }
@@ -43,7 +43,7 @@ async function put(endpoint, data) {
   return axios.put(baseUrl + endpoint, bodyData, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
 }
@@ -55,7 +55,7 @@ async function del(endpoint) {
 
   return axios.delete(baseUrl + endpoint, {
     headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
 }

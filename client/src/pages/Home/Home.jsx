@@ -19,6 +19,7 @@ const Home = () => {
   const handleChangeSearchInput = (e) => {
     setSearchInput(e.target.value);
   };
+
   return (
     <>
       <BannerImage src={banner} />
@@ -39,7 +40,7 @@ const Home = () => {
         </FilterWrapper>
         <GroundList>
           {groundListDummy.map((ground) => (
-            <GroundCard ground={ground} />
+            <GroundCard ground={ground} key={ground.shortId} />
           ))}
         </GroundList>
         <PaginationWrapper>
@@ -61,11 +62,12 @@ const Home = () => {
 };
 
 const Container = styled.div`
-  padding: 1.5rem 10rem;
+  padding: 1.5rem 5rem;
 `;
 
 const FilterWrapper = styled.div`
   display: flex;
+  margin-left: 5%;
   margin-bottom: 0.5rem;
 `;
 
