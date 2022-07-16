@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema(
       default: false,
     },
     totalPoint: {
-      type: Boolean,
+      type: Number,
       required: false,
       default: 0,
     },

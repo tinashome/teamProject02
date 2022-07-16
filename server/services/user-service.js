@@ -11,7 +11,7 @@ class UserService {
   // 회원가입
   async addUser(userInfo) {
     // 객체 destructuring
-    const { email, nickName, password, phoneNumber, name } = userInfo;
+    const { name, email, password, phoneNumber } = userInfo;
 
     // 이메일 중복 확인
     const user = await this.userModel.findByEmail(email);
@@ -27,7 +27,6 @@ class UserService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUserInfo = {
-      nickName,
       email,
       password: hashedPassword,
       phoneNumber,
@@ -106,7 +105,10 @@ class UserService {
     //작성
     // 로그인 성공 -> JWT 웹 토큰 생성
     const secretKey = process.env.JWT_SECRET_KEY || 'secret-key';
-    const token = jwt.sign({ userId: user._id, role: user.role }, secretKey);
+    const token = jwt.sign(
+      { userId: user._id, role: user.role, isOAuth: user.isOAuth },
+      secretKey,
+    );
     const isAdmin = user.role === 'admin';
 
     return { token, isAdmin };
@@ -127,7 +129,10 @@ class UserService {
 
     // 로그인 성공 -> JWT 웹 토큰 생성
     const secretKey = process.env.JWT_SECRET_KEY || 'secret-key';
-    const token = jwt.sign({ userId: user._id, role: user.role }, secretKey);
+    const token = jwt.sign(
+      { userId: user._id, role: user.role, isOAuth: user.isOAuth },
+      secretKey,
+    );
 
     const isAdmin = user.role === 'admin';
 
