@@ -1,50 +1,162 @@
 // 관리자페이지본문 메뉴1 회원탈퇴 AdminDeleteMember
+/* eslint-disable no-console, no-alert  */
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { adminUsers } from 'stores/store';
 import { useRecoilState } from 'recoil';
+
 import axios from 'axios';
+import Pagenation from './AdminPagenation';
 
 const AdminDeleteMember = () => {
+  // 조회한유저목록
   const [users, setUsers] = useRecoilState(adminUsers);
+  // 현재 페이지 유저목록
+  const [currentUsers, setcurrentUsers] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(999);
+  const [currrentPage, setCurrrentPage] = useState(0);
 
-  const Url = 'https://futsal-api-elice.herokuapp.com/api/user/users';
+  // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
+  const [modal, setModal] = useState('');
+
+  const Url = 'https://futsal-api-elice.herokuapp.com/api/users';
+  const accessToken = localStorage.getItem('token');
+
+  const getUsers = () => {
+    axios
+      .get(Url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => setUsers(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setTotalCount(users.length);
+    setcurrentUsers(
+      users.slice(
+        currrentPage * 1 * pageSize,
+        (currrentPage * 1 + 1) * pageSize,
+      ),
+    );
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, [currrentPage, modal, users]);
 
   const handleClick = (event) => {
     // 회원정보삭제 api요청
-    // alert넣기
-    axios.delete(
-      `https://futsal-api-elice.herokuapp.com/api/user/users/${event.id}`,
+    const deleteConfirm = window.confirm(
+      `${event.target.name}의 계정 정보를 정말 삭제 하시겠습니까?`,
     );
+    if (deleteConfirm) {
+      axios
+        .delete(`${Url}/${event.target.id}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .then(
+          (res) => console.log(res.data),
+          setModal(
+            `계정정보 삭제성공
+            이름 : ${event.target.name}`,
+          ),
+        )
+        .catch((err) => {
+          console.log(err);
+          setModal(
+            `계정정보 삭제실패
+            이름 : ${event.target.name}`,
+          );
+        });
+    }
   };
 
   return (
     <>
+      <ModalWrapper
+        modal={modal}
+        onClick={() => {
+          setModal('');
+          getUsers();
+        }}
+      >
+        <NoticeResult>
+          {modal}
+          <ModalButton
+            onClick={() => {
+              setModal('');
+              getUsers();
+            }}
+          >
+            닫기
+          </ModalButton>
+        </NoticeResult>
+      </ModalWrapper>
       <TitleRow>
         <Text>이메일</Text>
         <Text>이름</Text>
-        <Text>닉네임</Text>
         <Text>연락처</Text>
+        <Text>보유포인트</Text>
         <Text>삭제(탈퇴)</Text>
       </TitleRow>
-      {users.map((e) => (
-        /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+      {currentUsers.map((e) => (
         <Row key={e._id}>
           <Text>{e.email}</Text>
           <Text>{e.name}</Text>
-          <Text>{e.nickName}</Text>
           <Text>{e.phoneNumber}</Text>
+          <Text>{e.totalPoint}P</Text>
           <Text>
-            <Button id={e._id} onClick={handleClick}>
+            <Button id={e._id} name={e.name} onClick={handleClick}>
               회원삭제
             </Button>
           </Text>
         </Row>
       ))}
+      <Pagenation
+        currrentPage={currrentPage}
+        setCurrrentPage={setCurrrentPage}
+        lastPage={Math.ceil(totalCount / pageSize) - 1}
+      />
     </>
   );
 };
+const ModalWrapper = styled.div`
+  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
+  position: fixed;
+  z-index: 1000;
+  top:0;
+  left:0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.4);
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -2px;
+  `;
+
+const NoticeResult = styled.div`
+  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 200px;
+  margin-left: -150px;
+  margin-top: -100px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color:#fff;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+`;
 
 const TitleRow = styled.div`
   display: flex;
@@ -78,6 +190,17 @@ const Button = styled.button`
   background: #3563e9;
   color: white;
   font-size: 16px;
+`;
+const ModalButton = styled.button`
+  width: 80px;
+  height: 50px;
+  padding: 5px 10px;
+  margin-top: 20px;
+  border-radius: 4px;
+  background: #3563e9;
+  color: white;
+  text-align: center;
+  font-size: 25px;
 `;
 
 export default AdminDeleteMember;
