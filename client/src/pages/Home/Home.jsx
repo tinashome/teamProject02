@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BannerImage from 'components/atoms/BannerImage';
 import GroundCard from 'components/organisms/GroundCard';
 import banner from 'assets/image/banner.jpeg';
 import styled from 'styled-components';
+import * as Api from 'api/api';
 import {
   FaAngleLeft,
   FaAngleRight,
@@ -15,10 +16,19 @@ import groundListDummy from './groundListDummy';
 
 const Home = () => {
   const [searchInput, setSearchInput] = useState('');
+  const [groundList, setGroundList] = useState();
 
   const handleChangeSearchInput = (e) => {
     setSearchInput(e.target.value);
   };
+
+  useEffect(() => {
+    (async () => {
+      const result = await Api.get('grounds?offset=0');
+      console.log(result.data);
+      setGroundList(result.data);
+    })();
+  }, []);
 
   return (
     <>
@@ -39,8 +49,8 @@ const Home = () => {
           </SearchBar>
         </FilterWrapper>
         <GroundList>
-          {groundListDummy.map((ground) => (
-            <GroundCard ground={ground} key={ground.shortId} />
+          {groundList?.map((ground) => (
+            <GroundCard ground={ground} key={ground._id} />
           ))}
         </GroundList>
         <PaginationWrapper>

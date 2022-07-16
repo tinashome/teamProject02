@@ -2,12 +2,11 @@ import styled from 'styled-components';
 
 const Logo = styled.button`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 170px;
-  height: 40px;
+  width: 13rem;
   color: #3563e9;
-  font-size: 26px;
+  font-size: 1.6rem;
   font-weight: 700;
 `;
 
