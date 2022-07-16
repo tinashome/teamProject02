@@ -3,19 +3,29 @@ import styled from 'styled-components';
 import Button from 'components/atoms/Button';
 import { Link } from 'react-router-dom';
 
-const GroundCard = ({ ground }) => (
-  <Container>
-    <GroundImage src={ground.groundImg} />
-    <GroundAddress>{ground.groundAddress1}</GroundAddress>
-    <GroundName>{ground.groundName}</GroundName>
-    <Wrapper>
-      <PaymentPoint>{ground.paymentPoint}</PaymentPoint>
-      <Link to={`detail/${ground.shortId}`}>
-        <ReservationButton type='button'>예약하기</ReservationButton>
-      </Link>
-    </Wrapper>
-  </Container>
-);
+const GroundCard = ({ ground }) => {
+  const {
+    groundImg,
+    groundName,
+    groundAddress: { address1, address2 },
+    paymentPoint,
+    _id,
+  } = ground;
+
+  return (
+    <Container>
+      <GroundImage src={groundImg} />
+      <GroundAddress>{`${address1} ${address2}`}</GroundAddress>
+      <GroundName>{groundName}</GroundName>
+      <Wrapper>
+        <PaymentPoint>{paymentPoint}</PaymentPoint>
+        <Link to={`detail/${_id}`}>
+          <ReservationButton type='button'>예약하기</ReservationButton>
+        </Link>
+      </Wrapper>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   width: 20%;
@@ -39,7 +49,7 @@ const GroundAddress = styled.p`
 const GroundName = styled.p`
   font-size: 30px;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 `;
 
 const Wrapper = styled.div`
@@ -53,7 +63,7 @@ const PaymentPoint = styled.p`
 `;
 
 const ReservationButton = styled(Button)`
-  font-size: 1rem;
+  font-size: 0.9rem;
   padding: 8px 12px;
 `;
 

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BannerImage from 'components/atoms/BannerImage';
 import GroundCard from 'components/organisms/GroundCard';
 import banner from 'assets/image/banner.jpeg';
 import styled from 'styled-components';
+import * as Api from 'api/api';
 import {
   FaAngleLeft,
   FaAngleRight,
@@ -11,14 +12,31 @@ import {
   FaAngleDown,
   FaSearch,
 } from 'react-icons/fa';
-import groundListDummy from './groundListDummy';
 
 const Home = () => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [groundList, setGroundList] = useState();
 
   const handleChangeSearchInput = (e) => {
-    setSearchInput(e.target.value);
+    setSearchValue(e.target.value);
   };
+
+  const handleSearch = async (e) => {
+    if (e.key === 'Enter') {
+      if (searchValue === '') {
+        alert('검색어를 입력해주세요!');
+      }
+      const searchResult = await Api.get(`grounds/?search=${searchValue}`);
+      setGroundList(searchResult.data);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const result = await Api.get('grounds?offset=0');
+      setGroundList(result.data);
+    })();
+  }, []);
 
   return (
     <>
@@ -33,14 +51,15 @@ const Home = () => {
             <FaSearch />
             <StyledInput
               placeholder='구장 찾기'
-              value={searchInput}
+              value={searchValue}
               onChange={handleChangeSearchInput}
+              onKeyDown={handleSearch}
             />
           </SearchBar>
         </FilterWrapper>
         <GroundList>
-          {groundListDummy.map((ground) => (
-            <GroundCard ground={ground} key={ground.shortId} />
+          {groundList?.map((ground) => (
+            <GroundCard ground={ground} key={ground._id} />
           ))}
         </GroundList>
         <PaginationWrapper>
