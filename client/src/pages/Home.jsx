@@ -12,20 +12,28 @@ import {
   FaAngleDown,
   FaSearch,
 } from 'react-icons/fa';
-import groundListDummy from './groundListDummy';
 
 const Home = () => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [groundList, setGroundList] = useState();
 
   const handleChangeSearchInput = (e) => {
-    setSearchInput(e.target.value);
+    setSearchValue(e.target.value);
+  };
+
+  const handleSearch = async (e) => {
+    if (e.key === 'Enter') {
+      if (searchValue === '') {
+        alert('검색어를 입력해주세요!');
+      }
+      const searchResult = await Api.get(`grounds/?search=${searchValue}`);
+      setGroundList(searchResult.data);
+    }
   };
 
   useEffect(() => {
     (async () => {
       const result = await Api.get('grounds?offset=0');
-      console.log(result.data);
       setGroundList(result.data);
     })();
   }, []);
@@ -43,8 +51,9 @@ const Home = () => {
             <FaSearch />
             <StyledInput
               placeholder='구장 찾기'
-              value={searchInput}
+              value={searchValue}
               onChange={handleChangeSearchInput}
+              onKeyDown={handleSearch}
             />
           </SearchBar>
         </FilterWrapper>
