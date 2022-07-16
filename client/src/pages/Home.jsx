@@ -13,12 +13,12 @@ import {
   FaSearch,
 } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
-import { groundLengthState, groundListState } from 'stores/groundStore';
+import { groundListState } from 'stores/groundStore';
+import Spinner from 'components/atoms/Spinner';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState('');
   const [groundList, setGroundList] = useRecoilState(groundListState);
-  const [groundLength, setGroundLength] = useRecoilState(groundLengthState);
   const [page, setPage] = useState(1);
 
   const handleChangeSearchInput = (e) => {
@@ -30,20 +30,30 @@ const Home = () => {
       if (searchValue === '') {
         alert('검색어를 입력해주세요!');
       }
+      setGroundList({
+        isLoading: true,
+      });
       const searchResult = await Api.get(`grounds/?search=${searchValue}`);
-      setGroundList(searchResult.data.grounds);
+      setGroundList({
+        isLoading: false,
+        length: searchResult.data.length,
+        data: searchResult.data.grounds,
+      });
     }
   };
 
   useEffect(() => {
     (async () => {
       const result = await Api.get(`grounds?offset=${page + 8}`);
-      setGroundList(result.data.grounds);
-      setGroundLength(result.data.length);
+      setGroundList({
+        isLoading: false,
+        length: result.data.length,
+        data: result.data.grounds,
+      });
     })();
   }, [page]);
 
-  const pagesNum = Math.ceil(groundLength / 10);
+  const pagesNum = Math.ceil(groundList.length / 10);
 
   return (
     <>
@@ -64,29 +74,37 @@ const Home = () => {
             />
           </SearchBar>
         </FilterWrapper>
-        <GroundList>
-          {groundList?.map((ground) => (
-            <GroundCard ground={ground} key={ground._id} />
-          ))}
-        </GroundList>
-        <PaginationWrapper>
-          <FaAngleDoubleLeft />
-          <FaAngleLeft />
-          <ButtonWrapper>
-            {Array(pagesNum)
-              .fill()
-              .map((_, i) => (
-                <PageButton
-                  onClick={() => setPage(i + 1)}
-                  aria-current={page === i + 1 ? 'page' : null}
-                >
-                  {i + 1}
-                </PageButton>
+        {groundList.isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <GroundList>
+              {groundList.data?.map((ground) => (
+                <GroundCard ground={ground} key={ground._id} />
               ))}
-          </ButtonWrapper>
-          <FaAngleRight />
-          <FaAngleDoubleRight />
-        </PaginationWrapper>
+            </GroundList>
+            {groundList.length !== 0 && (
+              <PaginationWrapper>
+                <FaAngleDoubleLeft />
+                <FaAngleLeft />
+                <ButtonWrapper>
+                  {Array(pagesNum)
+                    .fill()
+                    .map((_, i) => (
+                      <PageButton
+                        onClick={() => setPage(i + 1)}
+                        aria-current={page === i + 1 ? 'page' : null}
+                      >
+                        {i + 1}
+                      </PageButton>
+                    ))}
+                </ButtonWrapper>
+                <FaAngleRight />
+                <FaAngleDoubleRight />
+              </PaginationWrapper>
+            )}
+          </>
+        )}
       </Container>
     </>
   );
