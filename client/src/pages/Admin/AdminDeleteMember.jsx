@@ -1,15 +1,15 @@
+// 관리자페이지본문 메뉴1 회원탈퇴 AdminDeleteMember
+
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { adminUsers } from 'stores/store';
 import { useRecoilState } from 'recoil';
 import axios from 'axios';
 
-// 관리자페이지본문 메뉴1 회원탈퇴 AdminDeleteMember
-
-const Url = 'https://futsal-api-elice.herokuapp.com/api/user/users';
-
 const AdminDeleteMember = () => {
   const [users, setUsers] = useRecoilState(adminUsers);
+
+  const Url = 'https://futsal-api-elice.herokuapp.com/api/user/users';
 
   const handleClick = (event) => {
     // 회원정보삭제 api요청
@@ -53,6 +53,7 @@ const TitleRow = styled.div`
   font-weight: 600;
   font-size: 20px;
 `;
+
 const Row = styled.div`
   display: flex;
   flex-direction: row;
@@ -60,6 +61,7 @@ const Row = styled.div`
   border-bottom: 1px solid #bdbdbd;
   justify-content: space-between;
 `;
+
 const Text = styled.p`
   display: flex;
   width: 150px;
@@ -68,6 +70,7 @@ const Text = styled.p`
   align-items: center;
   justify-content: center;
 `;
+
 const Button = styled.button`
   display: flex;
   padding: 5px 10px;
