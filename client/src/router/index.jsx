@@ -10,6 +10,7 @@ import MyPage from '../pages/MyPage';
 import PasswordChange from '../pages/PasswordChange';
 import UserInfoChange from '../pages/UserInfoChange';
 import UnRegister from '../pages/UnRegister';
+import RentalManagement from '../pages/RentalManagement';
 
 const Router = () => (
   <BrowserRouter>
@@ -24,6 +25,7 @@ const Router = () => (
           <Route path='' element={<UserInfoChange />} />
           <Route path='password' element={<PasswordChange />} />
           <Route path='user' element={<UnRegister />} />
+          <Route path='rental' element={<RentalManagement />} />
         </Route>
       </Route>
     </Routes>

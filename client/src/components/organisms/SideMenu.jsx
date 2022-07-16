@@ -9,10 +9,7 @@ const SideMenu = () => (
       <SideTitle>예약 관리</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo'>예약 조회</NavLink>
-        </SideListItem>
-        <SideListItem>
-          <NavLink to='/myinfo'>예약 취소</NavLink>
+          <NavLink to='/myinfo/rental'>예약 조회</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>

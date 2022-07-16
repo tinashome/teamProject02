@@ -28,7 +28,13 @@ const Header = () => {
             <UserProfile>
               <p>{name}님 환영합니다!</p>
               <UserProfileButtonWrapper>
-                <UserProfileButton>마이 페이지</UserProfileButton>
+                <UserProfileButton>
+                  {name === '관리자' ? (
+                    '관리자 페이지'
+                  ) : (
+                    <NavLink to='/myinfo'>마이 페이지</NavLink>
+                  )}
+                </UserProfileButton>
                 <UserProfileButton>로그아웃</UserProfileButton>
               </UserProfileButtonWrapper>
             </UserProfile>
