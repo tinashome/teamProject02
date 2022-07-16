@@ -4,10 +4,11 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { adminUsers } from 'stores/store';
 import { useRecoilState } from 'recoil';
+import { adminUsers } from 'stores/store';
+import * as Api from 'api/api';
 
-import axios from 'axios';
+// import axios from 'axios';
 import Pagenation from './AdminPagenation';
 
 const AdminDeleteMember = () => {
@@ -22,20 +23,14 @@ const AdminDeleteMember = () => {
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState('');
 
-  const Url = 'https://futsal-api-elice.herokuapp.com/api/users';
-  const accessToken = localStorage.getItem('token');
-
-  const getUsers = () => {
-    axios
-      .get(Url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => setUsers(res.data))
-      .catch((err) => {
-        console.log(err);
-      });
+  const getUsers = async () => {
+    // 사용자목록조회 api요청
+    try {
+      const result = await Api.get('users');
+      await setUsers(result.data);
+    } catch (err) {
+      console.log(err);
+    }
 
     setTotalCount(users.length);
     setcurrentUsers(
@@ -48,32 +43,25 @@ const AdminDeleteMember = () => {
 
   useEffect(() => {
     getUsers();
-  }, [currrentPage, modal, users]);
+  }, [currrentPage, modal]);
 
-  const handleClick = (event) => {
+  const handleClick = async (event) => {
     // 회원정보삭제 api요청
     const deleteConfirm = window.confirm(
       `${event.target.name}의 계정 정보를 정말 삭제 하시겠습니까?`,
     );
     if (deleteConfirm) {
-      axios
-        .delete(`${Url}/${event.target.id}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-        .then(
-          (res) => console.log(res.data),
-          setModal(
-            `계정정보 삭제성공
+      try {
+        await Api.delete('users', event.target.id);
+        setModal(`계정정보 삭제성공
+        이름 : ${event.target.name}`);
+        return;
+      } catch (err) {
+        setModal(
+          `계정정보 삭제실패
             이름 : ${event.target.name}`,
-          ),
-        )
-        .catch((err) => {
-          console.log(err);
-          setModal(
-            `계정정보 삭제실패
-            이름 : ${event.target.name}`,
-          );
-        });
+        );
+      }
     }
   };
 
