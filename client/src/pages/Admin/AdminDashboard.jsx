@@ -1,27 +1,55 @@
 // 관리자페이지 메뉴0 대쉬보드 AdminDashboard
 /* eslint-disable no-console */
 
-import React, { useState } from 'react';
-import ContentLargetxt from 'components/atoms/ContentLargetxt';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { adminUsers } from 'stores/adminStore';
+import * as Api from 'api/api';
+import ContentLargetxt from 'components/atoms/ContentLargetxt';
 
 const AdminDashboard = () => {
+  const [users, setUsers] = useRecoilState(adminUsers);
   const [role, setRole] = useState(false);
 
-  const signin = () => {
-    axios
-      .post('https://futsal-api-elice.herokuapp.com/api/auth/signin', {
+  const signin = async () => {
+    try {
+      const result = await Api.post('auth/signin', {
         email: 'admin@gmail.com',
         password: '1234',
-      })
-      .then((res) => {
-        localStorage.setItem('token', res.data.token);
-        console.log(res.data);
       });
-
-    setRole(localStorage.getItem('token'));
+      const { token } = result.data;
+      localStorage.setItem('token', token);
+      setRole(localStorage.getItem('token'));
+    } catch (err) {
+      console.log(err);
+    }
   };
+  const signup = () => {
+    Api.post('auth/signup', {
+      name: '관리자',
+      email: 'admin@gmail.com',
+      password: '1234',
+      phoneNumber: '0100001234',
+    }).then((res) => {
+      console.log(res.data);
+    });
+  };
+
+  const getUsers = async () => {
+    // 사용자목록조회 api요청
+    try {
+      const result = await Api.get('users');
+      setUsers(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 유저목록 미리 로딩
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <ContentLargetxt>
@@ -31,6 +59,13 @@ const AdminDashboard = () => {
       <br />
       admin:{role ? '로그인완료' : '로그인전'}
       <br />
+      <Button
+        onClick={() => {
+          console.log(users);
+        }}
+      >
+        관리자가입
+      </Button>
       <Button onClick={signin}>관리자로그인</Button>
     </ContentLargetxt>
   );

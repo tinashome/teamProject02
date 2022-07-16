@@ -5,10 +5,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers } from 'stores/store';
+import { adminUsers } from 'stores/adminStore';
 import * as Api from 'api/api';
-
-// import axios from 'axios';
 import Pagenation from './AdminPagenation';
 
 const AdminDeleteMember = () => {
@@ -27,21 +25,21 @@ const AdminDeleteMember = () => {
     // 사용자목록조회 api요청
     try {
       const result = await Api.get('users');
-      await setUsers(result.data);
+      setUsers(result.data);
+      setTotalCount(users.length);
+      await setcurrentUsers(
+        users.slice(
+          currrentPage * 1 * pageSize,
+          (currrentPage * 1 + 1) * pageSize,
+        ),
+      );
     } catch (err) {
       console.log(err);
     }
-
-    setTotalCount(users.length);
-    setcurrentUsers(
-      users.slice(
-        currrentPage * 1 * pageSize,
-        (currrentPage * 1 + 1) * pageSize,
-      ),
-    );
   };
 
   useEffect(() => {
+    setUsers(users);
     getUsers();
   }, [currrentPage, modal]);
 
