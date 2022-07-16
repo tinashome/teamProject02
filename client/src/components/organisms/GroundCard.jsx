@@ -7,15 +7,15 @@ const GroundCard = ({ ground }) => {
   const {
     groundImg,
     groundName,
-    groundAddress: { address1, address2 },
+    groundAddress: { address1 },
     paymentPoint,
     _id,
   } = ground;
 
   return (
     <Container>
-      <GroundImage src={groundImg} />
-      <GroundAddress>{`${address1} ${address2}`}</GroundAddress>
+      <GroundImage src={groundImg[0]} />
+      <GroundAddress>{`${address1}`}</GroundAddress>
       <GroundName>{groundName}</GroundName>
       <Wrapper>
         <PaymentPoint>{paymentPoint}</PaymentPoint>
@@ -28,7 +28,7 @@ const GroundCard = ({ ground }) => {
 };
 
 const Container = styled.div`
-  width: 20%;
+  /* width: 20%; */
   min-width: fit-content;
   height: 20rem;
   margin: 1rem;
