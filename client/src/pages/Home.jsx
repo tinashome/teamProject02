@@ -12,10 +12,14 @@ import {
   FaAngleDown,
   FaSearch,
 } from 'react-icons/fa';
+import { useRecoilState } from 'recoil';
+import { groundLengthState, groundListState } from 'stores/groundStore';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [groundList, setGroundList] = useState();
+  const [groundList, setGroundList] = useRecoilState(groundListState);
+  const [groundLength, setGroundLength] = useRecoilState(groundLengthState);
+  const [page, setPage] = useState(1);
 
   const handleChangeSearchInput = (e) => {
     setSearchValue(e.target.value);
@@ -27,16 +31,19 @@ const Home = () => {
         alert('검색어를 입력해주세요!');
       }
       const searchResult = await Api.get(`grounds/?search=${searchValue}`);
-      setGroundList(searchResult.data);
+      setGroundList(searchResult.data.grounds);
     }
   };
 
   useEffect(() => {
     (async () => {
-      const result = await Api.get('grounds?offset=0');
-      setGroundList(result.data);
+      const result = await Api.get(`grounds?offset=${page + 8}`);
+      setGroundList(result.data.grounds);
+      setGroundLength(result.data.length);
     })();
-  }, []);
+  }, [page]);
+
+  const pagesNum = Math.ceil(groundLength / 10);
 
   return (
     <>
@@ -66,11 +73,16 @@ const Home = () => {
           <FaAngleDoubleLeft />
           <FaAngleLeft />
           <ButtonWrapper>
-            <PageButton>1</PageButton>
-            <PageButton>2</PageButton>
-            <PageButton>3</PageButton>
-            <PageButton>4</PageButton>
-            <PageButton>5</PageButton>
+            {Array(pagesNum)
+              .fill()
+              .map((_, i) => (
+                <PageButton
+                  onClick={() => setPage(i + 1)}
+                  aria-current={page === i + 1 ? 'page' : null}
+                >
+                  {i + 1}
+                </PageButton>
+              ))}
           </ButtonWrapper>
           <FaAngleRight />
           <FaAngleDoubleRight />
@@ -81,12 +93,11 @@ const Home = () => {
 };
 
 const Container = styled.div`
-  padding: 1.5rem 5rem;
+  padding: 1.5rem 10rem;
 `;
 
 const FilterWrapper = styled.div`
   display: flex;
-  margin-left: 5%;
   margin-bottom: 0.5rem;
 `;
 
@@ -106,6 +117,7 @@ const FilterName = styled.p`
 const SearchBar = styled.div`
   width: 18rem;
   display: flex;
+  align-items: center;
   border: 1px solid #ced4da;
   border-radius: 24px;
   padding: 12px 16px;
@@ -119,14 +131,12 @@ const StyledInput = styled.input`
   width: 90%;
   border: none;
   outline: none;
-  padding-left: 1rem;
+  padding-left: 0.8rem;
 `;
 
 const GroundList = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25%, auto));
   margin-bottom: 3rem;
 `;
 
@@ -147,8 +157,16 @@ const ButtonWrapper = styled.div`
 `;
 
 const PageButton = styled.button`
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 12px;
   margin: 0 1em;
+  border-radius: 50%;
+
+  &[aria-current] {
+    color: #ffffff;
+    background: #3563e9;
+    cursor: revert;
+  }
 `;
 
 export default Home;
