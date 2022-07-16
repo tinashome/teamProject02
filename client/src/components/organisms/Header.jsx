@@ -61,7 +61,9 @@ const Header = () => {
                     <NavLink to='/myinfo'>마이 페이지</NavLink>
                   )}
                 </UserProfileButton>
-                <UserProfileButton>로그아웃</UserProfileButton>
+                <UserProfileButton onClick={handleLogout}>
+                  로그아웃
+                </UserProfileButton>
               </UserProfileButtonWrapper>
             </UserProfile>
           </>
