@@ -177,10 +177,12 @@ const ButtonWrapper = styled.div`
 `;
 
 const PageButton = styled.button`
+  width: 50px;
+  height: 50px;
   font-size: 1rem;
   padding: 12px;
   margin: 0 1em;
-  border-radius: 50%;
+  border-radius: 100px;
 
   &[aria-current] {
     color: #ffffff;
