@@ -1,6 +1,6 @@
 import React from 'react';
 import { RecoilRoot } from 'recoil';
-import Router from './router';
+import Router from './router/index';
 import GlobalStyles from './styles/globalStyles';
 
 const App = () => (
