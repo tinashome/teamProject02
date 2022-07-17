@@ -140,10 +140,11 @@ const Pagenation = ({ lastPage }) => {
 
 const Page = styled.button`
   display: ${(props) =>
-    props.value * 1 <= props.lastPage * 1 ||
+    (props.value * 1 >= 0 && props.value * 1 <= props.lastPage * 1) ||
     ['prev', 'next', 'first', 'last'].includes(props.value)
       ? 'flex'
       : 'none'};
+  color: ${(props) => props.value * 1 < 0 && 'red'};
   width: 35px;
   height: 35px;
   margin: 0 5px;
