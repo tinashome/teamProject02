@@ -11,6 +11,7 @@ import ContentLargetxt from 'components/atoms/ContentLargetxt';
 const AdminDashboard = () => {
   const [users, setUsers] = useRecoilState(adminUsers);
   const [role, setRole] = useState(false);
+  const newUsers = [];
 
   const signin = async () => {
     try {
@@ -25,12 +26,13 @@ const AdminDashboard = () => {
       console.log(err);
     }
   };
-  const signup = () => {
+  const signup = (usersss) => {
+    const { name, email, phoneNumber } = usersss;
     Api.post('auth/signup', {
-      name: '관리자',
-      email: 'admin@gmail.com',
+      name,
+      email,
       password: '1234',
-      phoneNumber: '0100001234',
+      phoneNumber,
     }).then((res) => {
       console.log(res.data);
     });
@@ -44,6 +46,8 @@ const AdminDashboard = () => {
     } catch (err) {
       console.log(err);
     }
+    localStorage.getItem('token');
+    setRole(localStorage.getItem('token'));
   };
 
   // 유저목록 미리 로딩
@@ -64,9 +68,14 @@ const AdminDashboard = () => {
           console.log(users);
         }}
       >
-        관리자가입
+        유저목록출력
       </Button>
       <Button onClick={signin}>관리자로그인</Button>
+      <Button
+        onClick={() => {
+          signup(newUsers.map((e) => signup(e)));
+        }}
+      >{`테스트계정 ${newUsers.length}개 일괄생성`}</Button>
     </ContentLargetxt>
   );
 };

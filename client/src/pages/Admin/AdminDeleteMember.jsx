@@ -47,12 +47,14 @@ const AdminDeleteMember = () => {
     // 회원정보삭제 api요청
     const deleteConfirm = window.confirm(
       `${event.target.name}의 계정 정보를 정말 삭제 하시겠습니까?`,
+      console.log(event.target.id),
     );
     if (deleteConfirm) {
       try {
-        await Api.delete('users', event.target.id);
+        const result = await Api.delete(`users/${event.target.id}`);
         setModal(`계정정보 삭제성공
         이름 : ${event.target.name}`);
+        console.log(result);
         return;
       } catch (err) {
         setModal(
