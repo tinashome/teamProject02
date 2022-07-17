@@ -7,40 +7,52 @@ import IconCard from './IconCard';
 
 // 경기장 정보 값 받아오기 (api)
 // const act = info.actInfo;
+// contents
 
-const GroundInfo = ({info}) => (
+const GroundInfo = ({ info }) => {
+  
+  const infoContents = [
+    {
+      title: '풋살장 가는길',
+      text: info.wayTo,
+    },
+    {
+      title: '주차',
+      text: info.parkingInfo,
+    },
+    {
+      title: '흡연',
+      text: info.smoking,
+    },
+    {
+      title: '풋살화 대여',
+      text: info.shoesRentalInfo,
+    },
+    {
+      title: '화장실',
+      text: info.toilet,
+    },
+  ];
+
+  return (
     <>
       <GroundTitle>{info.groundName}</GroundTitle>
       <GroundSubTitle>경기장 정보</GroundSubTitle>
       {/* 아이콘  */}
       <IconCard size={info.groundSize} />
+
       <GroundDetailInformation>
         <GroundSubTitle>경기장 특이사항</GroundSubTitle>
 
-        <GroundInfoTitle>
-          <BoxBlanckIcon /> 풋살장 가는길
-        </GroundInfoTitle>
-        <GroundText>{info.wayTo}</GroundText>
-
-        <GroundInfoTitle>
-          <BoxBlanckIcon /> 주차
-        </GroundInfoTitle>
-        <GroundText>{info.parkingInfo}</GroundText>
-
-        <GroundInfoTitle>
-          <BoxBlanckIcon /> 흡연
-        </GroundInfoTitle>
-        <GroundText>{info.smoking}</GroundText>
-
-        <GroundInfoTitle>
-          <BoxBlanckIcon /> 풋살화 대여
-        </GroundInfoTitle>
-        <GroundText>{info.shoesRentalInfo}</GroundText>
-
-        <GroundInfoTitle>
-          <BoxBlanckIcon /> 화장실
-        </GroundInfoTitle>
-        <GroundText>{info.toilet}</GroundText>
+        {infoContents.map((list) => (
+          <>
+            <GroundInfoTitle>
+              <BoxBlanckIcon />
+              {list.title}
+            </GroundInfoTitle>
+            <GroundText>{list.text}</GroundText>
+          </>
+        ))}
 
         <GroundInfoTitle>
           <BoxBlanckIcon /> 기타
@@ -51,9 +63,11 @@ const GroundInfo = ({info}) => (
             <li>{list}</li>
           </GroundText>
         ))} */}
+
       </GroundDetailInformation>
     </>
   );
+};
 
 const GroundTitle = styled.h1`
   font-size: 2.8rem;
@@ -65,7 +79,7 @@ const GroundTitle = styled.h1`
 const GroundSubTitle = styled.h2`
   font-size: 30px;
   text-align: left;
-  margin: 2rem 0.3rem 1rem 1rem;
+  margin: 2rem 0.3rem 1.5rem 1rem;
 `;
 
 const GroundDetailInformation = styled.div`
