@@ -44,7 +44,7 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await Api.get(`grounds?offset=${page + 8}`);
+      const result = await Api.get(`grounds?offset=${(page - 1) * 8}`);
       setGroundList({
         isLoading: false,
         length: result.data.length,
@@ -53,7 +53,7 @@ const Home = () => {
     })();
   }, [page]);
 
-  const pagesNum = Math.ceil(groundList.length / 10);
+  const pagesNum = Math.ceil(groundList.length / 8);
 
   return (
     <>
@@ -92,6 +92,8 @@ const Home = () => {
                     .fill()
                     .map((_, i) => (
                       <PageButton
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={i + 1}
                         onClick={() => setPage(i + 1)}
                         aria-current={page === i + 1 ? 'page' : null}
                       >
