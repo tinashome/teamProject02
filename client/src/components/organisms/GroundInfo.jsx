@@ -10,7 +10,6 @@ import IconCard from './IconCard';
 // contents
 
 const GroundInfo = ({ info }) => {
-  
   const infoContents = [
     {
       title: '풋살장 가는길',
@@ -39,7 +38,7 @@ const GroundInfo = ({ info }) => {
       <GroundTitle>{info.groundName}</GroundTitle>
       <GroundSubTitle>경기장 정보</GroundSubTitle>
       {/* 아이콘  */}
-      <IconCard size={info.groundSize} />
+      <IconCard info={info} />
 
       <GroundDetailInformation>
         <GroundSubTitle>경기장 특이사항</GroundSubTitle>
@@ -63,7 +62,6 @@ const GroundInfo = ({ info }) => {
             <li>{list}</li>
           </GroundText>
         ))} */}
-
       </GroundDetailInformation>
     </>
   );
