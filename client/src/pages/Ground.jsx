@@ -1,17 +1,30 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import GroundSlide from 'components/organisms/GroundSlide';
 import GroundReservationCalendar from 'components/organisms/GroundReservationCalendar';
 import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
 import { Link } from 'react-router-dom';
+import * as Api from 'api/api'
 import GroundInfo from '../components/organisms/GroundInfo';
 
-const Ground = () => (
+const Ground = () => {
+  const [detailInfo, setDetailInfo] = useState([]);
+
+  const getDetailInfo = async () => {
+    const result = await Api.get(`grounds/62d2d84af34863cbb7647549`);
+    setDetailInfo(result.data);
+  };
+
+  useEffect(() => {
+    getDetailInfo();
+  }, []);
+  
+  return(
   <>
     <GroundSlide />
     <Container>
-      <GroundInfo />
+      <GroundInfo info={detailInfo}/>
       <GroundReservationCalendar />
       <GroundTime />
       <BackBtn>
@@ -20,7 +33,7 @@ const Ground = () => (
       <ReservationBtn>예약하기</ReservationBtn>
     </Container>
   </>
-);
+)};
 
 const Container = styled.div`
   width: 80%;

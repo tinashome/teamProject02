@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
 const Logo = styled.button`
-  width: 210px;
-  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 13rem;
   color: #3563e9;
-  font-size: 26px;
+  font-size: 1.6rem;
   font-weight: 700;
 `;
 

@@ -5,8 +5,4 @@ const textState = atom({
   default: '', // default value (aka initial value)
 });
 
-const adminContentState = atom({
-  key: 'sideMenu',
-  default: [],
-});
-export { textState, adminContentState };
+export default textState;
