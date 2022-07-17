@@ -5,43 +5,54 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers } from 'stores/adminStore';
+import { adminUsers, adminCurrentPage } from 'stores/adminStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
 
 const AdminDeleteMember = () => {
-  // 조회한유저목록
+  // 조회한유저목록을 저장하는 상태
   const [users, setUsers] = useRecoilState(adminUsers);
-  // 현재 페이지 유저목록
-  const [currentUsers, setcurrentUsers] = useState([]);
+  // 현재 페이지에 보여줄 유저목록(users를 slice하여 저장됨) >> api페이지네이션으로 삭제예정
+  // const [currentUsers, setCurrentUsers] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(999);
-  const [currrentPage, setCurrrentPage] = useState(0);
-
+  // eslint-disable-next-line no-unused-vars
+  const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState('');
 
   const getUsers = async () => {
     // 사용자목록조회 api요청
+    // users?
+    // name=이름
+    // &email=이메일
+    // &phoneNumber=연락처
+    // &offset=시작번호
+    // &count=조회할갯수
     try {
-      const result = await Api.get('users');
-      setUsers(result.data);
-      setTotalCount(users.length);
-      await setcurrentUsers(
-        users.slice(
-          currrentPage * 1 * pageSize,
-          (currrentPage * 1 + 1) * pageSize,
-        ),
+      const result = await Api.get(
+        `users?offset=${currentPage * pageSize}&count=${pageSize}`,
       );
+      const resultData = await result.data;
+      await setUsers(resultData.users);
+      await setTotalCount(resultData.length);
+      await console.log(users, totalCount);
+      // 현재 페이지에 보여줄 유저목록(users를 slice하여 저장함) >> api페이지네이션으로 삭제예정
+      // await setCurrentUsers(
+      //   users.slice(
+      //     currentPage * 1 * pageSize,
+      //     (currentPage * 1 + 1) * pageSize,
+      //   ),
+      // );
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    setUsers(users);
     getUsers();
-  }, [currrentPage, modal]);
+  }, [currentPage, modal]);
 
   const handleClick = async (event) => {
     // 회원정보삭제 api요청
@@ -93,7 +104,7 @@ const AdminDeleteMember = () => {
         <Text>보유포인트</Text>
         <Text>삭제(탈퇴)</Text>
       </TitleRow>
-      {currentUsers.map((e) => (
+      {users.map((e) => (
         <Row key={e._id}>
           <Text>{e.email}</Text>
           <Text>{e.name}</Text>
@@ -106,11 +117,7 @@ const AdminDeleteMember = () => {
           </Text>
         </Row>
       ))}
-      <Pagenation
-        currrentPage={currrentPage}
-        setCurrrentPage={setCurrrentPage}
-        lastPage={Math.ceil(totalCount / pageSize) - 1}
-      />
+      <Pagenation lastPage={Math.ceil(totalCount / pageSize) - 1} />
     </>
   );
 };

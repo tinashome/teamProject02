@@ -1,18 +1,22 @@
 // 관리자페이지 메뉴0 대쉬보드 AdminDashboard
+// 대쉬보드는 관리자페이지의 첫페이지이며 각종정보를 요약하여 표시할 예정입니다.
+// 현재는 개발도중 필요한 기능들이 표시됩니다.
+
 /* eslint-disable no-console */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { adminUsers } from 'stores/adminStore';
+// import { useRecoilState } from 'recoil';
+// import { adminUsers } from 'stores/adminStore';
 import * as Api from 'api/api';
 import ContentLargetxt from 'components/atoms/ContentLargetxt';
 
 const AdminDashboard = () => {
-  const [users, setUsers] = useRecoilState(adminUsers);
+  // const [users, setUsers] = useRecoilState(adminUsers);
   const [role, setRole] = useState(false);
   const newUsers = [];
 
+  // 관리자로그인함수
   const signin = async () => {
     try {
       const result = await Api.post('auth/signin', {
@@ -26,6 +30,8 @@ const AdminDashboard = () => {
       console.log(err);
     }
   };
+
+  // 회원가입함수(테스트계정 일괄가입시 사용)
   const signup = (usersss) => {
     const { name, email, phoneNumber } = usersss;
     Api.post('auth/signup', {
@@ -38,22 +44,22 @@ const AdminDashboard = () => {
     });
   };
 
-  const getUsers = async () => {
-    // 사용자목록조회 api요청
-    try {
-      const result = await Api.get('users');
-      setUsers(result.data);
-    } catch (err) {
-      console.log(err);
-    }
-    localStorage.getItem('token');
-    setRole(localStorage.getItem('token'));
-  };
+  // // 사용자목록조회 api요청
+  // const getUsers = async () => {
+  //   try {
+  //     const result = await Api.get('users');
+  //     setUsers(result.data);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   localStorage.getItem('token');
+  //   setRole(localStorage.getItem('token'));
+  // };
 
   // 유저목록 미리 로딩
-  useEffect(() => {
-    getUsers();
-  }, []);
+  // useEffect(() => {
+  //   // getUsers();
+  // }, []);
 
   return (
     <ContentLargetxt>
@@ -64,9 +70,9 @@ const AdminDashboard = () => {
       admin:{role ? '로그인완료' : '로그인전'}
       <br />
       <Button
-        onClick={() => {
-          console.log(users);
-        }}
+      // onClick={() => {
+      //   console.log(users);
+      // }}
       >
         유저목록출력
       </Button>
