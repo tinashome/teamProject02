@@ -47,17 +47,17 @@ const GroundTime = () => {
       </DateTimeNavbar>
       <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
         <Title>오전</Title>
-        <TimeBtn>
+        <TimeBtns>
           {morningTimeValue.map((list) => (
-            <TimeButton>{list}</TimeButton>
+            <Button>{list}</Button>
           ))}
-        </TimeBtn>
+        </TimeBtns>
         <Title>오후</Title>
-        <TimeBtn>
+        <TimeBtns>
           {afternoonTimeValue.map((list) => (
-            <TimeButton>{list}</TimeButton>
+            <Button>{list}</Button>
           ))}
-        </TimeBtn>
+        </TimeBtns>
       </Container>
     </>
   );
@@ -78,12 +78,19 @@ const Title = styled.h2`
   font-size: 20px;
 `;
 
-const TimeBtn = styled.div`
+const TimeBtns = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
   margin: 1rem 0 1rem 1rem;
   gap: 0.5rem 0;
+`;
+
+const Button = styled(TimeButton)`
+  &:hover {
+    color:white;
+    background-color: #3563e9;
+  }
 `;
 
 const DateTimeNavbar = styled.div`

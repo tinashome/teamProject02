@@ -8,7 +8,7 @@ const IconDataList = [
   {
     id: 1,
     icon: <TbSoccerField />,
-    iconName: '21X15(m)',
+    iconName: '경기장크기',
   },
   {
     id: 2,

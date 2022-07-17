@@ -4,6 +4,7 @@ import GroundSlide from 'components/organisms/GroundSlide';
 import GroundReservationCalendar from 'components/organisms/GroundReservationCalendar';
 import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
+import { Link } from 'react-router-dom';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => (
@@ -13,7 +14,9 @@ const Ground = () => (
       <GroundInfo />
       <GroundReservationCalendar />
       <GroundTime />
-      <BackBtn>돌아가기</BackBtn>
+      <BackBtn>
+        <Link to='/'>돌아가기</Link>{' '}
+      </BackBtn>
       <ReservationBtn>예약하기</ReservationBtn>
     </Container>
   </>
