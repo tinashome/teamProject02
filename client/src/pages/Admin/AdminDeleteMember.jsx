@@ -15,7 +15,7 @@ const AdminDeleteMember = () => {
   // 현재 페이지에 보여줄 유저목록(users를 slice하여 저장됨) >> api페이지네이션으로 삭제예정
   // const [currentUsers, setCurrentUsers] = useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(9);
   const [totalCount, setTotalCount] = useState(999);
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
@@ -37,7 +37,6 @@ const AdminDeleteMember = () => {
       const resultData = await result.data;
       await setUsers(resultData.users);
       await setTotalCount(resultData.length);
-      await console.log(users, totalCount);
       // 현재 페이지에 보여줄 유저목록(users를 slice하여 저장함) >> api페이지네이션으로 삭제예정
       // await setCurrentUsers(
       //   users.slice(
@@ -98,29 +97,85 @@ const AdminDeleteMember = () => {
         </NoticeResult>
       </ModalWrapper>
       <TitleRow>
-        <Text>이메일</Text>
+        <Text width='250'>이메일</Text>
         <Text>이름</Text>
         <Text>연락처</Text>
-        <Text>보유포인트</Text>
+        <Text width='100'>포인트</Text>
         <Text>삭제(탈퇴)</Text>
       </TitleRow>
-      {users.map((e) => (
-        <Row key={e._id}>
-          <Text>{e.email}</Text>
-          <Text>{e.name}</Text>
-          <Text>{e.phoneNumber}</Text>
-          <Text>{e.totalPoint}P</Text>
-          <Text>
-            <Button id={e._id} name={e.name} onClick={handleClick}>
-              회원삭제
-            </Button>
-          </Text>
-        </Row>
-      ))}
+      <Wrapper pageSize={pageSize}>
+        {users.map((e) => (
+          <Row key={e._id}>
+            <Text width='250'>{e.email}</Text>
+            <Text>{e.name}</Text>
+            <Text>{e.phoneNumber}</Text>
+            <Text width='100'>{e.totalPoint}P</Text>
+            <Text>
+              <Button id={e._id} name={e.name} onClick={handleClick}>
+                회원삭제
+              </Button>
+            </Text>
+          </Row>
+        ))}
+      </Wrapper>
       <Pagenation lastPage={Math.ceil(totalCount / pageSize) - 1} />
     </>
   );
 };
+
+const TitleRow = styled.div`
+  display: flex;
+  padding: 10px;
+  border-bottom: 2px solid black;
+  font-weight: 600;
+  font-size: 20px;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: ${(props) => `${45 * props.pageSize}px`};
+  align-self: end;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  border-bottom: 1px solid #bdbdbd;
+  justify-content: space-between;
+`;
+
+const Text = styled.p`
+  display: flex;
+  width: ${(props) => props.width ?? '150'}px;
+  height: 24px;
+  letter-spacing: 0.5px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Button = styled.button`
+  display: flex;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: #3563e9;
+  color: white;
+  font-size: 16px;
+`;
+
+const ModalButton = styled.button`
+  width: 80px;
+  height: 50px;
+  padding: 5px 10px;
+  margin-top: 20px;
+  border-radius: 4px;
+  background: #3563e9;
+  color: white;
+  text-align: center;
+  font-size: 25px;
+`;
+
 const ModalWrapper = styled.div`
   display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
   position: fixed;
@@ -151,51 +206,6 @@ const NoticeResult = styled.div`
   text-align: center;
   align-items: center;
   flex-direction: column;
-`;
-
-const TitleRow = styled.div`
-  display: flex;
-  padding: 10px;
-  border-bottom: 2px solid black;
-  font-weight: 600;
-  font-size: 20px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 10px;
-  border-bottom: 1px solid #bdbdbd;
-  justify-content: space-between;
-`;
-
-const Text = styled.p`
-  display: flex;
-  width: 150px;
-  height: 24px;
-  letter-spacing: 0.5px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Button = styled.button`
-  display: flex;
-  padding: 5px 10px;
-  border-radius: 4px;
-  background: #3563e9;
-  color: white;
-  font-size: 16px;
-`;
-const ModalButton = styled.button`
-  width: 80px;
-  height: 50px;
-  padding: 5px 10px;
-  margin-top: 20px;
-  border-radius: 4px;
-  background: #3563e9;
-  color: white;
-  text-align: center;
-  font-size: 25px;
 `;
 
 export default AdminDeleteMember;

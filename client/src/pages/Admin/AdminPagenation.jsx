@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { adminCurrentPage } from 'stores/adminStore';
@@ -9,8 +9,10 @@ const Pagenation = ({ lastPage }) => {
   const handleClick = (e) => {
     if (e.target.value === 'first') {
       setCurentPage(0);
+      setPageList(0);
     } else if (e.target.value === 'last') {
       setCurentPage(lastPage);
+      setPageList(lastPage - 8);
     } else if (e.target.value === 'prev') {
       if (currentPage * 1 > 0) {
         setCurentPage(currentPage * 1 - 1);
@@ -19,18 +21,20 @@ const Pagenation = ({ lastPage }) => {
     } else if (e.target.value === 'next') {
       if (currentPage * 1 < lastPage) {
         if (
-          currentPage * 1 === pageList * 1 + 7 &&
-          currentPage * 1 !== lastPage - 1
+          currentPage * 1 === pageList * 1 + 8 &&
+          currentPage * 1 !== lastPage
         ) {
           setPageList(pageList + 1);
-        } else {
-          setCurentPage(currentPage * 1 + 1);
         }
+        setCurentPage(currentPage * 1 + 1);
       }
     } else {
       setCurentPage(e.target.value);
     }
   };
+  useEffect(() => {
+    setCurentPage(0);
+  }, []);
 
   return (
     <Wrapper>
@@ -115,6 +119,14 @@ const Pagenation = ({ lastPage }) => {
         >
           {pageList * 1 + 8}
         </Page>
+        <Page
+          value={pageList * 1 + 8}
+          currentPage={currentPage}
+          onClick={handleClick}
+          lastPage={lastPage}
+        >
+          {pageList * 1 + 9}
+        </Page>
         <Page value='next' currentPage={currentPage} onClick={handleClick}>
           &gt;
         </Page>
@@ -145,6 +157,7 @@ const Page = styled.button`
     props.value * 1 === props.currentPage * 1 && '#3563e9'};
   border-radius: 50%;
   cursor: pointer;
+  user-select: none;
 `;
 const Wrapper = styled.div`
   display: flex;
