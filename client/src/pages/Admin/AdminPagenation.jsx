@@ -1,40 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { adminCurrentPage } from 'stores/adminStore';
 
-const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
+const Pagenation = ({ lastPage }) => {
   const [pageList, setPageList] = useState(0);
+  const [currentPage, setCurentPage] = useRecoilState(adminCurrentPage);
   const handleClick = (e) => {
     if (e.target.value === 'first') {
-      setCurrrentPage(0);
+      setCurentPage(0);
+      setPageList(0);
     } else if (e.target.value === 'last') {
-      setCurrrentPage(lastPage);
+      setCurentPage(lastPage);
+      setPageList(lastPage - 8);
     } else if (e.target.value === 'prev') {
-      if (currrentPage * 1 > 0) {
-        setCurrrentPage(currrentPage * 1 - 1);
-      } else if (currrentPage * 1 === pageList * 1 && currrentPage * 1 !== 0)
+      if (currentPage * 1 > 0) {
+        setCurentPage(currentPage * 1 - 1);
+      } else if (currentPage * 1 === pageList * 1 && currentPage * 1 !== 0)
         setPageList(pageList - 1);
     } else if (e.target.value === 'next') {
-      if (currrentPage * 1 < lastPage) {
+      if (currentPage * 1 < lastPage) {
         if (
-          currrentPage * 1 === pageList * 1 + 7 &&
-          currrentPage * 1 !== lastPage - 1
+          currentPage * 1 === pageList * 1 + 8 &&
+          currentPage * 1 !== lastPage
         ) {
           setPageList(pageList + 1);
-        } else {
-          setCurrrentPage(currrentPage * 1 + 1);
         }
+        setCurentPage(currentPage * 1 + 1);
       }
     } else {
-      setCurrrentPage(e.target.value);
+      setCurentPage(e.target.value);
     }
   };
+  useEffect(() => {
+    setCurentPage(0);
+  }, []);
 
   return (
     <Wrapper>
       <PageRow>
         <Page
           value='first'
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -42,7 +49,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value='prev'
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -50,7 +57,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -58,7 +65,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 1}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -66,7 +73,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 2}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -74,7 +81,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 3}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -82,7 +89,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 4}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -90,7 +97,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 5}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -98,7 +105,7 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 6}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
@@ -106,16 +113,24 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
         </Page>
         <Page
           value={pageList * 1 + 7}
-          currrentPage={currrentPage}
+          currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
         >
           {pageList * 1 + 8}
         </Page>
-        <Page value='next' currrentPage={currrentPage} onClick={handleClick}>
+        <Page
+          value={pageList * 1 + 8}
+          currentPage={currentPage}
+          onClick={handleClick}
+          lastPage={lastPage}
+        >
+          {pageList * 1 + 9}
+        </Page>
+        <Page value='next' currentPage={currentPage} onClick={handleClick}>
           &gt;
         </Page>
-        <Page value='last' currrentPage={currrentPage} onClick={handleClick}>
+        <Page value='last' currentPage={currentPage} onClick={handleClick}>
           &gt;&gt;
         </Page>
       </PageRow>
@@ -125,13 +140,11 @@ const Pagenation = ({ currrentPage, setCurrrentPage, lastPage }) => {
 
 const Page = styled.button`
   display: ${(props) =>
-    props.value * 1 <= props.lastPage * 1 ||
-    props.value === 'prev' ||
-    props.value === 'next' ||
-    props.value === 'first' ||
-    props.value === 'last'
+    (props.value * 1 >= 0 && props.value * 1 <= props.lastPage * 1) ||
+    ['prev', 'next', 'first', 'last'].includes(props.value)
       ? 'flex'
       : 'none'};
+  color: ${(props) => props.value * 1 < 0 && 'red'};
   width: 35px;
   height: 35px;
   margin: 0 5px;
@@ -140,11 +153,12 @@ const Page = styled.button`
   justify-content: center;
   align-items: center;
   color: ${(props) =>
-    props.value * 1 === props.currrentPage * 1 ? '#fff' : '#000'};
+    props.value * 1 === props.currentPage * 1 ? '#fff' : '#000'};
   background-color: ${(props) =>
-    props.value * 1 === props.currrentPage * 1 && '#3563e9'};
+    props.value * 1 === props.currentPage * 1 && '#3563e9'};
   border-radius: 50%;
   cursor: pointer;
+  user-select: none;
 `;
 const Wrapper = styled.div`
   display: flex;
