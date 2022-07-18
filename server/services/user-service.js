@@ -106,7 +106,12 @@ class UserService {
     // 로그인 성공 -> JWT 웹 토큰 생성
     const secretKey = process.env.JWT_SECRET_KEY || 'secret-key';
     const token = jwt.sign(
-      { userId: user._id, role: user.role, isOAuth: user.isOAuth },
+      {
+        userId: user._id,
+        role: user.role,
+        isOAuth: user.isOAuth,
+        name: user.name,
+      },
       secretKey,
     );
     const isAdmin = user.role === 'admin';
@@ -157,7 +162,7 @@ class UserService {
     }
 
     // 비밀번호 일치함. 유저 정보 반환
-    return user;
+    return { result: 'success' };
   }
 
   // 사용자 목록을 받음.
@@ -245,9 +250,7 @@ class UserService {
 
   async getUser(userId) {
     // 우선 해당 id의 유저가 db에 있는지 확인
-    const user = await this.userModel.findById(userId, {
-      select: { password: 0 },
-    });
+    const user = await this.userModel.findById(userId);
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!user) {
@@ -272,6 +275,39 @@ class UserService {
       };
     }
     return checkUserMailResult;
+  }
+
+  async getUsersByPagination({
+    phoneNumber,
+    name,
+    email,
+    offset = 0,
+    count = 10,
+  }) {
+    let search_list = [];
+
+    if (name) {
+      search_list.push({ name: { $regex: name } });
+    }
+    if (email) {
+      search_list.push({ email: { $regex: email } });
+    }
+    if (phoneNumber) {
+      search_list.push({ phoneNumber: { $regex: phoneNumber } });
+    }
+    let query = {};
+
+    if (search_list.length > 0) {
+      query = { $and: search_list };
+    }
+
+    const users = await this.userModel.findByPagination(query, offset, count);
+    const length = await this.userModel.countdocument(query);
+    const result = {
+      length,
+      users,
+    };
+    return result;
   }
 }
 

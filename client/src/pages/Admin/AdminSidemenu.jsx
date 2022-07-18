@@ -4,8 +4,8 @@ import { adminContentState } from 'stores/adminStore';
 import { useRecoilState } from 'recoil';
 
 import AdminDeleteMember from './AdminDeleteMember';
+import AdminAddGround from './AdminAddGround';
 import {
-  AdminAddGround,
   AdminEditGround,
   AdminDeleteGround,
   AdminReservations,
@@ -100,7 +100,7 @@ const SideMenuTitle = styled.div`
   height: 50px;
   padding-top: 10px;
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
 `;
 
 const SideMenuLink = styled.button`

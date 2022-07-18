@@ -39,21 +39,22 @@ uploadRouter.get('/images/:key', (req, res) => {
  *             schema:
  *               type: object
  *               properties:
- *                 type: string
+ *                 imageUrl:
+ *                   type: string
+ *                   description: 결과 url
  */
 uploadRouter.post(
   '/imageUpload',
   upload.single('image'),
   async (req, res, next) => {
-    const { file } = req;
-    console.log(file);
-    if (!file) {
-      next(error);
-    } else {
+    try {
+      const { file } = req;
       const success = {
         imageUrl: file.location,
       };
       res.send(success);
+    } catch (error) {
+      next(error);
     }
   },
 );

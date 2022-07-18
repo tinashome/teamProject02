@@ -1,26 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import BannerImage from 'components/atoms/BannerImage';
 import GroundCard from 'components/organisms/GroundCard';
 import banner from 'assets/image/banner.jpeg';
 import styled from 'styled-components';
 import * as Api from 'api/api';
-import {
-  FaAngleLeft,
-  FaAngleRight,
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaAngleDown,
-  FaSearch,
-} from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
 import { groundListState } from 'stores/groundStore';
 import Spinner from 'components/atoms/Spinner';
+import SearchBar from 'components/organisms/SearchBar';
+import LocationFilter from 'components/organisms/LocationFilter';
+import Pagination from 'components/organisms/Pagination';
+import locationList from 'constants/locationList';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [groundList, setGroundList] = useRecoilState(groundListState);
+  const [location, setLocation] = useState('');
   const [page, setPage] = useState(1);
+  const [groundList, setGroundList] = useRecoilState(groundListState);
+  const totalPage = Math.ceil(groundList.length / 8);
 
+  // 처음 화면 구성, Pagination, Location Filter 변경 시 실행
+  useEffect(() => {
+    (async () => {
+      const result = await Api.get(
+        `grounds?location=${location}&search=${searchValue}&offset=${
+          (page - 1) * 8
+        }`,
+      );
+      setGroundList({
+        isLoading: false,
+        length: result.data.length,
+        data: result.data.grounds,
+      });
+    })();
+  }, [page, location]);
+
+  // Search
   const handleChangeSearchInput = (e) => {
     setSearchValue(e.target.value);
   };
@@ -28,12 +43,25 @@ const Home = () => {
   const handleSearch = async (e) => {
     if (e.key === 'Enter') {
       if (searchValue === '') {
-        alert('검색어를 입력해주세요!');
+        setGroundList({
+          isLoading: true,
+        });
+        const result = await Api.get(
+          `grounds/?location=${location}&search=${searchValue}`,
+        );
+        setGroundList({
+          isLoading: false,
+          length: result.data.length,
+          data: result.data.grounds,
+        });
+        return;
       }
       setGroundList({
         isLoading: true,
       });
-      const searchResult = await Api.get(`grounds/?search=${searchValue}`);
+      const searchResult = await Api.get(
+        `grounds/?location=${location}&search=${searchValue}`,
+      );
       setGroundList({
         isLoading: false,
         length: searchResult.data.length,
@@ -42,37 +70,53 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const result = await Api.get(`grounds?offset=${(page - 1) * 8}`);
-      setGroundList({
-        isLoading: false,
-        length: result.data.length,
-        data: result.data.grounds,
-      });
-    })();
-  }, [page]);
+  // Location Filter
+  const [isOpenFilterModal, setisOpenFilterModal] = useState(false);
+  const handleToggleFilterModal = useCallback(() => {
+    setisOpenFilterModal((prev) => !prev);
+  }, [isOpenFilterModal]);
 
-  const pagesNum = Math.ceil(groundList.length / 8);
+  const getFilteredData = async (e) => {
+    if (e.target.innerText === '모든 지역') {
+      setLocation('');
+    } else {
+      setLocation(e.target.innerText);
+    }
+    handleToggleFilterModal();
+    setGroundList({
+      isLoading: true,
+    });
+    // useEffect Hook 실행
+  };
 
   return (
     <>
       <BannerImage src={banner} />
       <Container>
         <FilterWrapper>
-          <AreaFilter>
-            <FilterName>모든 지역</FilterName>
-            <FaAngleDown />
-          </AreaFilter>
-          <SearchBar>
-            <FaSearch />
-            <StyledInput
-              placeholder='구장 찾기'
-              value={searchValue}
-              onChange={handleChangeSearchInput}
-              onKeyDown={handleSearch}
-            />
-          </SearchBar>
+          <LocationFilter
+            filterName={location || '모든 지역'}
+            handleClick={handleToggleFilterModal}
+          />
+          {isOpenFilterModal && (
+            <FilterModal>
+              {locationList.map((districtName) => (
+                <FilterButton
+                  type='button'
+                  key={districtName}
+                  onClick={getFilteredData}
+                >
+                  {districtName}
+                </FilterButton>
+              ))}
+            </FilterModal>
+          )}
+          <SearchBar
+            placeholder='구장 찾기'
+            value={searchValue}
+            onChange={handleChangeSearchInput}
+            onKeyDown={handleSearch}
+          />
         </FilterWrapper>
         {groundList.isLoading ? (
           <Spinner />
@@ -84,26 +128,12 @@ const Home = () => {
               ))}
             </GroundList>
             {groundList.length !== 0 && (
-              <PaginationWrapper>
-                <FaAngleDoubleLeft />
-                <FaAngleLeft />
-                <ButtonWrapper>
-                  {Array(pagesNum)
-                    .fill()
-                    .map((_, i) => (
-                      <PageButton
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={i + 1}
-                        onClick={() => setPage(i + 1)}
-                        aria-current={page === i + 1 ? 'page' : null}
-                      >
-                        {i + 1}
-                      </PageButton>
-                    ))}
-                </ButtonWrapper>
-                <FaAngleRight />
-                <FaAngleDoubleRight />
-              </PaginationWrapper>
+              <Pagination
+                totalPage={totalPage}
+                limit={5}
+                page={page}
+                setPage={setPage}
+              />
             )}
           </>
         )}
@@ -117,78 +147,48 @@ const Container = styled.div`
 `;
 
 const FilterWrapper = styled.div`
+  position: relative;
   display: flex;
   margin-bottom: 0.5rem;
 `;
 
-const AreaFilter = styled.button`
+const FilterModal = styled.div`
+  position: absolute;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin: 0 2rem;
-  button {
-    margin-right: 0.5rem;
+  width: 15%;
+  left: 1rem;
+  top: 3rem;
+  padding: 1.5rem 1rem;
+  background-color: #495057;
+  border-radius: 4px;
+  z-index: 9;
+
+  p {
+    margin-bottom: 1rem;
   }
 `;
 
-const FilterName = styled.p`
-  margin-right: 0.5rem;
-`;
+const FilterButton = styled.button`
+  width: 100%;
+  padding: 4px 0;
+  border-radius: 4px;
+  color: #ffffff;
 
-const SearchBar = styled.div`
-  width: 18rem;
-  display: flex;
-  align-items: center;
-  border: 1px solid #ced4da;
-  border-radius: 24px;
-  padding: 12px 16px;
-  margin-right: 8rem;
-  svg {
-    opacity: 0.5;
+  & + & {
+    margin-top: 0.5rem;
   }
-`;
 
-const StyledInput = styled.input`
-  width: 90%;
-  border: none;
-  outline: none;
-  padding-left: 0.8rem;
+  &:hover {
+    background-color: #91a7ff;
+  }
 `;
 
 const GroundList = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25%, auto));
   margin-bottom: 3rem;
-`;
-
-const PaginationWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem 0;
-
-  svg {
-    margin: 0 0.5rem;
-    cursor: pointer;
-  }
-`;
-
-const ButtonWrapper = styled.div`
-  padding: 0 2rem;
-`;
-
-const PageButton = styled.button`
-  width: 50px;
-  height: 50px;
-  font-size: 1rem;
-  padding: 12px;
-  margin: 0 1em;
-  border-radius: 100px;
-
-  &[aria-current] {
-    color: #ffffff;
-    background: #3563e9;
-    cursor: revert;
-  }
 `;
 
 export default Home;

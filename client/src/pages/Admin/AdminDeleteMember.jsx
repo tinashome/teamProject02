@@ -77,7 +77,7 @@ const AdminDeleteMember = () => {
           getUsers();
         }}
       >
-        <NoticeResult>
+        <ModalDiv>
           {modal}
           <ModalButton
             onClick={() => {
@@ -87,7 +87,7 @@ const AdminDeleteMember = () => {
           >
             닫기
           </ModalButton>
-        </NoticeResult>
+        </ModalDiv>
       </ModalWrapper>
       <TitleRow>
         <Text width='200'>이메일</Text>
@@ -128,7 +128,7 @@ const TitleRow = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${(props) => `${45 * props.pageSize}px`};
+  // height: ${(props) => `${45 * props.pageSize}px`};
   align-self: end;
 `;
 
@@ -158,18 +158,6 @@ const Button = styled.button`
   font-size: 16px;
 `;
 
-const ModalButton = styled.button`
-  width: 80px;
-  height: 50px;
-  padding: 5px 10px;
-  margin-top: 20px;
-  border-radius: 4px;
-  background: #3563e9;
-  color: white;
-  text-align: center;
-  font-size: 25px;
-`;
-
 const ModalWrapper = styled.div`
   display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
   position: fixed;
@@ -184,7 +172,7 @@ const ModalWrapper = styled.div`
   letter-spacing: -2px;
   `;
 
-const NoticeResult = styled.div`
+const ModalDiv = styled.div`
   display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
   position:absolute;
   top: 50%;
@@ -200,6 +188,18 @@ const NoticeResult = styled.div`
   text-align: center;
   align-items: center;
   flex-direction: column;
+`;
+
+const ModalButton = styled.button`
+  width: 80px;
+  height: 50px;
+  padding: 5px 10px;
+  margin-top: 20px;
+  border-radius: 4px;
+  background: #3563e9;
+  color: white;
+  text-align: center;
+  font-size: 25px;
 `;
 
 export default AdminDeleteMember;

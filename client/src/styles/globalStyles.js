@@ -10,6 +10,10 @@ export default createGlobalStyle`
       font-family: 'Noto Sans KR', sans-serif;
     }
 
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
     *, :after, :before {
         box-sizing: border-box;
     }
