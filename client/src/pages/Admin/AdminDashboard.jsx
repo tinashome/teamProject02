@@ -6,15 +6,19 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// import { useRecoilState } from 'recoil';
-// import { adminUsers } from 'stores/adminStore';
+import { useRecoilState } from 'recoil';
+import { adminContentState } from 'stores/adminStore';
 import * as Api from 'api/api';
 import ContentLargetxt from 'components/atoms/ContentLargetxt';
 
+import AdminAddGround from './AdminAddGround';
+
 const AdminDashboard = () => {
   // const [users, setUsers] = useRecoilState(adminUsers);
+  const [content, setContent] = useRecoilState(adminContentState);
   const [role, setRole] = useState(false);
   const newUsers = [];
+  setContent(['경기장 추가', <AdminAddGround />]);
 
   // 관리자로그인함수
   const signin = async (email, pass) => {
