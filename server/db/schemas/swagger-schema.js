@@ -172,6 +172,13 @@
  *             description: 예약 가능 여부
  *             default: false
  *             required: false
+ *       userName:
+ *         type: string
+ *         description: 예약한 유저이름
+ *       groundName:
+ *         type: string
+ *         description: 예약한 구장 이름
+ *         required: true
  *       reservationDate:
  *         type: string
  *         description: 예약날짜
@@ -180,6 +187,11 @@
  *         type: string
  *         description: 예약시간
  *         required: true
+ *       isBooked:
+ *         type: boolean
+ *         description: 예약여부
+ *         required: false
+ *         default: true
  *       isDeleted:
  *         type: boolean
  *         description: 삭제여부
@@ -202,59 +214,30 @@
  *     required:
  *        - _id
  *        - paymentAmount
- *        - userObject
+ *        - user
  *     properties:
  *       _id:
  *         type: objectid
  *         description: primary key
- *       userObject:
- *         type: object
- *         description: userObject입니다. poplutate용 생성이 userId값을 입력하세요.
+ *       user:
+ *         type: "object"
  *         required: true
  *         properties:
- *           _id:
- *             type: objectid
- *             description: primary key
- *           name:
- *             type: string
- *             description: 이름
- *             required: false
- *             default: "null"
+ *           id:
+ *             type: "string"
+ *             description: 유저id
  *           email:
- *             type: string
+ *             type: "string"
  *             description: 이메일
- *             required: true
- *           phoneNumber:
- *             type: string
- *             description: 전화번호
- *             required: false
- *           role:
- *             type: string
- *             description: basic-user, admin 넣기
- *             default: "basic-user"
- *             required: false
- *           isOAuth:
- *             type: boolean
- *             description: 카카오 권한 확인
- *             default: false
- *             required: false
- *           totalPoint:
- *             type: integer
- *             description: point를 가지고 있는 돈
- *             default: 0
- *             required: false
- *           createAt:
+ *           name:
  *             type: "string"
- *             format: "date-time"
- *           updateAt:
- *             type: "string"
- *             format: "date-time"
+ *             description: 이름
  *       paymentOption:
  *         type: boolean
  *         description: 페이옵션
  *         required: true
  *       paymentAmount:
- *         type: string
+ *         type: integer
  *         description: 요금
  *         required: true
  *       isCharged:
@@ -304,16 +287,18 @@
  *             description: 이미지 url 배열
  *             required: false
  *           groundAddress:
- *             type: Schema
- *             description: 주소넣기
+ *             type: "object"
+ *             required: true
  *             properties:
  *               postalCode:
- *                 type: string
+ *                 type: "string"
+ *                 description: 주소번호
  *               address1:
- *                 type: string
+ *                 type: "string"
+ *                 description: 주소
  *               address2:
- *                 type: string
- *             required: true
+ *                 type: "string"
+ *                 description: 주소상세
  *           groundSize:
  *             type: string
  *             description: 구장크기
@@ -357,7 +342,7 @@
  *           isBookedDate:
  *             type: array
  *             description: rental 생성시 추가 rental 종료시 삭제 ["날짜-시간","날짜-시간","날짜-시간",...]
- *             default: null
+ *             default: []
  *             required: false
  *           isBooked:
  *             type: boolean

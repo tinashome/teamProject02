@@ -25,13 +25,12 @@ class BannerService {
   }
 
   async setBanner(bannerId, toUpdate) {
-    console.log('hi');
     let banner = await this.bannerModel.findById(bannerId);
 
     if (!banner) {
       throw new Error('배너가 없습니다. 다시 한 번 확인해 주세요.');
     }
-    console.log('hi');
+
     banner = await this.bannerModel.update({
       bannerId,
       update: toUpdate,

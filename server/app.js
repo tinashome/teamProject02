@@ -4,6 +4,9 @@ import {
   uploadRouter,
   bannerRouter,
   authRouter,
+  pointRouter,
+  groundRouter,
+  rentalRouter,
 } from './routers/index.js';
 
 import cors from 'cors';
@@ -27,7 +30,8 @@ const options = {
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          description: '해당 토큰 안에는 role,userId,isOAtuth 가 주어집니다. ',
+          description:
+            '해당 토큰 안에는 role,userId,isOAtuth,name 가 주어집니다. ',
         },
         IsAdmin: {
           type: 'apiKey',
@@ -38,7 +42,8 @@ const options = {
       },
     },
     schemes: ['http', 'https'], // 가능
-
+    //'https://futsal-api-elice.herokuapp.com/',
+    //'http://localhost:5000/'
     servers: [
       {
         url: 'https://futsal-api-elice.herokuapp.com/',
@@ -53,9 +58,7 @@ const app = express();
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 // CORS 에러 방지
-// url 체크
-//'https://futsal-api-elice.herokuapp.com/',
-//'http://localhost:5000/'
+
 app.use(cors());
 // Content-Type: application/json 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.json());
@@ -70,10 +73,13 @@ app.use(cookieParser('secreatofTeam4'));
 app.use('/uploads', express.static('uploads'));
 
 // api 라우팅
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/banners', bannerRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/grounds', groundRouter);
+app.use('/api/points', pointRouter);
+app.use('/api/rentals', rentalRouter);
 app.use(errorHandler);
 
 export { app };
