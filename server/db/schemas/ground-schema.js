@@ -98,6 +98,7 @@ const GroundSchema = new mongoose.Schema(
     collection: 'grounds',
     timestamps: true,
   },
+  { typeKey: '$type' },
 );
 
 export { GroundSchema };

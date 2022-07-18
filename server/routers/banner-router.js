@@ -171,24 +171,21 @@ bannerRouter.patch('/:bannerId', adminOnly, async (req, res, next) => {
  *       - JWT: []
  *       - IsAdmin: []
  *     responses:
- *       200:
+ *       204:
  *         description: 배너가 삭제되었습니다.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 result:
- *                   type: string
- *                   description: 성공여부
  */
 bannerRouter.delete('/:bannerId', adminOnly, async (req, res, next) => {
   try {
     const { bannerId } = req.params;
     let result = await bannerService.deleteBannerData(bannerId);
-    result.message = `해당 배너: ${bannerId}는 삭제처리 되었습니다.`;
-    // 사용자 정보를 JSON 형태로 프론트에 보냄
-    res.send(result);
+    if (!result) {
+      throw new Error(`${bannerId} 삭제가 완료되지 않았습니다.`);
+    }
+
+    res.status(204).send();
+    // result.message = `해당 배너: ${bannerId}는 삭제처리 되었습니다.`;
+    // // 사용자 정보를 JSON 형태로 프론트에 보냄
+    // res.send(result);
   } catch (error) {
     next(error);
   }
@@ -202,20 +199,20 @@ export { bannerRouter };
  *   bannerPost:
  *     type: "object"
  *     properties:
- *                   _id:
- *                     type: objectid
- *                     description: primaryKey
- *                   title:
- *                     type: string
- *                     description: 제목
- *                   imageUrl:
- *                     type: string
- *                     description: 이미지 url
- *                   createdAt:
- *                     type: "string"
- *                     format: "date-time"
- *                   updatedAt:
- *                     type: "string"
- *                     format: "date-time"
+ *        _id:
+ *          type: objectid
+ *          description: primaryKey
+ *        title:
+ *          type: string
+ *          description: 제목
+ *        imageUrl:
+ *          type: string
+ *          description: 이미지 url
+ *        createdAt:
+ *          type: "string"
+ *          format: "date-time"
+ *        updatedAt:
+ *          type: "string"
+ *          format: "date-time"
  *
  */

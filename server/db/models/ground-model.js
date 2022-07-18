@@ -1,72 +1,76 @@
-import mongoose from "mongoose";
-import { GroundSchema } from "../schemas/ground-schema.js";
+import mongoose from 'mongoose';
+import { GroundSchema } from '../schemas/ground-schema.js';
 
-const Ground = mongoose.model("grounds", GroundSchema);
+const Ground = mongoose.model('grounds', GroundSchema);
 
 export class GroundModel {
   async findById(groundId) {
     const ground = await Ground.findOne({ _id: groundId })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .sort({ _id: -1 });
+      .select('-isDeleted');
+
     return ground;
   }
   async findByName(groundName) {
     const ground = await Ground.findOne({ groundName })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .sort({ _id: -1 });
+      .select('-isDeleted');
+
     return ground;
   }
   async findByAddress(groundAddress) {
     const ground = await Ground.findOne({ groundAddress })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .sort({ _id: -1 });
+      .select('-isDeleted');
+
     return ground;
   }
-
+  async countdocument(query) {
+    const count = await Ground.countDocuments(query)
+      .where('isDeleted')
+      .equals(false)
+      .select('-isDeleted');
+    return count;
+  }
   async create(groundInfo) {
-    const createdNewGround = await Ground.create(groundInfo).select(
-      "-isDeleted"
-    );
+    const createdNewGround = await Ground.create(groundInfo);
     return createdNewGround;
   }
 
   async findAll() {
     const grounds = await Ground.find({})
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .sort({ _id: -1 });
     return grounds;
   }
   async findByDeltedAll() {
-    const grounds = await Ground.find({}).where("isDeleted").equals(true);
+    const grounds = await Ground.find({}).where('isDeleted').equals(true);
 
     return grounds;
   }
   async findKeyword(keyword) {
     const grounds = await Ground.find({})
-      .regex("groundName", keyword)
-      .where("isDeleted")
+      .regex('groundName', keyword)
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .sort({ _id: -1 });
     return grounds;
   }
 
-  async findByPagination(query, page, limit) {
+  async findByPagination(query, offset, count) {
     const grounds = await Ground.find(query)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
+      .select('-isDeleted')
       .sort({ _id: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+      .skip(offset)
+      .limit(count);
     return grounds;
   }
   async update({ groundId, update }) {
@@ -83,7 +87,7 @@ export class GroundModel {
     const ground = await Ground.findOneAndUpdate(
       filter,
       { isDeleted: true },
-      option
+      option,
     );
     return ground;
   }
