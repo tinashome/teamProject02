@@ -2,15 +2,29 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { adminContentState } from 'stores/adminStore';
 import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 import AdminSidemenu from './AdminSidemenu';
 import AdminDashboard from './AdminDashboard';
 
 const Admin = () => {
   const [content, setContent] = useRecoilState(adminContentState);
+  const navigate = useNavigate();
+  const isAdmin = () => {
+    try {
+      const token = localStorage.getItem('token');
+      const userRole = jwtDecode(token).role;
+      if (userRole !== 'admin') navigate('/');
+    } catch (err) {
+      navigate('/login');
+    }
+  };
+  isAdmin();
   useEffect(() => {
     setContent(['관리자 페이지', <AdminDashboard />]);
   }, []);
+
   return (
     <AdminPageWrapper>
       <AdminSidemenu />
