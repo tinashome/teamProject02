@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaFutbol, FaUserCircle } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
@@ -11,6 +11,9 @@ import Button from '../atoms/Button';
 import Logo from '../atoms/Logo';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
   const handleLogout = () => {
@@ -18,6 +21,7 @@ const Header = () => {
     setUserInfo({
       isLogin: false,
     });
+    navigate('/login');
   };
 
   useEffect(() => {
@@ -32,6 +36,10 @@ const Header = () => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    window.scroll({ top: 0 });
+  }, [params]);
 
   return (
     <Container>
