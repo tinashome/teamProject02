@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
@@ -7,14 +7,35 @@ import {
 } from 'react-icons/fa';
 import styled from 'styled-components';
 
-const Pagination = ({ pagesNum, page, setPage }) => (
-  <PaginationWrapper>
-    <FaAngleDoubleLeft onClick={() => setPage(1)} disabled={page === 1} />
-    <FaAngleLeft onClick={() => setPage(page - 1)} disabled={page === 1} />
-    <ButtonWrapper>
-      {Array(pagesNum)
-        .fill()
-        .map((_, i) => (
+const Pagination = ({ totalPage, limit, page, setPage }) => {
+  // 총 페이지 갯수에 따라 Pagination 갯수 정하기, limit 단위로 페이지 리스트 넘기기
+  const [currentPageArray, setCurrentPageArray] = useState([]);
+  const [totalPageArray, setTotalPageArray] = useState([]);
+
+  useEffect(() => {
+    if (page % limit === 1) {
+      setCurrentPageArray(totalPageArray[Math.floor(page / limit)]);
+    } else if (page % limit === 0) {
+      setCurrentPageArray(totalPageArray[Math.floor(page / limit) - 1]);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    const tmp = Array.from({ length: totalPage }, (_, i) => i);
+    const slicedPageArray = [];
+    for (let i = 0; i < totalPage; i += limit) {
+      slicedPageArray.push(tmp.slice(i, i + limit));
+    }
+    setTotalPageArray(slicedPageArray);
+    setCurrentPageArray(slicedPageArray[0]);
+  }, []);
+
+  return (
+    <PaginationWrapper>
+      <FaAngleDoubleLeft onClick={() => setPage(1)} disabled={page === 1} />
+      <FaAngleLeft onClick={() => setPage(page - 1)} disabled={page === 1} />
+      <ButtonWrapper>
+        {currentPageArray?.map((i) => (
           <PageButton
             // eslint-disable-next-line react/no-array-index-key
             key={i + 1}
@@ -24,17 +45,18 @@ const Pagination = ({ pagesNum, page, setPage }) => (
             {i + 1}
           </PageButton>
         ))}
-    </ButtonWrapper>
-    <FaAngleRight
-      onClick={() => setPage(page + 1)}
-      disabled={page === pagesNum}
-    />
-    <FaAngleDoubleRight
-      onClick={() => setPage(pagesNum)}
-      disabled={page === pagesNum}
-    />
-  </PaginationWrapper>
-);
+      </ButtonWrapper>
+      <FaAngleRight
+        onClick={() => setPage(page + 1)}
+        disabled={page === totalPage}
+      />
+      <FaAngleDoubleRight
+        onClick={() => setPage(totalPage)}
+        disabled={page === totalPage}
+      />
+    </PaginationWrapper>
+  );
+};
 
 const PaginationWrapper = styled.div`
   display: flex;

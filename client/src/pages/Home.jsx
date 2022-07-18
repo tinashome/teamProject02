@@ -17,7 +17,7 @@ const Home = () => {
   const [location, setLocation] = useState('');
   const [page, setPage] = useState(1);
   const [groundList, setGroundList] = useRecoilState(groundListState);
-  const pagesNum = Math.ceil(groundList.length / 8);
+  const totalPage = Math.ceil(groundList.length / 8);
 
   // 처음 화면 구성, Pagination, Location Filter 변경 시 실행
   useEffect(() => {
@@ -124,7 +124,12 @@ const Home = () => {
               ))}
             </GroundList>
             {groundList.length !== 0 && (
-              <Pagination pagesNum={pagesNum} page={page} setPage={setPage} />
+              <Pagination
+                totalPage={totalPage}
+                limit={5}
+                page={page}
+                setPage={setPage}
+              />
             )}
           </>
         )}
