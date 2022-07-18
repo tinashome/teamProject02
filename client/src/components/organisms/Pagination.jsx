@@ -6,6 +6,7 @@ import {
   FaAngleRight,
 } from 'react-icons/fa';
 import styled from 'styled-components';
+import { sliceArrayByLimit } from 'util/useful-functions';
 
 const Pagination = ({ totalPage, limit, page, setPage }) => {
   // 총 페이지 갯수에 따라 Pagination 갯수 정하기, limit 단위로 페이지 리스트 넘기기
@@ -21,11 +22,7 @@ const Pagination = ({ totalPage, limit, page, setPage }) => {
   }, [page]);
 
   useEffect(() => {
-    const tmp = Array.from({ length: totalPage }, (_, i) => i);
-    const slicedPageArray = [];
-    for (let i = 0; i < totalPage; i += limit) {
-      slicedPageArray.push(tmp.slice(i, i + limit));
-    }
+    const slicedPageArray = sliceArrayByLimit(totalPage, limit);
     setTotalPageArray(slicedPageArray);
     setCurrentPageArray(slicedPageArray[0]);
   }, []);

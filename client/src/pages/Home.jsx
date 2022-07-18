@@ -83,7 +83,9 @@ const Home = () => {
       setLocation(e.target.innerText);
     }
     handleToggleFilterModal();
-
+    setGroundList({
+      isLoading: true,
+    });
     // useEffect Hook 실행
   };
 
@@ -127,7 +129,7 @@ const Home = () => {
             </GroundList>
             {groundList.length !== 0 && (
               <Pagination
-                totalPage={totalPage}
+                totalPage={10}
                 limit={5}
                 page={page}
                 setPage={setPage}

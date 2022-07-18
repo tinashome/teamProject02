@@ -16,3 +16,13 @@ export const addCommas = (n) =>
 // 휴대폰 번호 하이픈 추가
 export const addHyphen = (n) =>
   n.toString().replace(/\B(?=(\d{4})+(?!\d))/g, '-');
+
+// 페이지네이션 할 때, 특정 숫자까지의 배열을 만들고 limit 기준으로 자른 배열 만들기
+export const sliceArrayByLimit = (totalPage, limit) => {
+  const totalPageArray = Array(totalPage)
+    .fill()
+    .map((_, i) => i);
+  return Array(Math.ceil(totalPage / limit))
+    .fill()
+    .map(() => totalPageArray.splice(0, limit));
+};
