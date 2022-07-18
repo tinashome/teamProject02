@@ -45,14 +45,14 @@ const AdminPageWrapper = styled.div`
 
 const AdminPageContentContainer = styled.div`
   width: 770px;
-  margin: 0 100px;
+  margin: 50px;
 `;
 
 const AdminPageContentTitleBox = styled.div`
   text-align: center;
   padding: 30px 50px;
   font-size: 40px;
-  font-weight: 800;
+  font-weight: 700;
 `;
 
 const AdminPageContentBox = styled.div`
