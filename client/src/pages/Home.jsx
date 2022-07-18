@@ -82,6 +82,8 @@ const Home = () => {
     } else {
       setLocation(e.target.innerText);
     }
+    handleToggleFilterModal();
+
     // useEffect Hook 실행
   };
 
@@ -91,7 +93,7 @@ const Home = () => {
       <Container>
         <FilterWrapper>
           <LocationFilter
-            filterName='모든 지역'
+            filterName={location || '모든 지역'}
             handleClick={handleToggleFilterModal}
           />
           {isOpenFilterModal && (
