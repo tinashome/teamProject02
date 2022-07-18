@@ -4,17 +4,12 @@ import GroundCard from 'components/organisms/GroundCard';
 import banner from 'assets/image/banner.jpeg';
 import styled from 'styled-components';
 import * as Api from 'api/api';
-import {
-  FaAngleLeft,
-  FaAngleRight,
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaAngleDown,
-  FaSearch,
-} from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
 import { groundListState } from 'stores/groundStore';
 import Spinner from 'components/atoms/Spinner';
+import SearchBar from 'components/organisms/SearchBar';
+import DistrictFilter from 'components/organisms/DistrictFilter';
+import Pagination from 'components/organisms/Pagination';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -28,7 +23,16 @@ const Home = () => {
   const handleSearch = async (e) => {
     if (e.key === 'Enter') {
       if (searchValue === '') {
-        alert('검색어를 입력해주세요!');
+        setGroundList({
+          isLoading: true,
+        });
+        const result = await Api.get(`grounds`);
+        setGroundList({
+          isLoading: false,
+          length: result.data.length,
+          data: result.data.grounds,
+        });
+        return;
       }
       setGroundList({
         isLoading: true,
@@ -60,19 +64,13 @@ const Home = () => {
       <BannerImage src={banner} />
       <Container>
         <FilterWrapper>
-          <AreaFilter>
-            <FilterName>모든 지역</FilterName>
-            <FaAngleDown />
-          </AreaFilter>
-          <SearchBar>
-            <FaSearch />
-            <StyledInput
-              placeholder='구장 찾기'
-              value={searchValue}
-              onChange={handleChangeSearchInput}
-              onKeyDown={handleSearch}
-            />
-          </SearchBar>
+          <DistrictFilter filterName='모든 지역' />
+          <SearchBar
+            placeholder='구장 찾기'
+            value={searchValue}
+            onChange={handleChangeSearchInput}
+            onKeyDown={handleSearch}
+          />
         </FilterWrapper>
         {groundList.isLoading ? (
           <Spinner />
@@ -84,26 +82,7 @@ const Home = () => {
               ))}
             </GroundList>
             {groundList.length !== 0 && (
-              <PaginationWrapper>
-                <FaAngleDoubleLeft />
-                <FaAngleLeft />
-                <ButtonWrapper>
-                  {Array(pagesNum)
-                    .fill()
-                    .map((_, i) => (
-                      <PageButton
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={i + 1}
-                        onClick={() => setPage(i + 1)}
-                        aria-current={page === i + 1 ? 'page' : null}
-                      >
-                        {i + 1}
-                      </PageButton>
-                    ))}
-                </ButtonWrapper>
-                <FaAngleRight />
-                <FaAngleDoubleRight />
-              </PaginationWrapper>
+              <Pagination pagesNum={pagesNum} page={page} setPage={setPage} />
             )}
           </>
         )}
@@ -121,74 +100,10 @@ const FilterWrapper = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const AreaFilter = styled.button`
-  display: flex;
-  align-items: center;
-  margin: 0 2rem;
-  button {
-    margin-right: 0.5rem;
-  }
-`;
-
-const FilterName = styled.p`
-  margin-right: 0.5rem;
-`;
-
-const SearchBar = styled.div`
-  width: 18rem;
-  display: flex;
-  align-items: center;
-  border: 1px solid #ced4da;
-  border-radius: 24px;
-  padding: 12px 16px;
-  margin-right: 8rem;
-  svg {
-    opacity: 0.5;
-  }
-`;
-
-const StyledInput = styled.input`
-  width: 90%;
-  border: none;
-  outline: none;
-  padding-left: 0.8rem;
-`;
-
 const GroundList = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25%, auto));
   margin-bottom: 3rem;
-`;
-
-const PaginationWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem 0;
-
-  svg {
-    margin: 0 0.5rem;
-    cursor: pointer;
-  }
-`;
-
-const ButtonWrapper = styled.div`
-  padding: 0 2rem;
-`;
-
-const PageButton = styled.button`
-  width: 50px;
-  height: 50px;
-  font-size: 1rem;
-  padding: 12px;
-  margin: 0 1em;
-  border-radius: 100px;
-
-  &[aria-current] {
-    color: #ffffff;
-    background: #3563e9;
-    cursor: revert;
-  }
 `;
 
 export default Home;
