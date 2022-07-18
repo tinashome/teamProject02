@@ -74,7 +74,7 @@ const Container = styled.div`
   height: auto;
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   font-size: 20px;
 `;
 

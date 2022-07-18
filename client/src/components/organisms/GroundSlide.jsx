@@ -25,8 +25,8 @@ const GroundSlide = ({ info }) => {
       slidesToShow={1}
       slidesToScroll={1}
     >
-      {infoState.map((data) => (
-        <SlideImgs src={data} />
+      {infoState.map((data, idx) => (
+        <SlideImgs key={idx} src={data} />
       ))}
     </StyleSlider>
   );
