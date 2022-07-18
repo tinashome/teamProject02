@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import BannerImage from 'components/atoms/BannerImage';
 import GroundCard from 'components/organisms/GroundCard';
 import banner from 'assets/image/banner.jpeg';
@@ -8,14 +8,34 @@ import { useRecoilState } from 'recoil';
 import { groundListState } from 'stores/groundStore';
 import Spinner from 'components/atoms/Spinner';
 import SearchBar from 'components/organisms/SearchBar';
-import DistrictFilter from 'components/organisms/DistrictFilter';
+import LocationFilter from 'components/organisms/LocationFilter';
 import Pagination from 'components/organisms/Pagination';
+import locationList from 'constants/locationList';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [groundList, setGroundList] = useRecoilState(groundListState);
+  const [location, setLocation] = useState('');
   const [page, setPage] = useState(1);
+  const [groundList, setGroundList] = useRecoilState(groundListState);
+  const pagesNum = Math.ceil(groundList.length / 8);
 
+  // 처음 화면 구성, Pagination, Location Filter 변경 시 실행
+  useEffect(() => {
+    (async () => {
+      const result = await Api.get(
+        `grounds?location=${location}&search=${searchValue}&offset=${
+          (page - 1) * 8
+        }`,
+      );
+      setGroundList({
+        isLoading: false,
+        length: result.data.length,
+        data: result.data.grounds,
+      });
+    })();
+  }, [page, location]);
+
+  // Search
   const handleChangeSearchInput = (e) => {
     setSearchValue(e.target.value);
   };
@@ -26,7 +46,9 @@ const Home = () => {
         setGroundList({
           isLoading: true,
         });
-        const result = await Api.get(`grounds`);
+        const result = await Api.get(
+          `grounds/?location=${location}&search=${searchValue}`,
+        );
         setGroundList({
           isLoading: false,
           length: result.data.length,
@@ -37,7 +59,9 @@ const Home = () => {
       setGroundList({
         isLoading: true,
       });
-      const searchResult = await Api.get(`grounds/?search=${searchValue}`);
+      const searchResult = await Api.get(
+        `grounds/?location=${location}&search=${searchValue}`,
+      );
       setGroundList({
         isLoading: false,
         length: searchResult.data.length,
@@ -46,25 +70,43 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const result = await Api.get(`grounds?offset=${(page - 1) * 8}`);
-      setGroundList({
-        isLoading: false,
-        length: result.data.length,
-        data: result.data.grounds,
-      });
-    })();
-  }, [page]);
+  // Location Filter
+  const [isOpenFilterModal, setisOpenFilterModal] = useState(false);
+  const handleToggleFilterModal = useCallback(() => {
+    setisOpenFilterModal((prev) => !prev);
+  }, [isOpenFilterModal]);
 
-  const pagesNum = Math.ceil(groundList.length / 8);
+  const getFilteredData = async (e) => {
+    if (e.target.innerText === '모든 지역') {
+      setLocation('');
+    } else {
+      setLocation(e.target.innerText);
+    }
+    // useEffect Hook 실행
+  };
 
   return (
     <>
       <BannerImage src={banner} />
       <Container>
         <FilterWrapper>
-          <DistrictFilter filterName='모든 지역' />
+          <LocationFilter
+            filterName='모든 지역'
+            handleClick={handleToggleFilterModal}
+          />
+          {isOpenFilterModal && (
+            <FilterModal>
+              {locationList.map((districtName) => (
+                <FilterButton
+                  type='button'
+                  key={districtName}
+                  onClick={getFilteredData}
+                >
+                  {districtName}
+                </FilterButton>
+              ))}
+            </FilterModal>
+          )}
           <SearchBar
             placeholder='구장 찾기'
             value={searchValue}
@@ -96,8 +138,42 @@ const Container = styled.div`
 `;
 
 const FilterWrapper = styled.div`
+  position: relative;
   display: flex;
   margin-bottom: 0.5rem;
+`;
+
+const FilterModal = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 15%;
+  left: 1rem;
+  top: 3rem;
+  padding: 1.5rem 1rem;
+  background-color: #495057;
+  border-radius: 4px;
+  z-index: 9;
+
+  p {
+    margin-bottom: 1rem;
+  }
+`;
+
+const FilterButton = styled.button`
+  width: 100%;
+  padding: 4px 0;
+  border-radius: 4px;
+  color: #ffffff;
+
+  & + & {
+    margin-top: 0.5rem;
+  }
+
+  &:hover {
+    background-color: #91a7ff;
+  }
 `;
 
 const GroundList = styled.section`
