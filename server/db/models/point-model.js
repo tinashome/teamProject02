@@ -1,68 +1,52 @@
-import mongoose from "mongoose";
-import { PointSchema } from "../schemas/point-schema.js";
+import mongoose from 'mongoose';
+import { PointSchema } from '../schemas/point-schema.js';
 
-const Point = mongoose.model("points", PointSchema);
+const Point = mongoose.model('points', PointSchema);
 
 export class PointModel {
   async findById(pointId) {
     const point = await Point.findOne({ _id: pointId })
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      })
+      .select('-isDeleted')
       .sort({ _id: -1 });
     return point;
   }
 
   async findAllByUserId(userId) {
-    const points = await Point.find({ userObject: userId })
-      .where("isDeleted")
+    const points = await Point.find({ user: userId })
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      })
+      .select('-isDeleted')
       .sort({ _id: -1 });
     return points;
   }
 
   async findByDeltedAll() {
-    const points = await Point.find({}).where("isDeleted").equals(true);
+    const points = await Point.find({}).where('isDeleted').equals(true);
     return points;
   }
 
-  async create(PointInfo) {
-    const createdNewPoint = await Point.create(PointInfo);
+  async create(pointInfo) {
+    const createdNewPoint = await Point.create(pointInfo);
     return createdNewPoint;
   }
 
   async findAll() {
     const Points = await Point.find({})
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      })
+      .select('-isDeleted')
       .sort({ _id: -1 });
     return Points;
   }
   async findByIsNotCharged(query, page, limit) {
     const points = await Point.find(query)
-      .where("isCharged")
+      .where('isCharged')
       .equalse(false)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      })
+      .select('-isDeleted')
       .sort({ _id: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
@@ -71,56 +55,54 @@ export class PointModel {
 
   async findByIsCharged(query, page, limit) {
     const points = await Point.find(query)
-      .where("isCharged")
+      .where('isCharged')
       .equalse(true)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      })
+      .select('-isDeleted')
       .sort({ _id: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
     return points;
   }
-  async update({ PointId, update }) {
-    const filter = { _id: PointId };
+  async update({ pointId, update }) {
+    const filter = { _id: pointId };
     const option = { returnOriginal: false };
 
     const updatedPoint = await Point.findOneAndUpdate(filter, update, option)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      });
+      .select('-isDeleted');
     return updatedPoint;
   }
 
-  async findByPagination(query, page, limit) {
+  async findByPagination(query, offset, count) {
     const points = await Point.find(query)
-      .where("isDeleted")
+      .where('isDeleted')
       .equals(false)
-      .select("-isDeleted")
-      .populate({
-        path: "userObject",
-        select: { password: 0, isDeleted: 0 },
-      })
+      .select('-isDeleted')
       .sort({ _id: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+      .skip(offset)
+      .limit(count);
+
     return points;
   }
+  async countdocument(query) {
+    const count = await Point.find(query)
+      .where('isDeleted')
+      .equals(false)
+      .select('-isDeleted')
+      .countDocuments();
+    return count;
+  }
+
   async deleteById(pointId) {
     const filter = { _id: pointId };
     const option = { returnOriginal: false };
     const point = await Point.findOneAndUpdate(
       filter,
       { isDeleted: true },
-      option
+      option,
     );
     return point;
   }

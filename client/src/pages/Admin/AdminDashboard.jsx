@@ -6,22 +6,26 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// import { useRecoilState } from 'recoil';
-// import { adminUsers } from 'stores/adminStore';
+import { useRecoilState } from 'recoil';
+import { adminContentState } from 'stores/adminStore';
 import * as Api from 'api/api';
 import ContentLargetxt from 'components/atoms/ContentLargetxt';
 
+import AdminAddGround from './AdminAddGround';
+
 const AdminDashboard = () => {
   // const [users, setUsers] = useRecoilState(adminUsers);
+  const [content, setContent] = useRecoilState(adminContentState);
   const [role, setRole] = useState(false);
   const newUsers = [];
+  setContent(['경기장 추가', <AdminAddGround />]);
 
   // 관리자로그인함수
-  const signin = async () => {
+  const signin = async (email, pass) => {
     try {
       const result = await Api.post('auth/signin', {
-        email: 'admin@gmail.com',
-        password: '1234',
+        email,
+        password: pass,
       });
       const { token } = result.data;
       localStorage.setItem('token', token);
@@ -76,7 +80,20 @@ const AdminDashboard = () => {
       >
         유저목록출력
       </Button>
-      <Button onClick={signin}>관리자로그인</Button>
+      <Button
+        onClick={() => {
+          signin('admin@gamil.com', '1234');
+        }}
+      >
+        관리자로그인
+      </Button>
+      <Button
+        onClick={() => {
+          signin('user@gmail.com', '12341234');
+        }}
+      >
+        사용자로그인
+      </Button>
       <Button
         onClick={() => {
           signup(newUsers.map((e) => signup(e)));
@@ -89,13 +106,13 @@ const AdminDashboard = () => {
 const Button = styled.button`
   // width: 80px;
   // height: 50px;
-  padding: 5px 10px;
-  margin-top: 20px;
+  padding: 5px 20px;
+  margin-top: 10px;
   border-radius: 4px;
   background: #3563e9;
   color: white;
   text-align: center;
-  font-size: 25px;
+  font-size: 20px;
 `;
 
 export default AdminDashboard;
