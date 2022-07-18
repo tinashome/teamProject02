@@ -129,7 +129,7 @@ const Home = () => {
             </GroundList>
             {groundList.length !== 0 && (
               <Pagination
-                totalPage={10}
+                totalPage={totalPage}
                 limit={5}
                 page={page}
                 setPage={setPage}
