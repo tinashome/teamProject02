@@ -55,8 +55,8 @@ const Header = () => {
               <p>{userInfo?.name}님! 환영합니다.</p>
               <UserProfileButtonWrapper>
                 <UserProfileButton>
-                  {userInfo.name === '관리자' ? (
-                    '관리자 페이지'
+                  {userInfo.role === 'admin' ? (
+                    <NavLink to='/admin'>관리자 페이지</NavLink>
                   ) : (
                     <NavLink to='/myinfo'>마이 페이지</NavLink>
                   )}
