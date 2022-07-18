@@ -17,8 +17,8 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (userData) => {
-    const result = await Api.post('auth/signin', userData);
-    if (result.status === 200) {
+    try {
+      const result = await Api.post('auth/signin', userData);
       const { token, isAdmin } = result.data;
       const { userId, name, role, isOAuth } = jwtDecode(token);
       localStorage.setItem('token', token);
@@ -31,8 +31,8 @@ const Login = () => {
         isLogin: true,
       });
       navigate('/');
-    } else {
-      alert('이메일 혹은 비밀번호가 일치하지 않습니다.');
+    } catch (err) {
+      alert(err.response.data.reason);
     }
   };
 
@@ -57,9 +57,7 @@ const Login = () => {
           <Link to='/signup'>
             <SignUpButton>회원가입</SignUpButton>
           </Link>
-          <span>
-            {'\u00A0'}•{'\u00A0'}
-          </span>
+          <span style={{ marginLeft: 5, marginRight: 5 }}>•</span>
           <FindPasswordButton>비밀번호 찾기</FindPasswordButton>
         </Wrapper>
       </InputContainer>
@@ -107,6 +105,9 @@ const LoginButton = styled.input`
 const Wrapper = styled.div`
   display: flex;
   margin-right: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   margin-top: 0.3rem;
   opacity: 0.5;
 `;
