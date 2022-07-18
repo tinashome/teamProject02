@@ -2,8 +2,8 @@ import React from 'react';
 import { FaAngleDown } from 'react-icons/fa';
 import styled from 'styled-components';
 
-const DistrictFilter = ({ filterName }) => (
-  <Container>
+const LocationFilter = ({ filterName, handleClick }) => (
+  <Container onClick={handleClick}>
     <FilterName>{filterName}</FilterName>
     <FaAngleDown />
   </Container>
@@ -22,4 +22,4 @@ const FilterName = styled.p`
   margin-right: 0.5rem;
 `;
 
-export default DistrictFilter;
+export default LocationFilter;

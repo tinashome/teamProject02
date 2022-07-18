@@ -60,7 +60,10 @@ const Header = () => {
             {/* 임시로 넣은 유저 아이콘 */}
             <FaUserCircle style={{ width: 40, height: 40, marginRight: 10 }} />
             <UserProfile>
-              <p>{userInfo?.name}님! 환영합니다.</p>
+              <UserName>
+                <span style={{ fontWeight: 700 }}>{userInfo?.name}</span>님!
+                환영합니다.
+              </UserName>
               <UserProfileButtonWrapper>
                 <UserProfileButton>
                   {userInfo.role === 'admin' ? (
@@ -115,6 +118,8 @@ const UserProfile = styled.div`
     font-size: 1.1rem;
   }
 `;
+
+const UserName = styled.div``;
 
 const UserImage = styled.img`
   width: 50px;
