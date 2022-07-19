@@ -7,18 +7,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminContentState } from 'stores/adminStore';
+import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import ContentLargetxt from 'components/atoms/ContentLargetxt';
-
-import AdminAddGround from './AdminAddGround';
+import groundData from 'mockData/groundData2';
+import AdminDeleteGround from './AdminDeleteGround';
 
 const AdminDashboard = () => {
   // const [users, setUsers] = useRecoilState(adminUsers);
   const [content, setContent] = useRecoilState(adminContentState);
   const [role, setRole] = useState(false);
   const newUsers = [];
-  setContent(['경기장 추가', <AdminAddGround />]);
+  const newGround = [];
+  setContent(['경기장 추가', <AdminDeleteGround />]);
 
   // 관리자로그인함수
   const signin = async (email, pass) => {
@@ -48,6 +49,56 @@ const AdminDashboard = () => {
     });
   };
 
+  // 경기장 등록함수(테스트경기장 일괄 등록시 사용)
+  const addGround = async (ground) => {
+    const {
+      groundName,
+      paymentPoint,
+      groundImg,
+      postalCode,
+      address1,
+      address2,
+      groundSize,
+      showerPlace,
+      parking,
+      shoesRental,
+      sportswearRental,
+      wayTo,
+      parkingInfo,
+      smoking,
+      toilet,
+      shoesRentallInfo,
+      actInfo,
+      startTime,
+      endTime,
+    } = ground;
+    const newGroundData = {
+      groundName,
+      paymentPoint,
+      groundImg,
+      groundAddress: { postalCode, address1, address2 },
+      groundSize,
+      showerPlace,
+      parking,
+      shoesRental,
+      sportswearRental,
+      wayTo,
+      parkingInfo,
+      smoking,
+      toilet,
+      shoesRentallInfo,
+      actInfo,
+      startTime,
+      endTime,
+    };
+
+    try {
+      const result = await Api.post(`grounds`, newGroundData);
+      console.log(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   // // 사용자목록조회 api요청
   // const getUsers = async () => {
   //   try {
@@ -78,13 +129,13 @@ const AdminDashboard = () => {
       //   console.log(users);
       // }}
       >
-        유저목록출력
+        {/* 유저목록출력
       </Button>
       <Button
         onClick={() => {
           signin('admin@gamil.com', '1234');
         }}
-      >
+      > */}
         관리자로그인
       </Button>
       <Button
@@ -99,6 +150,13 @@ const AdminDashboard = () => {
           signup(newUsers.map((e) => signup(e)));
         }}
       >{`테스트계정 ${newUsers.length}개 일괄생성`}</Button>
+      <Button
+        onClick={() => {
+          signup(newGround.map((e) => signup(e)));
+        }}
+      >
+        {`테스트경기장 ${newGround.length}개 일괄생성`}
+      </Button>
     </ContentLargetxt>
   );
 };

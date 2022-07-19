@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { adminContentState } from 'stores/adminStore';
+import { adminContentState } from 'stores/adminUserStore';
 import { useRecoilState } from 'recoil';
 
-import AdminDeleteMember from './AdminDeleteMember';
+import AdminDeleteMember from './AdminDeleteUser';
 import AdminAddGround from './AdminAddGround';
+import AdminEditGround from './AdminEditGround';
+import AdminDeleteGround from './AdminDeleteGround';
+
 import {
-  AdminEditGround,
-  AdminDeleteGround,
   AdminReservations,
   AdminDeleteReservations,
   AdminPayment,
