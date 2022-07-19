@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from 'components/atoms/Button';
 import { Link } from 'react-router-dom';
+import { addCommas } from 'util/useful-functions';
 
 const GroundCard = ({ ground }) => {
   const {
@@ -18,7 +19,7 @@ const GroundCard = ({ ground }) => {
       <GroundAddress>{`${address1}`}</GroundAddress>
       <GroundName>{groundName}</GroundName>
       <Wrapper>
-        <PaymentPoint>{paymentPoint}</PaymentPoint>
+        <PaymentPoint>{addCommas(paymentPoint)}P</PaymentPoint>
         <Link to={`detail/${_id}`}>
           <ReservationButton type='button'>예약하기</ReservationButton>
         </Link>

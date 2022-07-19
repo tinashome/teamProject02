@@ -5,7 +5,7 @@ const ContentLargetxt = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   height: 80%;
-  font-size: 80px;
+  font-size: 60px;
   font-weight: 600;
   text-align: center;
   align-content: center;

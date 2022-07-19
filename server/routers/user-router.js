@@ -6,35 +6,76 @@ import { adminOnly, loginRequired } from '../middlewares/index.js';
  * @swagger
  * tags:
  *   name: users
- *   description: 유저정보 API
+ *   description: 유저정보 API - jwt 토큰 이용
  */
 
 const userRouter = Router();
 
 /**
  * @swagger
- * /api/user/users:
+ * /api/users:
  *   get:
- *     summary: 모든 유저정보를 가져옵니다.
+ *     summary: 모든 유저정보를 가져옵니다. -관리자
  *     tags: [users]
+ *     security:
+ *       - JWT: []
+ *       - IsAdmin: []
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: 회원이름 입력이 없을시 보내지 마시고 입력할 경우 보내세요.
+ *       - in: query
+ *         name: email
+ *         schema:
+ *           type: string
+ *         description: 회원이메일 입력이 없을시 보내지 마시고 입력할 경우 보내세요.
+ *       - in: query
+ *         name: phoneNumber
+ *         schema:
+ *           type: string
+ *         description: 회원전화번호 입력이 없을시 보내지 마시고 입력할 경우 보내세요.
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *         description:  입력이 없을시 0부터,
+ *       - in: query
+ *         name: count
+ *         schema:
+ *           type: integer
+ *         description:  입력이 없을시 10개만큼
  *     responses:
  *       200:
- *         description: 모든 유저정보를 가져옵니다.
+ *         description: 특정 유저정보를 가져옵니다.
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: "#/definitions/users"
+ *               type: object
+ *               properties:
+ *                 length:
+ *                   type: string
+ *                   description: 길이
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/definitions/users"
  */
-userRouter.get('/users', async (req, res, next) => {
+userRouter.get('/', adminOnly, async (req, res, next) => {
   try {
+    const { name, email, phoneNumber, offset, count } = req.query;
     // 전체 사용자 목록을 얻음
-    const users = await userService.getUsers();
+    // const users = await userService.getUsers();
 
-    // 사용자 목록(배열)을 JSON 형태로 프론트에 보냄
+    const users = await userService.getUsersByPagination({
+      name,
+      email,
+      phoneNumber,
+      offset,
+      count,
+    });
 
-    console.log(users);
     res.send(users);
   } catch (error) {
     next(error);
@@ -43,17 +84,12 @@ userRouter.get('/users', async (req, res, next) => {
 
 /**
  * @swagger
- * /api/user/{email}:
+ * /api/users/user:
  *   get:
- *     summary: 이메일를 파라미터로 입력시 해당 유저정보를 가져옵니다.
+ *     summary:  해당 유저정보를 가져옵니다. - 유저
  *     tags: [users]
- *     parameters:
- *       - in: path
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: 유저 이메일를 입력하세요.
+ *     security:
+ *       - JWT: []
  *     responses:
  *       200:
  *         description: 해당 유저 정보를 가져옵니다.
@@ -62,22 +98,20 @@ userRouter.get('/users', async (req, res, next) => {
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/users'
+ *                 $ref: "#/definitions/users"
  *       404:
- *         description: 이메일이 존재하지 않습니다.
+ *         description: 유저 정보이 존재하지 않습니다.
  */
-userRouter.get('/:email', async (req, res, next) => {
+userRouter.get('/user', loginRequired, async (req, res, next) => {
   try {
-    const { email } = req.params;
-    console.log(email);
-    const checkResultMail = await userService.getUserMail(email);
-
-    res.send(checkResultMail);
-    if (!checkResultMail) {
+    const userId = req.currentUserId;
+    const user = await userService.getUser(userId);
+    if (!user) {
       res.status(404).json({
-        message: `${email}유저 정보가 존재하지 않습니다.`,
+        message: `${userId}유저 정보가 존재하지 않습니다.`,
       });
     }
+    res.send(user);
   } catch (error) {
     next(error);
   }
@@ -85,23 +119,114 @@ userRouter.get('/:email', async (req, res, next) => {
 
 /**
  * @swagger
- * /api/user/{userId}:
+ * /api/users/updatedPwd:
  *   patch:
- *     summary: 유저정보를 업데이트합니다.
+ *     summary: 유저비밀번호정보를 업데이트합니다. - 유저
  *     tags: [users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: 유저 id 고유값을 입력하세요.
+ *     security:
+ *       - JWT: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/users'
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: 바꿀비밀번호
+ *               currentPassword:
+ *                 type: string
+ *                 description: 현재전화번호
+ *     responses:
+ *       200:
+ *         description: 유저정보가 업데이트 되었습니다.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *                   description: 성공여부
+ *                 message:
+ *                   type: string
+ *                   description: 성공여부
+ *       404:
+ *         description: 유저정보를 찾지 못했습니다.
+ *       500:
+ *         description: Some error happend
+ */
+userRouter.patch('/updatedPwd', loginRequired, async (req, res, next) => {
+  try {
+    if (is.emptyObject(req.body)) {
+      throw new Error(
+        'headers의 Content-Type을 application/json으로 설정해주세요',
+      );
+    }
+
+    const userId = req.currentUserId;
+    // update할 비밀번호
+    const { password } = req.body;
+    //현재 비밀번호
+    const { currentPassword } = req.body;
+
+    // currentPassword 없을 시, 진행 불가
+    if (!currentPassword) {
+      throw new Error('정보를 변경하려면, 현재의 비밀번호가 필요합니다.');
+    }
+
+    const userInfoRequired = { userId, currentPassword };
+
+    // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
+    // 보내주었다면, 업데이트용 객체에 삽입함.
+    const toUpdate = {
+      ...(password && { password }),
+    };
+
+    // 사용자 정보를 업데이트함.
+    await userService.setUser(userInfoRequired, toUpdate);
+
+    res.status(200).json({
+      result: 'success',
+      message: `${userId}유저는 비밀번호가 변경 되었습니다.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/users:
+ *   patch:
+ *     summary: 유저정보를 업데이트합니다. -유저
+ *     tags: [users]
+ *     security:
+ *       - JWT: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: 이름
+ *                 required: false
+ *               email:
+ *                 type: string
+ *                 description: 이메일
+ *                 required: false
+ *               phoneNumber:
+ *                 type: string
+ *                 description: 전화번호
+ *                 required: false
+ *               role:
+ *                 type: string
+ *                 description: 권한
+ *                 required: false
  *     responses:
  *       200:
  *         description: 유저정보가 업데이트 되었습니다.
@@ -116,7 +241,7 @@ userRouter.get('/:email', async (req, res, next) => {
  *       500:
  *         description: Some error happend
  */
-userRouter.patch('/:userId', async (req, res, next) => {
+userRouter.patch('/', loginRequired, async (req, res, next) => {
   try {
     // content-type 을 application/json 로 프론트에서
     // 설정 안 하고 요청하면, body가 비어 있게 됨.
@@ -127,40 +252,25 @@ userRouter.patch('/:userId', async (req, res, next) => {
     }
 
     // params로부터 id를 가져옴
-    const { userId } = req.params;
+    const userId = req.currentUserId;
 
     // body data 로부터 업데이트할 사용자 정보를 추출함.
-    const { nickName } = req.body;
+    const { name } = req.body;
     const { email } = req.body;
-    const { password } = req.body;
     const { phoneNumber } = req.body;
     const { role } = req.body;
-
-    // body data로부터, 확인용으로 사용할 현재 비밀번호를 추출함.
-    const { currentPassword } = req.body;
-
-    // currentPassword 없을 시, 진행 불가
-    if (!currentPassword) {
-      throw new Error('정보를 변경하려면, 현재의 비밀번호가 필요합니다.');
-    }
-
-    const userInfoRequired = { userId, currentPassword };
 
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
     const toUpdate = {
-      ...(nickName && { nickName }),
+      ...(name && { name }),
       ...(email && { email }),
-      ...(password && { password }),
       ...(phoneNumber && { phoneNumber }),
       ...(role && { role }),
     };
 
     // 사용자 정보를 업데이트함.
-    const updatedUserInfo = await userService.setUser(
-      userInfoRequired,
-      toUpdate,
-    );
+    const updatedUserInfo = await userService.saveUserInfo(userId, toUpdate);
 
     // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
     res.status(200).json(updatedUserInfo);
@@ -171,37 +281,39 @@ userRouter.patch('/:userId', async (req, res, next) => {
 
 /**
  * @swagger
- * /api/user/{id}:
+ * /api/users:
  *   delete:
- *     summary: 유저정보를 삭제합니다..
+ *     summary: 유저정보를 삭제합니다.. - 유저
  *     tags: [users]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: 유저 id 고유값을 입력하세요.
+ *     security:
+ *       - JWT: []
  *     responses:
  *       200:
  *         description: 유저가 삭제되었습니다.
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/users'
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *                   description: 성공여부
+ *                 message:
+ *                   type: string
+ *                   description: 성공여부
  *       404:
  *         description: 유저를 찾지 못했습니다.
  *
  */
-userRouter.delete('/:id', async (req, res, next) => {
+userRouter.delete('/', loginRequired, async (req, res, next) => {
   try {
-    const userId = req.params;
-    await userService.deleteUser(userId);
+    const userId = req.currentUserId;
+
+    await userService.deleteUserData(userId);
 
     // 사용자 정보를 JSON 형태로 프론트에 보냄
     res.status(200).json({
+      result: 'success',
       message: `${userId}유저는 탈퇴처리 되었습니다.`,
     });
   } catch (error) {
@@ -209,4 +321,39 @@ userRouter.delete('/:id', async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/users/{userId}:
+ *   delete:
+ *     summary: 유저정보를 삭제합니다.- 관리자
+ *     tags: [users]
+ *     security:
+ *       - JWT: []
+ *       - IsAdmin: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: 유저 id 고유값을 입력하세요.
+ *     responses:
+ *       204:
+ *         description: 유저가 삭제되었습니다.
+ *       404:
+ *         description: 유저를 찾지 못했습니다.
+ *
+ */
+userRouter.delete('/:userId', adminOnly, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    await userService.deleteUserData(userId);
+
+    // 사용자 정보를 JSON 형태로 프론트에 보냄
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+});
 export { userRouter };
