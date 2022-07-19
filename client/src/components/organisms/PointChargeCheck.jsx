@@ -4,28 +4,39 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from 'components/atoms/Input';
 import Button from 'components/atoms/Button';
+import { useRecoilState } from 'recoil';
+import pointSelected from 'stores/pointChargeStore';
+import * as Api from 'api/api';
 
 const PointChargeCheck = () => {
   const [depositorName, setDepositorName] = useState('');
   const [paymentOption, setPaymentOption] = useState(false);
   const [checkValid, setCheckValid] = useState(false);
-  const [btnState, setBtnState] = useState('');
+  const [paymentAmount, setPaymentAmount] = useRecoilState(pointSelected);
 
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     try {
       const token = localStorage.getItem('token');
       const userRole = jwtDecode(token).role;
       const regex = /[가-힣]+/u;
 
       if (userRole === '') navigate('/login');
+      else if (paymentAmount === 0) alert('충전하실 포인트를 선택해 주세요.');
       else if (depositorName.length < 2) alert('이름을 2자 이상 입력해주세요.');
       else if (!regex.test(depositorName)) alert('이름을 확인해주세요.');
       else if (!paymentOption) alert('결제 방법을 선택해 주세요.');
-      else if (!checkValid) alert('입금자명과 결제방식 확인항목을 확인해주세요.');
+      else if (!checkValid)
+        alert('입금자명과 결제방식 확인항목을 확인해주세요.');
       else {
-        console.log('완료')
+        const setInfo = {paymentOption, paymentAmount};
+        const result = await Api.post('points', setInfo);
+        if (result.status === 200) {
+          // 포인트 충전 상세 페이지로 이동
+          console.log(result)
+          console.log('포인트 상세 페이지로 이동')
+        }
       }
     } catch (err) {
       console.log(err);

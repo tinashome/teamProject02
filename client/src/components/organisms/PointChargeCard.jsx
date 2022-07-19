@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import pointList from 'constants/PointList';
 import PointBtn from 'components/atoms/PointBtn';
+import { useRecoilState } from 'recoil';
+import pointSelected from 'stores/pointChargeStore';
 
 const PointChargeCard = () => {
   const [selectBtn, setSelectBtn] = useState(false);
+  const [selectPoint, setSelectPoint] = useRecoilState(pointSelected);
 
   const handleClick = (idx) => {
     const newPointBtn = Array(8).fill(false);
     newPointBtn[idx] = true;
     setSelectBtn(newPointBtn);
+    setSelectPoint(pointList[idx].amount);
   };
 
   return (
@@ -20,7 +24,10 @@ const PointChargeCard = () => {
           <PointCard
             key={list.id}
             value={list.amount}
-            style={{ color: selectBtn[idx] ? 'white' : 'black', backgroundColor: selectBtn[idx] ? '#3563e9' : 'white' }}
+            style={{
+              color: selectBtn[idx] ? 'white' : 'black',
+              backgroundColor: selectBtn[idx] ? '#3563e9' : 'white',
+            }}
             onClick={() => handleClick(idx)}
           >
             {list.amount.toLocaleString()}원
@@ -30,7 +37,6 @@ const PointChargeCard = () => {
     </>
   );
 };
-
 
 const Title = styled.h2`
   font-size: 25px;
