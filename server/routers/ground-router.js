@@ -54,6 +54,10 @@ groundRouter.post('/', adminOnly, async (req, res, next) => {
       parkingInfo,
       smoking,
       toilet,
+      startTime,
+      endTime,
+      shoesRentallInfo,
+      actInfo,
     } = req.body;
 
     const newGround = await groundService.addGround({
@@ -70,6 +74,10 @@ groundRouter.post('/', adminOnly, async (req, res, next) => {
       parkingInfo,
       smoking,
       toilet,
+      startTime,
+      endTime,
+      shoesRentallInfo,
+      actInfo,
     });
     res.send(newGround);
   } catch (error) {
@@ -131,6 +139,10 @@ groundRouter.patch('/:groundId', adminOnly, async function (req, res, next) {
       parkingInfo,
       smoking,
       toilet,
+      startTime,
+      endTime,
+      shoesRentallInfo,
+      actInfo,
     } = req.body;
 
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
@@ -149,6 +161,10 @@ groundRouter.patch('/:groundId', adminOnly, async function (req, res, next) {
       ...(parkingInfo && { parkingInfo }),
       ...(smoking && { smoking }),
       ...(toilet && { toilet }),
+      ...(startTime && { startTime }),
+      ...(endTime && { endTime }),
+      ...(shoesRentallInfo && { shoesRentallInfo }),
+      ...(actInfo && { actInfo }),
     };
 
     const updatedGround = await groundService.setGround(groundId, toUpdate);
