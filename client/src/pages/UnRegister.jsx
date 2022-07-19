@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import userState from '../stores/userStore';
-import userInfoState from '../stores/userInfoStore';
 import * as Api from '../api/api';
 
 const UnRegister = () => {
   const [str, setStr] = useState('');
   const setUserInfo = useSetRecoilState(userState);
-  const setUser = useSetRecoilState(userInfoState);
   const navigate = useNavigate();
   const onClickHandle = async () => {
     try {
@@ -22,10 +20,7 @@ const UnRegister = () => {
         alert('입력 문장을 다시 확인해 주세요');
       }
       localStorage.removeItem('token');
-      setUserInfo({
-        isLogin: false,
-      });
-      setUser({});
+      setUserInfo({});
       navigate('/');
     } catch (err) {
       console.log(err);

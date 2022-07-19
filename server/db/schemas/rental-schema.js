@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 
 const RentalSchema = new mongoose.Schema(
   {
-    userObject: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users',
       required: true,
     },
-    groundObject: {
+    groundId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'grounds',
       required: true,

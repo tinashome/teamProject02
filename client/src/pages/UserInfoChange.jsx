@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import userInfo from '../stores/userInfoStore';
+import userState from '../stores/userStore';
 import * as Api from '../api/api';
 
 const UserInfoChange = () => {
-  const [user, setUser] = useRecoilState(userInfo);
+  const [user, setUser] = useRecoilState(userState);
   const [phoneNumber, setPhoneNumber] = useState('');
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const UserInfoChange = () => {
       };
       const result = await Api.patch('users', userData);
       if (result.status === 200) {
-        setUser(result.data);
+        setUser((prev) => ({ ...prev, ...result.data }));
         alert('개인 정보 변경이 완료되었습니다.');
       }
     } catch (err) {
