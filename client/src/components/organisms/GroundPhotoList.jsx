@@ -15,6 +15,10 @@ const GroundPhotoList = ({ location, searchInput }) => {
   const totalPage = Math.ceil(groundList.length / listPerPage);
 
   useEffect(() => {
+    setPage(1);
+  }, [searchInput]);
+
+  useEffect(() => {
     (async () => {
       setIsLoading(true);
       const result = await Api.get(
@@ -30,6 +34,8 @@ const GroundPhotoList = ({ location, searchInput }) => {
     })();
   }, [location, searchInput, page]);
 
+  if (groundList.length === 0) return null;
+
   return (
     <>
       {isLoading ? (
@@ -41,15 +47,12 @@ const GroundPhotoList = ({ location, searchInput }) => {
           ))}
         </Container>
       )}
-
-      {groundList.length !== 0 && (
-        <Pagination
-          totalPage={totalPage}
-          limit={5}
-          page={page}
-          setPage={setPage}
-        />
-      )}
+      <Pagination
+        totalPage={totalPage}
+        limit={5}
+        page={page}
+        setPage={setPage}
+      />
     </>
   );
 };
