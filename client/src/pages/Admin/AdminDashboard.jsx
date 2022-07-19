@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   const [role, setRole] = useState(false);
   const newUsers = [];
   const newGround = [];
-  setContent(['경기장 추가', <AdminDeleteGround />]);
+  setContent(['경기장 삭제', <AdminDeleteGround />]);
 
   // 관리자로그인함수
   const signin = async (email, pass) => {
