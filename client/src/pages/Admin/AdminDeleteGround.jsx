@@ -6,17 +6,18 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers, adminCurrentPage } from 'stores/adminStore';
+import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
 
 const AdminDeleteGround = () => {
   // 조회한유저목록을 저장하는 상태
-  const [grounds, setGrounds] = useRecoilState(adminUsers);
+  // const [grounds, setGrounds] = useRecoilState(adminUsers);
+  const [grounds, setGrounds] = useState(null);
   // eslint-disable-next-line no-unused-vars
-  const [pageSize, setPageSize] = useState(30);
-  const [totalCount, setTotalCount] = useState(999);
-  const [lastPage, setLastPage] = useState(9);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(null);
+  const [lastPage, setLastPage] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
@@ -32,14 +33,13 @@ const AdminDeleteGround = () => {
     try {
       const result = await Api.get(
         // `grounds`,
-        `grounds?count=100`,
-        // `grounds?offset=${currentPage * pageSize}&count=${pageSize}`,
+        // `grounds?count=100`,
+        `grounds?offset=${currentPage * pageSize}&count=${pageSize}`,
       );
       const resultData = await result.data;
-      await setGrounds(resultData.grounds);
-      await setTotalCount(resultData.length);
+      setGrounds(resultData.grounds);
+      setTotalCount(resultData.length);
       console.log(totalCount);
-      await setLastPage(Math.ceil(totalCount / pageSize) - 1);
     } catch (err) {
       console.log(err);
     }
@@ -49,23 +49,28 @@ const AdminDeleteGround = () => {
     getGrounds();
   }, [currentPage, modal]);
 
+  useEffect(() => {
+    setLastPage(Math.ceil(totalCount / pageSize) - 1);
+    console.log(lastPage);
+  }, [totalCount]);
+
   const handleClick = async (event) => {
-    // 회원정보삭제 api요청
+    // 경기장정보삭제 api요청
     const deleteConfirm = window.confirm(
-      `${event.target.name}의 계정 정보를 정말 삭제 하시겠습니까?`,
+      `${event.target.groundName}의 경기장 정보를 정말 삭제 하시겠습니까?`,
       console.log(event.target.id),
     );
     if (deleteConfirm) {
       try {
         const result = await Api.delete(`grounds/${event.target.id}`);
-        setModal(`계정정보 삭제성공
-        이름 : ${event.target.name}`);
+        setModal(`경기장정보 삭제성공
+        이름 : ${event.target.groundName}`);
         console.log(result);
         return;
       } catch (err) {
         setModal(
-          `계정정보 삭제실패
-            이름 : ${event.target.name}`,
+          `경기장정보 삭제실패
+            이름 : ${event.target.groundName}`,
         );
       }
     }
@@ -99,27 +104,30 @@ const AdminDeleteGround = () => {
         <Text width='100'>포인트</Text>
         <Text>삭제(탈퇴)</Text>
       </TitleRow>
-      <Wrapper pageSize={pageSize}>
-        {grounds.map((e) => (
-          <Row key={e._id}>
-            <Text width='200'>{e.groundName}</Text>
-            <Text width='80'>{e.paymentPoint}</Text>
-            <Text>
-              {e.postalCode}
-              {e.address1}
-              {e.address2}
-            </Text>
-            <Text width='100'>{e.paymentPoint.toLocaleString()}P</Text>
-            <Text>{e.startTime}</Text>
-            <Text>{e.endTime}</Text>
-            <Text>
-              <Button id={e._id} name={e.name} onClick={handleClick}>
-                회원삭제
-              </Button>
-            </Text>
-          </Row>
-        ))}
+      <Wrapper>
+        {/* <Wrapper pageSize={pageSize}> */}
+        {grounds &&
+          grounds.map((e) => (
+            <Row key={e._id}>
+              <Text width='200'>{e.groundName}</Text>
+              <Text width='80'>{e.paymentPoint}</Text>
+              <Text>
+                {e.postalCode}
+                {e.address1}
+                {e.address2}
+              </Text>
+              <Text width='100'>{e.paymentPoint.toLocaleString()}P</Text>
+              <Text>{e.startTime}</Text>
+              <Text>{e.endTime}</Text>
+              <Text>
+                <Button id={e._id} name={e.name} onClick={handleClick}>
+                  회원삭제
+                </Button>
+              </Text>
+            </Row>
+          ))}
       </Wrapper>
+      {/* {grounds.length !== 0 && <Pagenation lastPage={lastPage} />} */}
       <Pagenation lastPage={lastPage} />
     </>
   );

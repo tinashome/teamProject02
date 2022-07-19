@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -11,9 +11,10 @@ import imgbox from '../../assets/image/imgbox.png';
 
 const AdminAddGround = () => {
   const { register, handleSubmit } = useForm();
-  const [inputPointValue, setInputPointValue] = useState(null);
+  const [inputPointValue, setInputPointValue] = useState(0);
   const [postCode, setPostCode] = useState([]);
   // 업로드 된 이미지 주소를 배열로 저장하여 화면에보여주고 경기장 생성시 주소를 전송
+  const [uplodedImgsSrc, setUplodedImgsSrc] = useState(null);
   const [uplodedImgsSrcArray, setUplodedImgsSrcArray] = useState([]);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState('');
@@ -39,21 +40,24 @@ const AdminAddGround = () => {
     formdata.append('image', file);
     try {
       const result = await Api.postImg('upload/imageUpload', formdata);
-      const resultImageUrl = await result.data.imageUrl;
-      // const imageArray = [...uplodedImgsSrcArray];
-      // console.log(imageArray);
-      await setUplodedImgsSrcArray([...uplodedImgsSrcArray, resultImageUrl]);
-      // await console.warn(uplodedImgsSrcArray, uplodedImgsSrcArray.length);
+      const resultImageUrl = result.data.imageUrl;
+      setUplodedImgsSrc(resultImageUrl);
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (uplodedImgsSrc)
+      setUplodedImgsSrcArray([...uplodedImgsSrcArray, uplodedImgsSrc]);
+  }, [uplodedImgsSrc]);
 
   // 파일불러오면 실행되는 함수
   // 이미지서버에 저장하여 받은 주소를 배열로 저장
   const getImgSrcArray = async (e) => {
     const { files } = e.target;
     const filesArray = Array.from(files);
+    console.log(filesArray);
     filesArray.map((el) => postImg(el));
   };
 
@@ -103,6 +107,7 @@ const AdminAddGround = () => {
     try {
       const result = await Api.post(`grounds`, newGroundData);
       setModal({ success: true, ...newGroundData });
+      setModal({ success: true, ...result.data });
       // console.log(result.data, groundImg);
     } catch (err) {
       setModal({ success: false, ...newGroundData });
@@ -111,6 +116,7 @@ const AdminAddGround = () => {
   };
 
   // 테스트용 데이터
+  // eslint-disable-next-line no-unused-vars
   const testData = [
     'test경기장명',
     100000,
@@ -259,7 +265,7 @@ const AdminAddGround = () => {
               <Input
                 type='file'
                 style={{ display: 'none' }}
-                // multiple
+                multiple
                 accept='image/*'
                 {...register('groundImg')}
                 ref={fileInput}
@@ -269,7 +275,9 @@ const AdminAddGround = () => {
               <ImgBoxContainers>
                 <ImgBox>
                   {uplodedImgsSrcArray.map((e, i) => (
-                    <Img src={e} alt={`img${i}`} />
+                    // <LoadedImage e={e} i={i} />
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Img key={i} src={e} alt={`img${i}`} />
                   ))}
                 </ImgBox>
                 <ImgBoxBack>
@@ -278,9 +286,18 @@ const AdminAddGround = () => {
                   <Img src={imgbox} alt='imgbox' />
                 </ImgBoxBack>
               </ImgBoxContainers>
-              <AddButton onClick={handleAddClick} type='button'>
-                +
-              </AddButton>
+              <AddButtonWrap>
+                <AddButton onClick={handleAddClick} type='button'>
+                  +
+                </AddButton>
+                <Text
+                  onClick={() => {
+                    setUplodedImgsSrcArray([]);
+                  }}
+                >
+                  업로드취소
+                </Text>
+              </AddButtonWrap>
             </InputFileContainers>
           </Row>
         </Wrapper>
@@ -474,13 +491,21 @@ const Input = styled.input`
   border-radius: 4px;
   font-size: 20px;
 `;
+const AddButtonWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  align-items: center;
+`;
 
 const AddButton = styled.button`
   display: flex;
-  width: 60px;
+  width: 50px;
   height: 45px;
   padding-bottom: 5px;
-  margin: 20px 10px;
+  margin: 8px;
   border-radius: 4px;
   background: #3563e9;
   color: white;
@@ -535,6 +560,7 @@ const ImgBox = styled.div`
   width: 270px;
   flex-wrap: wrap;
 `;
+
 const ImgBoxBack = styled(ImgBox)`
   position: absolute;
   z-index: -999;

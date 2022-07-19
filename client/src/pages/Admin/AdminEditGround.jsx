@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers, adminCurrentPage } from 'stores/adminStore';
+import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
 
@@ -93,19 +93,23 @@ const AdminEditGround = () => {
         </ModalDiv>
       </ModalWrapper>
       <TitleRow>
-        <Text width='200'>경기장명</Text>
-        <Text width='80'>포인트</Text>
-        <Text>주소</Text>
+        <Text width='150'>경기장명</Text>
+        <Text width='300'>주소</Text>
         <Text width='100'>포인트</Text>
         <Text>삭제(탈퇴)</Text>
       </TitleRow>
       <Wrapper pageSize={pageSize}>
         {grounds.map((e) => (
           <Row key={e._id}>
-            <Text width='200'>{e.groundName}</Text>
-            <Text width='80'>{e.paymentPoint}</Text>
-            <Text>{e.postalCode}{e.address1}{e.address2}</Text>
-            <Text width='100'>{e.paymentPoint.toLocaleString()}P</Text>
+            <Text width='150'>{e.groundName}</Text>
+            <Text width='300'>
+              {e.groundAddress.postalCode}
+              {e.groundAddress.address1}
+              {e.groundAddress.address2}
+            </Text>
+            <Text width='100'>
+              {e.paymentPoint && e.paymentPoint.toLocaleString()}P
+            </Text>
             <Text>{e.startTime}</Text>
             <Text>{e.endTime}</Text>
             <Text>
