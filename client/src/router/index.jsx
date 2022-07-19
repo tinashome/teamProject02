@@ -12,6 +12,7 @@ import PasswordChange from '../pages/PasswordChange';
 import UserInfoChange from '../pages/UserInfoChange';
 import UnRegister from '../pages/UnRegister';
 import RentalManagement from '../pages/RentalManagement';
+import UserInformation from '../pages/UserInformation';
 
 const Router = () => (
   <BrowserRouter>
@@ -24,9 +25,10 @@ const Router = () => (
         <Route path='/admin' element={<Admin />} />
         <Route path='pointCharge' element={<PointCharge />} />
         <Route path='/myinfo' element={<MyPage />}>
-          <Route path='' element={<UserInfoChange />} />
+          <Route path='' element={<UserInformation />} />
+          <Route path='change' element={<UserInfoChange />} />
           <Route path='password' element={<PasswordChange />} />
-          <Route path='user' element={<UnRegister />} />
+          <Route path='withdrawal' element={<UnRegister />} />
           <Route path='rental' element={<RentalManagement />} />
         </Route>
       </Route>

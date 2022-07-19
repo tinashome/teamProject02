@@ -72,8 +72,8 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-  width: 550px;
-  height: 600px;
+  width: 450px;
+  height: 100%;
   border-radius: 4px;
   margin: 0 3rem;
 `;
