@@ -15,3 +15,8 @@ export const groundTextListState = atom({
     data: [],
   },
 });
+
+export const groundListTypeState = atom({
+  key: 'groundListTypeState',
+  default: '글',
+});

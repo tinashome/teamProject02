@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchBar from 'components/organisms/SearchBar';
 import LocationFilter from 'components/organisms/LocationFilter';
@@ -6,19 +6,19 @@ import locationList from 'constants/locationList';
 import GroundSlide from 'components/organisms/GroundSlide';
 import GroundPhotoList from 'components/organisms/GroundPhotoList';
 import GroundTextList from 'components/organisms/GroundTextList';
+import { useRecoilState } from 'recoil';
+import { groundListTypeState } from 'stores/groundStore';
 
 const Home = () => {
   const [location, setLocation] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
   // Toggle List Type
-  const [isPhotoList, setIsPhotoList] = useState(true);
-  const [listType, setListType] = useState('글');
+  const [listType, setListType] = useRecoilState(groundListTypeState);
   const handleToggleListType = useCallback(() => {
-    setIsPhotoList((prev) => !prev);
     if (listType === '글') setListType('그림');
     else setListType('글');
-  }, [isPhotoList]);
+  }, [listType]);
 
   // Search
   const handleSearch = async (e) => {
@@ -66,7 +66,7 @@ const Home = () => {
             {listType === '글' ? '글로 보기' : '그림으로 보기'}
           </ListTypeButton>
         </FilterWrapper>
-        {isPhotoList ? (
+        {listType === '글' ? (
           <GroundPhotoList location={location} searchInput={searchInput} />
         ) : (
           <GroundTextList location={location} searchInput={searchInput} />
