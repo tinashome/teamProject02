@@ -32,21 +32,6 @@ async function post(endpoint, data) {
   });
 }
 
-async function postImg(endpoint, formdata) {
-  // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
-  // 예시: {name: "Kim"} => {"name": "Kim"}
-  // const bodyData = JSON.stringify(data);
-
-  console.log(`%cPOST 요청: ${baseUrl + endpoint}`, 'color: #296aba;');
-  console.log(`%cPOST 요청 데이터: ${formdata}`, 'color: #296aba;');
-
-  return axios.post(baseUrl + endpoint, formdata, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-}
-
 async function put(endpoint, data) {
   // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
   // 예시: {name: "Kim"} => {"name": "Kim"}
@@ -71,6 +56,21 @@ async function del(endpoint) {
   return axios.delete(baseUrl + endpoint, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+}
+
+async function postImg(endpoint, formdata) {
+  // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
+  // 예시: {name: "Kim"} => {"name": "Kim"}
+  // const bodyData = JSON.stringify(data);
+
+  console.log(`%cPOST 요청: ${baseUrl + endpoint}`, 'color: #296aba;');
+  console.log(`%cPOST 요청 데이터: ${formdata}`, 'color: #296aba;');
+
+  return axios.post(baseUrl + endpoint, formdata, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
     },
   });
 }
