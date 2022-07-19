@@ -158,16 +158,36 @@
  *         description: 경기장 크기
  *       showerPlace:
  *         type: boolean
- *         description: 샤워실
+ *         description: 샤워실 가능 여부
+ *       startTime:
+ *         type: string
+ *         description: 매장 시작 시간
+ *         default: '0700'
+ *         required: false
+ *       endTime:
+ *         type: string
+ *         description: 매장 종료 시간
+ *         default: '2200'
+ *         required: false
+ *       shoesRentallInfo:
+ *         type: string
+ *         description: 신발 대여 정보
+ *         default: false
+ *         required: null
+ *       actInfo:
+ *         type: string
+ *         description: 기타정보
+ *         default: false
+ *         required: null
  *       parking:
  *         type: boolean
- *         description: 주차장
+ *         description: 주차장 가능 여부
  *       shoesRental:
  *         type: boolean
- *         description: 운동복대여
+ *         description: 운동복대여 가능 여부
  *       sportswearRental:
  *         type: boolean
- *         description: 풋살화대여
+ *         description: 풋살화대여 가능여부
  *       wayTo:
  *         type: "string"
  *         description: 가는길
@@ -203,5 +223,60 @@
  *       phoneNumber:
  *         type: string
  *         description: 전화번호
+ *
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   rentals:
+ *     type: object
+ *     required:
+ *        - _id
+ *        - userId
+ *        - groundId
+ *        - reservationDate
+ *        - reservationTime
+ *     properties:
+ *       _id:
+ *         type: objectid
+ *         description: primary key
+ *       userId:
+ *         type: string
+ *         description: r유저 id
+ *       groundId:
+ *         type: string
+ *         description: 구장 id
+ *       userName:
+ *         type: string
+ *         description: 예약한 유저이름
+ *       groundName:
+ *         type: string
+ *         description: 예약한 구장 이름
+ *         required: true
+ *       reservationDate:
+ *         type: string
+ *         description: 예약날짜
+ *         required: true
+ *       reservationTime:
+ *         type: string
+ *         description: 예약시간
+ *         required: true
+ *       isBooked:
+ *         type: boolean
+ *         description: 예약여부
+ *         required: false
+ *         default: true
+ *       isDeleted:
+ *         type: boolean
+ *         description: 삭제여부
+ *         required: false
+ *         default: false
+ *       createAt:
+ *         type: "string"
+ *         format: "date-time"
+ *       updateAt:
+ *         type: "string"
+ *         format: "date-time"
  *
  */
