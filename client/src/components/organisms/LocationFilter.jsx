@@ -12,7 +12,7 @@ const LocationFilter = ({ filterName, handleClick }) => (
 const Container = styled.button`
   display: flex;
   align-items: center;
-  margin-right: 1rem;
+  margin-right: 2rem;
   button {
     margin-right: 0.5rem;
   }

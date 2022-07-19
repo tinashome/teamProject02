@@ -28,7 +28,7 @@ const GroundPhotoList = ({ location, searchInput }) => {
       });
       setIsLoading(false);
     })();
-  }, [searchInput, location, page]);
+  }, [location, searchInput, page]);
 
   return (
     <>
