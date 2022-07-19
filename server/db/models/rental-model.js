@@ -10,17 +10,18 @@ export class RentalModel {
       .equals(false)
       .select('-isDeleted')
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: 'groundObject',
+        path: 'groundId',
         select: {
           _id: 1,
           groundName: 1,
-          isDeleted: 0,
+
           isBooked: 1,
           isBookedDate: 1,
+          paymentPoint: 1,
         },
       })
       .sort({ _id: -1 });
@@ -28,26 +29,27 @@ export class RentalModel {
   }
 
   async findAllByUserId(userId, page, limit) {
-    const rentals = await Rental.find({ userObject: userId })
+    const rentals = await Rental.find({ userId: userId })
       .where('isDeleted')
       .equals(false)
       .select('-isDeleted')
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: 'groundObject',
+        path: 'groundId',
         select: {
           _id: 1,
           groundName: 1,
-          isDeleted: 0,
+
           isBooked: 1,
           isBookedDate: 1,
+          paymentPoint: 1,
         },
       })
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .sort({ _id: -1 })
@@ -56,31 +58,50 @@ export class RentalModel {
     return rentals;
   }
 
-  async findAllByProductId(productId, page, limit) {
-    const rentals = await Rental.find({ productId })
+  async findAllByGroundId(groundId) {
+    const rentals = await Rental.find({ groundId: groundId })
       .where('isDeleted')
       .equals(false)
       .select('-isDeleted')
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: 'groundObject',
+        path: 'groundId',
         select: {
           _id: 1,
           groundName: 1,
-          isDeleted: 0,
           isBooked: 1,
           isBookedDate: 1,
+          paymentPoint: 1,
         },
-      })
-      .sort({ _id: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+      });
+
     return rentals;
   }
+  async findAllByUserId(userId) {
+    const rentals = await Rental.find({ userId: userId })
+      .where('isDeleted')
+      .equals(false)
+      .select('-isDeleted')
+      .populate({
+        path: 'userId',
+        select: { password: 0, isDeleted: 0 },
+      })
+      .populate({
+        path: 'groundId',
+        select: {
+          _id: 1,
+          groundName: 1,
+          isBooked: 1,
+          isBookedDate: 1,
+          paymentPoint: 1,
+        },
+      });
 
+    return rentals;
+  }
   async create(rentalInfo) {
     const createdNewrental = await Rental.create(rentalInfo);
     return createdNewrental;
@@ -92,47 +113,59 @@ export class RentalModel {
       .equals(false)
       .select('-isDeleted')
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: 'groundObject',
+        path: 'groundId',
         select: {
           _id: 1,
           groundName: 1,
-          isDeleted: 0,
+
           isBooked: 1,
           isBookedDate: 1,
+          paymentPoint: 1,
         },
       })
       .sort({ _id: -1 });
     return rentals;
   }
 
-  async findByPagination(query, page, limit) {
+  async findByPagination(query, offset, count) {
     const rentals = await Rental.find(query)
       .where('isDeleted')
       .equals(false)
       .select('-isDeleted')
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: 'groundObject',
+        path: 'groundId',
         select: {
           _id: 1,
           groundName: 1,
-          isDeleted: 0,
+
           isBooked: 1,
           isBookedDate: 1,
+          paymentPoint: 1,
         },
       })
       .sort({ _id: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+      .skip(offset)
+      .limit(count);
     return rentals;
   }
+
+  async countdocument(query) {
+    const count = await Rental.find(query)
+      .where('isDeleted')
+      .equals(false)
+      .select('-isDeleted')
+      .countDocuments();
+    return count;
+  }
+
   async update({ rentalId, update }) {
     const filter = { _id: rentalId };
     const option = { returnOriginal: false };
@@ -142,19 +175,21 @@ export class RentalModel {
       .equals(false)
       .select('-isDeleted')
       .populate({
-        path: 'userObject',
+        path: 'userId',
         select: { password: 0, isDeleted: 0 },
       })
       .populate({
-        path: 'groundObject',
+        path: 'groundId',
         select: {
           _id: 1,
           groundName: 1,
-          isDeleted: 0,
+
           isBooked: 1,
           isBookedDate: 1,
+          paymentPoint: 1,
         },
       });
+    console.log(updatedrental);
     return updatedrental;
   }
 

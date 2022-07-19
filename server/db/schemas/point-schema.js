@@ -1,12 +1,21 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const PointSchema = new mongoose.Schema(
   {
-    userObject: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+    user: {
+      type: new mongoose.Schema(
+        {
+          id: String,
+          email: String,
+          name: String,
+        },
+        {
+          _id: false,
+        },
+      ),
       required: true,
     },
+
     paymentOption: {
       type: Boolean,
       required: false,
@@ -28,9 +37,9 @@ const PointSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "points",
+    collection: 'points',
     timestamps: true,
-  }
+  },
 );
 
 export { PointSchema };

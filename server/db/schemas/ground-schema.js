@@ -38,7 +38,26 @@ const GroundSchema = new mongoose.Schema(
       required: false,
       default: false,
     },
-
+    startTime: {
+      type: String,
+      required: false,
+      default: '0700',
+    },
+    endTime: {
+      type: String,
+      required: false,
+      default: '2200',
+    },
+    shoesRentallInfo: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    actInfo: {
+      type: String,
+      required: false,
+      default: null,
+    },
     parking: {
       type: Boolean,
       required: false,
@@ -98,6 +117,7 @@ const GroundSchema = new mongoose.Schema(
     collection: 'grounds',
     timestamps: true,
   },
+  { typeKey: '$type' },
 );
 
 export { GroundSchema };

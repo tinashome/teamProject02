@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 const SideMenu = () => (
   <Container>
-    <SidemenuName>마이페이지</SidemenuName>
+    <SidemenuName>
+      <NavLink to='/myinfo'>마이페이지</NavLink>
+    </SidemenuName>
     <SideItem>
       <SideTitle>예약 관리</SideTitle>
       <SideList>
@@ -20,10 +22,10 @@ const SideMenu = () => (
           <NavLink to='/myinfo/password'>비밀번호 변경</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo'>개인정보 변경</NavLink>
+          <NavLink to='/myinfo/change'>개인 정보 변경</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo/user'>회원 탈퇴</NavLink>
+          <NavLink to='/myinfo/withdrawal'>회원 탈퇴</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>

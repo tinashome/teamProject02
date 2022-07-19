@@ -8,7 +8,6 @@ const userState = atom({
     role: '',
     isOAuth: '',
     isAdmin: false,
-    isLogin: false,
   },
 });
 

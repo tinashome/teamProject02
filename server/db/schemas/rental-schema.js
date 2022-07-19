@@ -1,15 +1,23 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const RentalSchema = new mongoose.Schema(
   {
-    userObject: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: 'users',
       required: true,
     },
-    groundObject: {
+    groundId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "grounds",
+      ref: 'grounds',
+      required: true,
+    },
+    userName: {
+      type: String,
+      required: true,
+    },
+    groundName: {
+      type: String,
       required: true,
     },
     reservationDate: {
@@ -20,6 +28,12 @@ const RentalSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    isBooked: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
     isDeleted: {
       type: Boolean,
       required: false,
@@ -27,9 +41,9 @@ const RentalSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "rentals",
+    collection: 'rentals',
     timestamps: true,
-  }
+  },
 );
 
 export { RentalSchema };

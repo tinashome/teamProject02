@@ -1,41 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import userState from '../stores/userStore';
+import * as Api from '../api/api';
 
-const UnRegister = () => (
-  <Container>
-    <Title>회원 탈퇴</Title>
-    <Wrapper>
-      <Contents>
-        <Content
-          style={{
-            color: 'red',
-            textAlign: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          회원 탈퇴를 위해 아래 문장을 입력해 주세요
-        </Content>
-        <Content
-          style={{
-            color: 'red',
-            textAlign: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          입력 문장 : 정말 탈퇴 하겠습니다
-        </Content>
-        <Content>
-          문장 확인 <input />
-        </Content>
-      </Contents>
-      <ButtonBox>
-        <button type='button'>탈퇴하기</button>
-        <button type='button'>돌아가기</button>
-      </ButtonBox>
-    </Wrapper>
-  </Container>
-);
-
+const UnRegister = () => {
+  const [str, setStr] = useState('');
+  const setUserInfo = useSetRecoilState(userState);
+  const navigate = useNavigate();
+  const onClickHandle = async () => {
+    try {
+      if (str === '정말 탈퇴 하겠습니다') {
+        const result = await Api.delete('users');
+        if (result.status === 200) {
+          alert('회원 탈퇴가 완료되었습니다.');
+        }
+      } else {
+        alert('입력 문장을 다시 확인해 주세요');
+      }
+      localStorage.removeItem('token');
+      setUserInfo({});
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  return (
+    <Container>
+      <Title>회원 탈퇴</Title>
+      <Wrapper>
+        <Contents>
+          <Content
+            style={{
+              color: 'red',
+              textAlign: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            회원 탈퇴를 위해 아래 문장을 입력해 주세요
+          </Content>
+          <Content
+            style={{
+              color: 'red',
+              textAlign: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            입력 문장 : 정말 탈퇴 하겠습니다
+          </Content>
+          <Content>
+            문장 확인{' '}
+            <input value={str} onChange={(e) => setStr(e.target.value)} />
+          </Content>
+        </Contents>
+        <ButtonBox>
+          <button type='button' onClick={onClickHandle}>
+            탈퇴하기
+          </button>
+          <button type='button'>돌아가기</button>
+        </ButtonBox>
+      </Wrapper>
+    </Container>
+  );
+};
 const Container = styled.div`
   display: flex;
   flex-direction: column;

@@ -32,15 +32,15 @@ async function post(endpoint, data) {
   });
 }
 
-async function put(endpoint, data) {
+async function patch(endpoint, data) {
   // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
   // 예시: {name: "Kim"} => {"name": "Kim"}
   const bodyData = JSON.stringify(data);
 
-  console.log(`%cPUT 요청: ${baseUrl + endpoint}`, 'color: #059c4b;');
-  console.log(`%cPUT 요청 데이터: ${bodyData}`, 'color: #059c4b;');
+  console.log(`%cPATCH 요청: ${baseUrl + endpoint}`, 'color: #059c4b;');
+  console.log(`%cPATCH 요청 데이터: ${bodyData}`, 'color: #059c4b;');
 
-  return axios.put(baseUrl + endpoint, bodyData, {
+  return axios.patch(baseUrl + endpoint, bodyData, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
