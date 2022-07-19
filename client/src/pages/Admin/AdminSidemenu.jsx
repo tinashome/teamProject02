@@ -39,7 +39,7 @@ const AdminSidemenu = () => {
         </SideMenuLink>
         <SideMenuLink
           onClick={() => {
-            setContent(['경기장 수정', <AdminEditGround />]);
+            // setContent(['경기장 수정', <AdminEditGround />]);
           }}
         >
           경기장 수정
