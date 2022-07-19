@@ -15,6 +15,7 @@ const ModalDiv = styled.div`
   justify-content: center;
   text-align: center;
   align-items: center;
+  white-space: pre-line;
   flex-direction: column;
 `;
 

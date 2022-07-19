@@ -25,7 +25,7 @@ const Pagination = ({ totalPage, limit, page, setPage }) => {
     const slicedPageArray = sliceArrayByLimit(totalPage, limit);
     setTotalPageArray(slicedPageArray);
     setCurrentPageArray(slicedPageArray[0]);
-  }, []);
+  }, [totalPage]);
 
   return (
     <PaginationWrapper>

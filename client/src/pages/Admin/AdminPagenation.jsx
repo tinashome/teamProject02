@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminCurrentPage } from 'stores/adminStore';
+import { adminCurrentPage } from 'stores/adminUserStore';
 
 const Pagenation = ({ lastPage }) => {
   const [pageList, setPageList] = useState(0);

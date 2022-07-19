@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { adminContentState } from 'stores/adminStore';
+import { adminContentState } from 'stores/adminUserStore';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';

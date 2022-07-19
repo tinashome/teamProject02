@@ -16,6 +16,10 @@ const GroundTextList = ({ location, searchInput }) => {
   const totalPage = Math.ceil(groundList.length / listPerPage);
 
   useEffect(() => {
+    setPage(1);
+  }, [searchInput]);
+
+  useEffect(() => {
     setIsLoading(true);
     (async () => {
       const result = await Api.get(
@@ -30,6 +34,8 @@ const GroundTextList = ({ location, searchInput }) => {
       setIsLoading(false);
     })();
   }, [location, searchInput, page]);
+
+  if (groundList.length === 0) return null;
 
   return (
     <>
@@ -56,20 +62,17 @@ const GroundTextList = ({ location, searchInput }) => {
         </Container>
       )}
 
-      {groundList.length !== 0 && (
-        <Pagination
-          totalPage={totalPage}
-          limit={5}
-          page={page}
-          setPage={setPage}
-        />
-      )}
+      <Pagination
+        totalPage={totalPage}
+        limit={5}
+        page={page}
+        setPage={setPage}
+      />
     </>
   );
 };
 
 const Container = styled.div`
-  padding: 1.5rem;
   border-radius: 4px;
   margin-top: 1rem;
 `;

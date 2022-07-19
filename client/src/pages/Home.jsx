@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { BiPhotoAlbum } from 'react-icons/bi';
+import { HiOutlineViewList } from 'react-icons/hi';
 import styled from 'styled-components';
 import SearchBar from 'components/organisms/SearchBar';
 import LocationFilter from 'components/organisms/LocationFilter';
@@ -15,10 +17,6 @@ const Home = () => {
 
   // Toggle List Type
   const [listType, setListType] = useRecoilState(groundListTypeState);
-  const handleToggleListType = useCallback(() => {
-    if (listType === '글') setListType('그림');
-    else setListType('글');
-  }, [listType]);
 
   // Search
   const handleSearch = async (e) => {
@@ -62,11 +60,18 @@ const Home = () => {
             </FilterModal>
           )}
           <SearchBar placeholder='구장 찾기' onKeyDown={handleSearch} />
-          <ListTypeButton type='button' onClick={handleToggleListType}>
-            {listType === '글' ? '글로 보기' : '그림으로 보기'}
+          <ListTypeButton>
+            <BiPhotoAlbum
+              onClick={() => setListType('그림')}
+              disabled={listType === '그림'}
+            />
+            <HiOutlineViewList
+              onClick={() => setListType('글')}
+              disabled={listType === '글'}
+            />
           </ListTypeButton>
         </FilterWrapper>
-        {listType === '글' ? (
+        {listType === '그림' ? (
           <GroundPhotoList location={location} searchInput={searchInput} />
         ) : (
           <GroundTextList location={location} searchInput={searchInput} />
@@ -118,8 +123,22 @@ const FilterButton = styled.button`
   }
 `;
 
-const ListTypeButton = styled.button`
+const ListTypeButton = styled.div`
+  display: flex;
+  align-items: center;
   margin-left: auto;
+
+  svg {
+    font-size: 1.7rem;
+    cursor: pointer;
+    margin: 0 0.5rem;
+
+    &[disabled] {
+      color: #f06595;
+      cursor: revert;
+      pointer-events: none;
+    }
+  }
 `;
 
 export default Home;
