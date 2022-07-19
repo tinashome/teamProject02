@@ -5,9 +5,10 @@ import { useRecoilState } from 'recoil';
 
 import AdminDeleteMember from './AdminDeleteMember';
 import AdminAddGround from './AdminAddGround';
+import AdminEditGround from './AdminEditGround';
+import AdminDeleteGround from './AdminDeleteGround';
+
 import {
-  AdminEditGround,
-  AdminDeleteGround,
   AdminReservations,
   AdminDeleteReservations,
   AdminPayment,
