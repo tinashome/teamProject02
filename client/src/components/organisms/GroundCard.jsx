@@ -20,7 +20,7 @@ const GroundCard = ({ ground }) => {
       <GroundName>{groundName}</GroundName>
       <Wrapper>
         <PaymentPoint>{addCommas(paymentPoint)}P</PaymentPoint>
-        <Link to={`detail/${_id}`}>
+        <Link to={`grounds/${_id}`}>
           <ReservationButton type='button'>예약하기</ReservationButton>
         </Link>
       </Wrapper>
