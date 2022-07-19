@@ -1,18 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import pointList from 'constants/PointList';
 import PointBtn from 'components/atoms/PointBtn';
 
-const PointChargeCard = () => (
-  <>
-    <Title>결제금액</Title>
-    <PointCards>
-      {pointList.map((list) => (
-        <PointCard key={list.id}>{list.amount.toLocaleString()}원</PointCard>
-      ))}
-    </PointCards>
-  </>
-);
+const PointChargeCard = () => {
+  const [selectBtn, setSelectBtn] = useState(false);
+
+  const handleClick = (idx) => {
+    const newPointBtn = Array(8).fill(false);
+    newPointBtn[idx] = true;
+    setSelectBtn(newPointBtn);
+  };
+
+  return (
+    <>
+      <Title>결제금액</Title>
+      <PointCards>
+        {pointList.map((list, idx) => (
+          <PointCard
+            key={list.id}
+            value={list.amount}
+            style={{ color: selectBtn[idx] ? 'white' : 'black', backgroundColor: selectBtn[idx] ? '#3563e9' : 'white' }}
+            onClick={() => handleClick(idx)}
+          >
+            {list.amount.toLocaleString()}원
+          </PointCard>
+        ))}
+      </PointCards>
+    </>
+  );
+};
+
 
 const Title = styled.h2`
   font-size: 25px;
@@ -34,9 +52,6 @@ const PointCard = styled(PointBtn)`
   font-weight: bold;
   border: solid #bdbdbd;
   margin: 0.5rem;
-  &:hover {
-    color: white;
-    background-color: #3563e9;
-  }
 `;
+
 export default PointChargeCard;

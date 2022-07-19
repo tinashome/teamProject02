@@ -9,8 +9,7 @@ const PointCharge = () => (
     <PointChargeTitle />
     <PointChargeCard />
     <PointChargeCheck />
-  </Container>
-);
+  </Container>);
 
 const Container = styled.div`
   width: 80%;
