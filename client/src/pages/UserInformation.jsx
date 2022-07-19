@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import userState from 'stores/userStore';
 import styled from 'styled-components';
-import userInfo from '../stores/userInfoStore';
 import * as Api from '../api/api';
 
 const UserInformation = () => {
-  const [user, setUser] = useRecoilState(userInfo);
+  const [user, setUser] = useRecoilState(userState);
 
   const userInformation = async () => {
     try {
       const result = await Api.get('users/user');
-      setUser(result.data);
+      setUser((prev) => ({ ...prev, ...result.data }));
     } catch (err) {
       console.log(err);
     }

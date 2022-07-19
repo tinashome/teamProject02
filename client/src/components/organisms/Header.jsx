@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaFutbol, FaUserCircle } from 'react-icons/fa';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import userState from 'stores/userStore';
-import userInfoState from 'stores/userInfoStore';
 import { getToken, isExistToken } from 'util/useful-functions';
 import jwtDecode from 'jwt-decode';
 import HeaderButton from '../atoms/HeaderButton';
@@ -15,27 +14,22 @@ const Header = () => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const setUser = useSetRecoilState(userInfoState);
+  const [user, setUser] = useRecoilState(userState);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setUserInfo({
-      isLogin: false,
-    });
-    setUser({});
+
     navigate('/login');
   };
 
   useEffect(() => {
     if (isExistToken()) {
       const { userId, name, role, isOAuth } = jwtDecode(getToken());
-      setUserInfo({
+      setUser({
         userId,
         name,
         role,
         isOAuth,
-        isLogin: true,
       });
     }
   }, []);
@@ -57,19 +51,19 @@ const Header = () => {
         <HeaderButton>문의 게시판</HeaderButton>
         <HeaderButton>공지사항</HeaderButton>
 
-        {userInfo.isLogin ? (
+        {isExistToken() ? (
           <>
             {/* <UserImage /> */}
             {/* 임시로 넣은 유저 아이콘 */}
             <FaUserCircle style={{ width: 40, height: 40, marginRight: 10 }} />
             <UserProfile>
               <UserName>
-                <span style={{ fontWeight: 700 }}>{userInfo?.name}</span>님!
+                <span style={{ fontWeight: 700 }}>{user?.name}</span>님!
                 환영합니다.
               </UserName>
               <UserProfileButtonWrapper>
                 <UserProfileButton>
-                  {userInfo.role === 'admin' ? (
+                  {user?.role === 'admin' ? (
                     <NavLink to='/admin'>관리자 페이지</NavLink>
                   ) : (
                     <NavLink to='/myinfo'>마이 페이지</NavLink>

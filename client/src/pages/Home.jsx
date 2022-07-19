@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import BannerImage from 'components/atoms/BannerImage';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import GroundCard from 'components/organisms/GroundCard';
-import banner from 'assets/image/banner.jpeg';
 import styled from 'styled-components';
 import * as Api from 'api/api';
 import { useRecoilState } from 'recoil';
@@ -11,6 +9,7 @@ import SearchBar from 'components/organisms/SearchBar';
 import LocationFilter from 'components/organisms/LocationFilter';
 import Pagination from 'components/organisms/Pagination';
 import locationList from 'constants/locationList';
+import GroundSlide from 'components/organisms/GroundSlide';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -91,7 +90,7 @@ const Home = () => {
 
   return (
     <>
-      <BannerImage src={banner} />
+      <GroundSlide />
       <Container>
         <FilterWrapper>
           <LocationFilter
