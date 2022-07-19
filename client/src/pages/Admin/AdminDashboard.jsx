@@ -10,11 +10,12 @@ import { useRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import ContentLargetxt from 'components/atoms/ContentLargetxt';
-import groundData from 'mockData/groundData2';
+// import groundData from 'mockData/groundData2';
 import AdminDeleteGround from './AdminDeleteGround';
 
 const AdminDashboard = () => {
   // const [users, setUsers] = useRecoilState(adminUsers);
+  // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
   const [role, setRole] = useState(false);
   const newUsers = [];
@@ -50,6 +51,7 @@ const AdminDashboard = () => {
   };
 
   // 경기장 등록함수(테스트경기장 일괄 등록시 사용)
+  // eslint-disable-next-line no-unused-vars
   const addGround = async (ground) => {
     const {
       groundName,
