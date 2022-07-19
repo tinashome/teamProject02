@@ -4,17 +4,22 @@ import GroundSlide from 'components/organisms/GroundSlide';
 import GroundReservationCalendar from 'components/organisms/GroundReservationCalendar';
 import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
   const [detailInfo, setDetailInfo] = useState([]);
+  const params = useParams();
 
-  useEffect(() => async () => {
-      const result = await Api.get(`grounds/62d2d84af34863cbb7647549`);
+  useEffect(
+    () => async () => {
+      const result = await Api.get(`grounds/${params.id}`);
       return setDetailInfo(result.data);
-    }, []);
+    },
+    [],
+  );
+
   return (
     <>
       <GroundSlide info={detailInfo.groundImg} />

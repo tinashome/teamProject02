@@ -22,7 +22,7 @@ const PointChargeCheck = () => {
       const userRole = jwtDecode(token).role;
       const regex = /[가-힣]+/u;
 
-      if (userRole === '') navigate('/login');
+      if (userRole == null) alert('로그인이 필요합니다.')
       else if (paymentAmount === 0) alert('충전하실 포인트를 선택해 주세요.');
       else if (depositorName.length < 2) alert('이름을 2자 이상 입력해주세요.');
       else if (!regex.test(depositorName)) alert('이름을 확인해주세요.');
@@ -30,16 +30,17 @@ const PointChargeCheck = () => {
       else if (!checkValid)
         alert('입금자명과 결제방식 확인항목을 확인해주세요.');
       else {
-        const setInfo = {paymentOption, paymentAmount};
+        const setInfo = { paymentOption, paymentAmount };
         const result = await Api.post('points', setInfo);
         if (result.status === 200) {
           // 포인트 충전 상세 페이지로 이동
-          console.log(result)
-          console.log('포인트 상세 페이지로 이동')
+          console.log(result);
+          console.log('포인트 충전 상세 페이지로 이동');
         }
       }
     } catch (err) {
-      console.log(err);
+      alert('로그인이 필요합니다');
+      navigate('/login');
     }
   };
   return (

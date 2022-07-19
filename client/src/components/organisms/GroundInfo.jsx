@@ -49,7 +49,11 @@ const GroundInfo = ({ info }) => {
               <BoxBlanckIcon />
               {list.title}
             </GroundInfoTitle>
-            <GroundText>{list.text}</GroundText>
+            {list.text == null ? (
+              <GroundText>정보없음</GroundText>
+            ) : (
+              <GroundText>{list.text}</GroundText>
+            )}
           </>
         ))}
 

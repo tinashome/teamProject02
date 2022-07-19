@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Link, useNavigate} from 'react-router-dom';
+
 import { AiOutlineQuestionCircle, AiOutlineArrowLeft } from 'react-icons/ai';
 
-const PointChargeTitle = () => (
+const PointChargeTitle = () => {
+  const navigate = useNavigate();
+
+  return(
   <Container>
-    <BackArrow>
+    <BackArrow onClick={()=>navigate(-1)}>
       <AiOutlineArrowLeft />
       이전 페이지
     </BackArrow>
@@ -12,16 +17,16 @@ const PointChargeTitle = () => (
     <Title>포인트 충전</Title>
 
     <ChargeInfoBtn>
-      <AiOutlineQuestionCircle /> 충전내역
+      <Link to="/"><AiOutlineQuestionCircle /> 충전내역</Link>
     </ChargeInfoBtn>
   </Container>
-);
+)};
 
 const Container = styled.div`
   display: flex;
   flex-direction: raw;
   width: 100%;
-  height:4rem;
+  height: 4rem;
   margin: 4rem 5rem 4rem 9rem;
   border-bottom-style: solid;
   border-bottom-width: 1px;
