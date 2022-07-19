@@ -1,38 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import userInfo from '../stores/userInfoStore';
+import * as Api from '../api/api';
 
-const SideMenu = () => (
-  <Container>
-    <Title>개인정보 변경</Title>
-    <Wrapper>
-      <Contents>
-        <Content>
-          이름{' '}
-          <input
-            disabled='ture'
-            placeholder='이름'
-            style={{ backgroundColor: '#e9e9e9' }}
-          />
-        </Content>
-        <Content>
-          이메일{' '}
-          <input
-            disabled='ture'
-            placeholder='이메일'
-            style={{ backgroundColor: '#e9e9e9' }}
-          />
-        </Content>
-        <Content>
-          전화번호 <input />
-        </Content>
-      </Contents>
-      <ButtonBox>
-        <button type='button'>변경하기</button>
-        <button type='button'>돌아가기</button>
-      </ButtonBox>
-    </Wrapper>
-  </Container>
-);
+const UserInfoChange = () => {
+  const [user, setUser] = useRecoilState(userInfo);
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  useEffect(() => {
+    setPhoneNumber(user.phoneNumber);
+  }, []);
+
+  const check = /^[0-9\b]{0,11}$/;
+
+  const onClickHandle = async () => {
+    try {
+      if (!check.test(phoneNumber)) {
+        alert(`전화번호는 숫자 만 입력해 주세요.`);
+        return;
+      }
+      if (user.phoneNumber === phoneNumber) {
+        alert('정보 변경 후 변경하기를 눌러주세요.');
+        return;
+      }
+      const userData = {
+        name: user.name,
+        email: user.email,
+        phoneNumber,
+        role: user.role,
+      };
+      const result = await Api.patch('users', userData);
+      if (result.status === 200) {
+        setUser(result.data);
+        alert('개인 정보 변경이 완료되었습니다.');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <Container>
+      <Title>개인 정보 변경</Title>
+      <Wrapper>
+        <Contents>
+          <Content>
+            이름{' '}
+            <input
+              disabled='ture'
+              placeholder={user.name}
+              style={{ backgroundColor: '#e9e9e9' }}
+            />
+          </Content>
+          <Content>
+            이메일{' '}
+            <input
+              disabled='ture'
+              placeholder={user.email}
+              style={{ backgroundColor: '#e9e9e9' }}
+            />
+          </Content>
+          <Content>
+            전화번호{' '}
+            <input
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </Content>
+        </Contents>
+        <ButtonBox>
+          <button type='button' onClick={onClickHandle}>
+            변경하기
+          </button>
+          <button type='button'>돌아가기</button>
+        </ButtonBox>
+      </Wrapper>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
@@ -107,4 +153,4 @@ const Content = styled.div`
   text-align: right;
 `;
 
-export default SideMenu;
+export default UserInfoChange;

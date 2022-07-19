@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaFutbol, FaUserCircle } from 'react-icons/fa';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import userState from 'stores/userStore';
+import userInfoState from 'stores/userInfoStore';
 import { getToken, isExistToken } from 'util/useful-functions';
 import jwtDecode from 'jwt-decode';
 import HeaderButton from '../atoms/HeaderButton';
@@ -12,12 +13,16 @@ import Logo from '../atoms/Logo';
 
 const Header = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const setUser = useSetRecoilState(userInfoState);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUserInfo({
       isLogin: false,
     });
+    setUser({});
+    navigate('/');
   };
 
   useEffect(() => {
@@ -55,8 +60,8 @@ const Header = () => {
               <p>{userInfo?.name}님! 환영합니다.</p>
               <UserProfileButtonWrapper>
                 <UserProfileButton>
-                  {userInfo.name === '관리자' ? (
-                    '관리자 페이지'
+                  {userInfo.isAdmin ? (
+                    <NavLink to='/admin'>관리자 페이지</NavLink>
                   ) : (
                     <NavLink to='/myinfo'>마이 페이지</NavLink>
                   )}

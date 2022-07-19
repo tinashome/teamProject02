@@ -1,28 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import * as Api from '../api/api';
 
-const PasswordChange = () => (
-  <Container>
-    <Title>비밀번호 변경</Title>
-    <Wrapper>
-      <Contents>
-        <Content>
-          현재 비밀번호 <input />
-        </Content>
-        <Content>
-          새 비밀번호 <input />
-        </Content>
-        <Content>
-          새 비밀번호 확인 <input />
-        </Content>
-      </Contents>
-      <ButtonBox>
-        <button type='button'>변경하기</button>
-        <button type='button'>돌아가기</button>
-      </ButtonBox>
-    </Wrapper>
-  </Container>
-);
+const PasswordChange = () => {
+  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
+
+  const onClickHandle = async () => {
+    try {
+      const userData = { password: newPassword, currentPassword: password };
+      if (newPassword.length < 8) {
+        alert('비밀번호는 최소 8자 이상이어야 합니다.');
+        return;
+      }
+      if (newPassword !== newPasswordConfirm) {
+        alert('새 비밀번호를 다시 확인해 주세요.');
+        return;
+      }
+      if (password === newPassword) {
+        alert('같은 비밀번호 말고 다른 비밀번호를 입력해 주세요.');
+        return;
+      }
+      const result = await Api.patch('users/updatedPwd', userData);
+      if (result.status === 200) {
+        alert('비밀번호 변경이 완료되었습니다.');
+      }
+      setPassword('');
+      setNewPassword('');
+      setNewPasswordConfirm('');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  return (
+    <Container>
+      <Title>비밀번호 변경</Title>
+      <Wrapper>
+        <Contents>
+          <Content>
+            현재 비밀번호{' '}
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Content>
+          <Content>
+            새 비밀번호{' '}
+            <input
+              type='password'
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </Content>
+          <Content>
+            새 비밀번호 확인{' '}
+            <input
+              type='password'
+              value={newPasswordConfirm}
+              onChange={(e) => setNewPasswordConfirm(e.target.value)}
+            />
+          </Content>
+        </Contents>
+        <ButtonBox>
+          <button type='button' onClick={onClickHandle}>
+            변경하기
+          </button>
+          <button type='button'>돌아가기</button>
+        </ButtonBox>
+      </Wrapper>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
