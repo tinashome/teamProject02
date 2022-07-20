@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import jwtDecode from 'jwt-decode';
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from 'components/atoms/Input';
@@ -7,8 +8,9 @@ import Button from 'components/atoms/Button';
 import { useRecoilState } from 'recoil';
 import {
   pointSelected,
-  chargeButton,
   modalState,
+  orderNumber,
+  issuedDate,
 } from 'stores/pointChargeStore';
 import * as Api from 'api/api';
 
@@ -17,8 +19,9 @@ const PointChargeCheck = () => {
   const [paymentOption, setPaymentOption] = useState(false);
   const [checkValid, setCheckValid] = useState(false);
   const [paymentAmount, setPaymentAmount] = useRecoilState(pointSelected);
-  const [pointButton, setPointButton] = useRecoilState(chargeButton);
   const [modalShow, setModalShow] = useRecoilState(modalState);
+  const [orderNum, setOrderNum] = useRecoilState(orderNumber);
+  const [createdDate, setCreatedDate] = useRecoilState(issuedDate);
 
   const navigate = useNavigate();
 
@@ -38,10 +41,13 @@ const PointChargeCheck = () => {
       else {
         const setInfo = { paymentOption, paymentAmount };
         const result = await Api.post('points', setInfo);
+        const order = new Date().valueOf();
+        const date = new Date();
+        const formatDate = moment(date).format('YYYY년 MM월 DD일 HH시');
         if (result.status === 201) {
-          // 포인트 충전 상세 모달 띄우기
-          setPointButton(!pointButton);
           setModalShow(!modalShow);
+          setOrderNum(order);
+          setCreatedDate(formatDate);
         }
       }
     } catch (err) {

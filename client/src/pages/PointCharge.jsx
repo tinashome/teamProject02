@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PointChargeTitle from 'components/organisms/PointChargeTitle';
 import PointChargeCard from 'components/organisms/PointChargeCard';
@@ -6,16 +6,22 @@ import PointChargeCheck from 'components/organisms/PointChargeCheck';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import ModalDiv from 'components/atoms/AdminModalDiv';
 import { useRecoilState } from 'recoil';
-import { modalState, pointSelected } from 'stores/pointChargeStore';
+import {
+  modalState,
+  pointSelected,
+  orderNumber,
+  issuedDate,
+} from 'stores/pointChargeStore';
 
 const PointCharge = () => {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [selectedValue, setSelectedValue] = useRecoilState(pointSelected);
+  const [orderNum, setOrderNum] = useRecoilState(orderNumber);
+  const [createdDate, setCreatedDate] = useRecoilState(issuedDate);
 
   const modalClose = () => {
     setModalOpen(!modalOpen);
   };
-
   return (
     <Container>
       <button type='button' onClick={modalClose}>
@@ -30,7 +36,7 @@ const PointCharge = () => {
             <MainTitle>나의 포인트 충전 정보</MainTitle>
             <InfoDetail>
               <Title>주문번호 : </Title>
-              <Info>주문번호</Info>
+              <Info>{orderNum}</Info>
             </InfoDetail>
             <InfoDetail>
               <Title>결제금액 : </Title>
@@ -46,11 +52,11 @@ const PointCharge = () => {
             </InfoDetail>
             <InfoDetail>
               <Title>결제방식 : </Title>
-              <Info>고정계좌 입금</Info>
+              <Info>고정계좌 입금 (무통장)</Info>
             </InfoDetail>
             <InfoDetail>
               <Title>발급일시 : </Title>
-              <Info>발급날짜</Info>
+              <Info>{createdDate}</Info>
             </InfoDetail>
           </PointModalDiv>
         </ModalWrapper>
@@ -80,6 +86,7 @@ const Title = styled.div`
 `;
 const Info = styled.div`
   font-size: 30px;
+  margin-left: 0.7rem;
 `;
 
 const PointModalDiv = styled(ModalDiv)`

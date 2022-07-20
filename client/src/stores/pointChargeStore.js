@@ -5,15 +5,19 @@ const pointSelected = atom({
   default: 0,
 });
 
-const chargeButton = atom({
-  key: 'chargeButton',
-  default: false,
-});
-
 const modalState = atom({
   key: 'modalState',
   default: false,
 });
 
+const orderNumber = atom({
+  key: 'orderNumber',
+  default: '',
+});
 
-export { pointSelected, chargeButton, modalState };
+const issuedDate = atom({
+  key: 'issuedDate',
+  default: '',
+});
+
+export { pointSelected, modalState, orderNumber, issuedDate };
