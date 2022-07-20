@@ -9,7 +9,7 @@ export const groundPhotoListState = atom({
 });
 
 export const groundTextListState = atom({
-  key: 'groundPhotoListState',
+  key: 'groundTextListState',
   default: {
     length: 0,
     data: [],
