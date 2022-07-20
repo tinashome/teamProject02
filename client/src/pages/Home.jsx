@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { BiPhotoAlbum } from 'react-icons/bi';
 import { HiOutlineViewList } from 'react-icons/hi';
 import styled from 'styled-components';

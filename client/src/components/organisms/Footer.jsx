@@ -39,8 +39,8 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 50px 150px;
-  color: #ffffff;
+  padding: 30px 150px;
+  color: white;
   background: #3563e9;
 `;
 
@@ -54,7 +54,7 @@ const MenuWrapper = styled.div`
 
 const MenuTitle = styled.span`
   display: block;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
 `;
@@ -64,6 +64,7 @@ const MenuList = styled.ul``;
 const Menu = styled.li`
   padding: 0.3rem 0;
   margin-left: 0.2rem;
+  font-size: 0.9rem;
   opacity: 0.5;
   cursor: pointer;
 `;
@@ -71,9 +72,11 @@ const Menu = styled.li`
 const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: auto;
 `;
 
 const Description = styled.span`
+  font-size: 0.8rem;
   padding: 0.3rem 0;
   opacity: 0.5;
 `;
