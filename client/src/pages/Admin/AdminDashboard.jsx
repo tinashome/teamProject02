@@ -8,10 +8,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
-// import groundData from '1test/groundData';
+import * as Api from 'api/api';
 import groundImgSrc from 'mockData/groundImgSrc';
 import groundImgSrcTest from 'mockData/groundImgSrcTest';
-import * as Api from 'api/api';
 
 const AdminDashboard = () => {
   // eslint-disable-next-line no-unused-vars

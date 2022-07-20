@@ -59,12 +59,8 @@ const AdminDeleteGround = () => {
     );
     if (deleteConfirm) {
       try {
-        const result = await Api.delete(`grounds/${event.target.id}`);
-        setModal({
-          success: true,
-          groundName: event.target.name,
-        });
-        console.log(result);
+        await Api.delete(`grounds/${event.target.id}`);
+        setModal({ success: true, groundName: event.target.name });
         return;
       } catch (err) {
         setModal({ success: false, groundName: event.target.name });
