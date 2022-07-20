@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
-// import groundData from '1test/groundData';
+
 import groundImgSrc from 'mockData/groundImgSrc';
 import groundImgSrcTest from 'mockData/groundImgSrcTest';
 
