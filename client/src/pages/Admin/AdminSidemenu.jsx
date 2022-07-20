@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 
 import AdminDeleteMember from './AdminDeleteUser';
 import AdminAddGround from './AdminAddGround';
-import AdminEditGround from './AdminEditGround';
+// import AdminEditGround from './AdminEditGround';
 import AdminDeleteGround from './AdminDeleteGround';
 
 import {
@@ -15,6 +15,7 @@ import {
 } from './AdminPages';
 
 const AdminSidemenu = () => {
+  // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
   return (
     <SideMenuWrapper>

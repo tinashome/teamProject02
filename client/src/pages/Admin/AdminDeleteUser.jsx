@@ -106,7 +106,12 @@ const AdminDeleteMember = () => {
             <Row key={e._id}>
               <Text width='200'>{e.email}</Text>
               <Text width='80'>{e.name}</Text>
-              <Text>{e.phoneNumber}</Text>
+              <Text>
+                {e.phoneNumber.replace(
+                  /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                  `$1-$2-$3`,
+                )}
+              </Text>
               <Text width='100'>{e.totalPoint.toLocaleString()}P</Text>
               <Text>
                 <Button id={e._id} name={e.name} onClick={handleClick}>

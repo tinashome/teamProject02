@@ -4,10 +4,14 @@ import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import banner1 from 'assets/image/banner1.jpeg';
+import banner2 from 'assets/image/banner2.jpeg';
+import banner3 from 'assets/image/banner3.jpeg';
+
 // 처음 mount 될 때는 undefined였다가 부모컴포넌트가 비동기처리를 끝내고 나면 다시 받아온다.
 
 const GroundSlide = ({ info }) => {
-  const [infoState, setInfoState] = useState([]);
+  const [infoState, setInfoState] = useState([banner1, banner2, banner3]);
 
   useEffect(() => {
     if (info && info.length > 0) {
@@ -34,7 +38,6 @@ const GroundSlide = ({ info }) => {
 
 const StyleSlider = styled(Slider)`
   width: 100%;
-  height: 17rem;
   margin-bottom: 4rem;
   .slick-prev {
     left: 3% !important;
@@ -51,7 +54,7 @@ const SlideImgs = styled.img`
   display: block;
   margin: auto;
   width: 100%;
-  height: 17rem;
+  height: 20rem;
   object-fit: cover;
 `;
 

@@ -9,7 +9,7 @@ export const groundPhotoListState = atom({
 });
 
 export const groundTextListState = atom({
-  key: 'groundPhotoListState',
+  key: 'groundTextListState',
   default: {
     length: 0,
     data: [],
@@ -18,5 +18,5 @@ export const groundTextListState = atom({
 
 export const groundListTypeState = atom({
   key: 'groundListTypeState',
-  default: '글',
+  default: '그림',
 });

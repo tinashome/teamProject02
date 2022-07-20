@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import userState from '../stores/userStore';
@@ -6,28 +8,19 @@ import * as Api from '../api/api';
 
 const UserInfoChange = () => {
   const [user, setUser] = useRecoilState(userState);
-  const [phoneNumber, setPhoneNumber] = useState('');
 
-  useEffect(() => {
-    setPhoneNumber(user.phoneNumber);
-  }, []);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const check = /^[0-9\b]{0,11}$/;
-
-  const onClickHandle = async () => {
+  const onSubmit = async (data) => {
     try {
-      if (!check.test(phoneNumber)) {
-        alert(`전화번호는 숫자 만 입력해 주세요.`);
-        return;
-      }
-      if (user.phoneNumber === phoneNumber) {
-        alert('정보 변경 후 변경하기를 눌러주세요.');
-        return;
-      }
       const userData = {
         name: user.name,
         email: user.email,
-        phoneNumber,
+        phoneNumber: data.phoneNumber,
         role: user.role,
       };
       const result = await Api.patch('users', userData);
@@ -44,37 +37,51 @@ const UserInfoChange = () => {
     <Container>
       <Title>개인 정보 변경</Title>
       <Wrapper>
-        <Contents>
-          <Content>
-            이름{' '}
-            <input
-              disabled='ture'
-              placeholder={user.name}
-              style={{ backgroundColor: '#e9e9e9' }}
-            />
-          </Content>
-          <Content>
-            이메일{' '}
-            <input
-              disabled='ture'
-              placeholder={user.email}
-              style={{ backgroundColor: '#e9e9e9' }}
-            />
-          </Content>
-          <Content>
-            전화번호{' '}
-            <input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </Content>
-        </Contents>
-        <ButtonBox>
-          <button type='button' onClick={onClickHandle}>
-            변경하기
-          </button>
-          <button type='button'>돌아가기</button>
-        </ButtonBox>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Contents>
+            <Content>
+              이름{' '}
+              <input
+                disabled='ture'
+                placeholder={user.name}
+                style={{ backgroundColor: '#e9e9e9' }}
+              />
+            </Content>
+            <Content>
+              이메일{' '}
+              <input
+                disabled='ture'
+                placeholder={user.email}
+                style={{ backgroundColor: '#e9e9e9' }}
+              />
+            </Content>
+            <Content>
+              전화번호{' '}
+              <input
+                {...register('phoneNumber', {
+                  required: '휴대전화 번호를 입력해주세요.',
+                  validate: {
+                    changePhoneNumber: (value) =>
+                      user.phoneNumber !== value ||
+                      '휴대전화 번호를 변경해 주세요.',
+                  },
+                  pattern: {
+                    value: /^[0-9\b]{0,11}$/,
+                    message: '올바른 휴대전화 번호를 숫자만 입력해 주세요.',
+                  },
+                })}
+                placeholder={user.phoneNumber}
+              />
+            </Content>
+            <ErrorMessage>{errors.phoneNumber?.message}</ErrorMessage>
+          </Contents>
+          <ButtonBox>
+            <button type='submit'>변경하기</button>
+            <button type='button'>
+              <NavLink to='/'>돌아가기</NavLink>
+            </button>
+          </ButtonBox>
+        </Form>
       </Wrapper>
     </Container>
   );
@@ -105,6 +112,11 @@ const Title = styled.div`
 const Wrapper = styled.div`
   height: 100%;
   margin: 0.9375rem 6.25rem;
+`;
+
+const Form = styled.form`
+  width: 100%;
+  height: 100%;
 `;
 
 const Contents = styled.div`
@@ -150,6 +162,12 @@ const Content = styled.div`
   font-weight: 400;
   font-size: 1.5rem;
   letter-spacing: -0.0625rem;
+  text-align: right;
+`;
+
+const ErrorMessage = styled.p`
+  color: #f03e3e;
+  margin: 0 5rem 0.5rem 0;
   text-align: right;
 `;
 

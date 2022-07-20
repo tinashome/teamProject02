@@ -172,13 +172,12 @@
  *       shoesRentallInfo:
  *         type: string
  *         description: 신발 대여 정보
- *         default: false
- *         required: null
+ *         required: false
  *       actInfo:
- *         type: string
+ *         type: array
  *         description: 기타정보
- *         default: false
- *         required: null
+ *         default: []
+ *         required: false
  *       parking:
  *         type: boolean
  *         description: 주차장 가능 여부

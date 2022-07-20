@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { BiPhotoAlbum } from 'react-icons/bi';
 import { HiOutlineViewList } from 'react-icons/hi';
 import styled from 'styled-components';
@@ -129,9 +129,12 @@ const ListTypeButton = styled.div`
   margin-left: auto;
 
   svg {
+    width: 35px;
+    height: 35px;
     font-size: 1.7rem;
     cursor: pointer;
-    margin: 0 0.5rem;
+    padding: 0.2rem;
+    border: 1px solid #ced4da;
 
     &[disabled] {
       color: #f06595;
