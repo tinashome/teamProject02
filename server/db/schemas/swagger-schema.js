@@ -99,15 +99,15 @@
  *     type: object
  *     required:
  *        - _id
- *        - userObject
- *        - groundObject
+ *        - userId
+ *        - groundId
  *        - reservationDate
  *        - reservationTime
  *     properties:
  *       _id:
  *         type: objectid
  *         description: primary key
- *       userObject:
+ *       userId:
  *         type: object
  *         description: userObject입니다. poplutate용 생성이 userId값을 입력하세요.
  *         required: true
@@ -149,7 +149,7 @@
  *           updateAt:
  *             type: "string"
  *             format: "date-time"
- *       groundObject:
+ *       groundId:
  *         type: object
  *         description: groundObject입니다. poplutate용 생성이 groundId값을 입력하세요.
  *         required: true
@@ -170,6 +170,11 @@
  *           isBooked:
  *             type: boolean
  *             description: 예약 가능 여부
+ *             default: false
+ *             required: false
+ *           paymentPoint:
+ *             type: integer
+ *             description: 구장 포인트
  *             default: false
  *             required: false
  *       userName:
@@ -308,6 +313,25 @@
  *             type: boolean
  *             description: 샤워 가능 여부
  *             default: false
+ *             required: false
+ *           startTime:
+ *             type: string
+ *             description: 매장 시작 시간
+ *             default: '0700'
+ *             required: false
+ *           endTime:
+ *             type: string
+ *             description: 매장 종료 시간
+ *             default: '2200'
+ *             required: false
+ *           shoesRentallInfo:
+ *             type: string
+ *             description: 신발 대여 정보
+ *             default: null
+ *           actInfo:
+ *             type: array
+ *             description: 기타정보
+ *             default: []
  *             required: false
  *           parking:
  *             type: boolean

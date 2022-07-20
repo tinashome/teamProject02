@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   height: auto;
-  margin-top: 100px;
+  /* margin-top: 80px; */
   min-height: calc(100vh - 320px);
 `;
 

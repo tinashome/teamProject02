@@ -2,6 +2,7 @@ import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { userService } from '../services/index.js';
 import { adminOnly, loginRequired } from '../middlewares/index.js';
+import { rentalRouter } from './rental-router.js';
 
 /**
  * @swagger
@@ -259,4 +260,5 @@ authRouter.post('/CheckPwd', loginRequired, async function (req, res, next) {
     next(error);
   }
 });
+
 export { authRouter };

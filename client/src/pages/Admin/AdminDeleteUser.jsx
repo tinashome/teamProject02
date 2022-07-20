@@ -5,16 +5,17 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers, adminCurrentPage } from 'stores/adminStore';
+import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
 
 const AdminDeleteMember = () => {
   // 조회한유저목록을 저장하는 상태
   const [users, setUsers] = useRecoilState(adminUsers);
+  // const [users, setUsers] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
-  const [totalCount, setTotalCount] = useState(999);
+  const [totalCount, setTotalCount] = useState(null);
   const [lastPage, setLastPage] = useState(9);
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
@@ -34,9 +35,8 @@ const AdminDeleteMember = () => {
         `users?offset=${currentPage * pageSize}&count=${pageSize}`,
       );
       const resultData = await result.data;
-      await setUsers(resultData.users);
-      await setTotalCount(resultData.length);
-      await setLastPage(Math.ceil(totalCount / pageSize) - 1);
+      setUsers(resultData.users);
+      setTotalCount(resultData.length);
     } catch (err) {
       console.log(err);
     }
@@ -45,6 +45,10 @@ const AdminDeleteMember = () => {
   useEffect(() => {
     getUsers();
   }, [currentPage, modal]);
+
+  useEffect(() => {
+    setLastPage(Math.ceil(totalCount / pageSize) - 1);
+  }, [totalCount]);
 
   const handleClick = async (event) => {
     // 회원정보삭제 api요청
@@ -97,21 +101,27 @@ const AdminDeleteMember = () => {
         <Text>삭제(탈퇴)</Text>
       </TitleRow>
       <Wrapper pageSize={pageSize}>
-        {users.map((e) => (
-          <Row key={e._id}>
-            <Text width='200'>{e.email}</Text>
-            <Text width='80'>{e.name}</Text>
-            <Text>{e.phoneNumber}</Text>
-            <Text width='100'>{e.totalPoint.toLocaleString()}P</Text>
-            <Text>
-              <Button id={e._id} name={e.name} onClick={handleClick}>
-                회원삭제
-              </Button>
-            </Text>
-          </Row>
-        ))}
+        {users &&
+          users.map((e) => (
+            <Row key={e._id}>
+              <Text width='200'>{e.email}</Text>
+              <Text width='80'>{e.name}</Text>
+              <Text>
+                {e.phoneNumber.replace(
+                  /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                  `$1-$2-$3`,
+                )}
+              </Text>
+              <Text width='100'>{e.totalPoint.toLocaleString()}P</Text>
+              <Text>
+                <Button id={e._id} name={e.name} onClick={handleClick}>
+                  회원삭제
+                </Button>
+              </Text>
+            </Row>
+          ))}
       </Wrapper>
-      <Pagenation lastPage={lastPage} />
+      {users.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
   );
 };
@@ -128,7 +138,7 @@ const TitleRow = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  // height: ${(props) => `${45 * props.pageSize}px`};
+  height: ${(props) => `${45 * props.pageSize}px`};
   align-self: end;
 `;
 

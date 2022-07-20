@@ -1,71 +1,27 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import GroundCard from 'components/organisms/GroundCard';
+import React, { useCallback, useState } from 'react';
+import { BiPhotoAlbum } from 'react-icons/bi';
+import { HiOutlineViewList } from 'react-icons/hi';
 import styled from 'styled-components';
-import * as Api from 'api/api';
-import { useRecoilState } from 'recoil';
-import { groundListState } from 'stores/groundStore';
-import Spinner from 'components/atoms/Spinner';
 import SearchBar from 'components/organisms/SearchBar';
 import LocationFilter from 'components/organisms/LocationFilter';
-import Pagination from 'components/organisms/Pagination';
 import locationList from 'constants/locationList';
 import GroundSlide from 'components/organisms/GroundSlide';
+import GroundPhotoList from 'components/organisms/GroundPhotoList';
+import GroundTextList from 'components/organisms/GroundTextList';
+import { useRecoilState } from 'recoil';
+import { groundListTypeState } from 'stores/groundStore';
 
 const Home = () => {
-  const [searchValue, setSearchValue] = useState('');
   const [location, setLocation] = useState('');
-  const [page, setPage] = useState(1);
-  const [groundList, setGroundList] = useRecoilState(groundListState);
-  const totalPage = Math.ceil(groundList.length / 8);
+  const [searchInput, setSearchInput] = useState('');
 
-  // 처음 화면 구성, Pagination, Location Filter 변경 시 실행
-  useEffect(() => {
-    (async () => {
-      const result = await Api.get(
-        `grounds?location=${location}&search=${searchValue}&offset=${
-          (page - 1) * 8
-        }`,
-      );
-      setGroundList({
-        isLoading: false,
-        length: result.data.length,
-        data: result.data.grounds,
-      });
-    })();
-  }, [page, location]);
+  // Toggle List Type
+  const [listType, setListType] = useRecoilState(groundListTypeState);
 
   // Search
-  const handleChangeSearchInput = (e) => {
-    setSearchValue(e.target.value);
-  };
-
   const handleSearch = async (e) => {
     if (e.key === 'Enter') {
-      if (searchValue === '') {
-        setGroundList({
-          isLoading: true,
-        });
-        const result = await Api.get(
-          `grounds/?location=${location}&search=${searchValue}`,
-        );
-        setGroundList({
-          isLoading: false,
-          length: result.data.length,
-          data: result.data.grounds,
-        });
-        return;
-      }
-      setGroundList({
-        isLoading: true,
-      });
-      const searchResult = await Api.get(
-        `grounds/?location=${location}&search=${searchValue}`,
-      );
-      setGroundList({
-        isLoading: false,
-        length: searchResult.data.length,
-        data: searchResult.data.grounds,
-      });
+      setSearchInput(e.target.value);
     }
   };
 
@@ -76,16 +32,9 @@ const Home = () => {
   }, [isOpenFilterModal]);
 
   const getFilteredData = async (e) => {
-    if (e.target.innerText === '모든 지역') {
-      setLocation('');
-    } else {
-      setLocation(e.target.innerText);
-    }
+    if (e.target.innerText === '모든 지역') setLocation('');
+    else setLocation(e.target.innerText);
     handleToggleFilterModal();
-    setGroundList({
-      isLoading: true,
-    });
-    // useEffect Hook 실행
   };
 
   return (
@@ -110,31 +59,22 @@ const Home = () => {
               ))}
             </FilterModal>
           )}
-          <SearchBar
-            placeholder='구장 찾기'
-            value={searchValue}
-            onChange={handleChangeSearchInput}
-            onKeyDown={handleSearch}
-          />
+          <SearchBar placeholder='구장 찾기' onKeyDown={handleSearch} />
+          <ListTypeButton>
+            <BiPhotoAlbum
+              onClick={() => setListType('그림')}
+              disabled={listType === '그림'}
+            />
+            <HiOutlineViewList
+              onClick={() => setListType('글')}
+              disabled={listType === '글'}
+            />
+          </ListTypeButton>
         </FilterWrapper>
-        {groundList.isLoading ? (
-          <Spinner />
+        {listType === '그림' ? (
+          <GroundPhotoList location={location} searchInput={searchInput} />
         ) : (
-          <>
-            <GroundList>
-              {groundList.data?.map((ground) => (
-                <GroundCard ground={ground} key={ground._id} />
-              ))}
-            </GroundList>
-            {groundList.length !== 0 && (
-              <Pagination
-                totalPage={totalPage}
-                limit={5}
-                page={page}
-                setPage={setPage}
-              />
-            )}
-          </>
+          <GroundTextList location={location} searchInput={searchInput} />
         )}
       </Container>
     </>
@@ -148,7 +88,7 @@ const Container = styled.div`
 const FilterWrapper = styled.div`
   position: relative;
   display: flex;
-  margin-bottom: 0.5rem;
+  margin: 0 1rem 0.5rem 1rem;
 `;
 
 const FilterModal = styled.div`
@@ -157,7 +97,6 @@ const FilterModal = styled.div`
   flex-direction: column;
   align-items: center;
   width: 15%;
-  left: 1rem;
   top: 3rem;
   padding: 1.5rem 1rem;
   background-color: #495057;
@@ -184,10 +123,25 @@ const FilterButton = styled.button`
   }
 `;
 
-const GroundList = styled.section`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25%, auto));
-  margin-bottom: 3rem;
+const ListTypeButton = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  svg {
+    width: 35px;
+    height: 35px;
+    font-size: 1.7rem;
+    cursor: pointer;
+    padding: 0.2rem;
+    border: 1px solid #ced4da;
+
+    &[disabled] {
+      color: #f06595;
+      cursor: revert;
+      pointer-events: none;
+    }
+  }
 `;
 
 export default Home;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from 'react-icons/bi';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
@@ -25,32 +25,43 @@ const afternoonTimeValue = [
   '21:00~22:00',
 ];
 
-const GroundTime = () => (
-  <Container>
-    <DateTimeNavbar>
-      <TimeText>
-        <BiTimeFive /> 시간 선택
-      </TimeText>
-      <ShowBtn>
-        <BsArrowDownCircle />
-        <BsArrowUpCircle />
-      </ShowBtn>
-    </DateTimeNavbar>
+const GroundTime = () => {
+  const [timeBtnShow, setTimeBtnShow] = useState(true);
 
-    <Title>오전</Title>
-    <ButtonContainer>
-      {morningTimeValue.map((list) => (
-        <TimeButton>{list}</TimeButton>
-      ))}
-    </ButtonContainer>
-    <Title>오후</Title>
-    <ButtonContainer>
-      {afternoonTimeValue.map((list) => (
-        <TimeButton>{list}</TimeButton>
-      ))}
-    </ButtonContainer>
-  </Container>
-);
+  const handleClick = () => {
+    setTimeBtnShow(!timeBtnShow);
+  };
+  return (
+    <>
+      <DateTimeNavbar>
+        <TimeText>
+          <BiTimeFive /> 시간 선택
+        </TimeText>
+        <ShowBtn>
+          {timeBtnShow ? (
+            <BsArrowDownCircle onClick={handleClick} />
+          ) : (
+            <BsArrowUpCircle onClick={handleClick} />
+          )}
+        </ShowBtn>
+      </DateTimeNavbar>
+      <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
+        <Title>오전</Title>
+        <TimeBtns>
+          {morningTimeValue.map((list) => (
+            <Button>{list}</Button>
+          ))}
+        </TimeBtns>
+        <Title>오후</Title>
+        <TimeBtns>
+          {afternoonTimeValue.map((list) => (
+            <Button>{list}</Button>
+          ))}
+        </TimeBtns>
+      </Container>
+    </>
+  );
+};
 const TimeText = styled.h1`
   font-size: 20px;
   text-align: left;
@@ -63,16 +74,23 @@ const Container = styled.div`
   height: auto;
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   font-size: 20px;
 `;
 
-const ButtonContainer = styled.div`
+const TimeBtns = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
   margin: 1rem 0 1rem 1rem;
   gap: 0.5rem 0;
+`;
+
+const Button = styled(TimeButton)`
+  &:hover {
+    color:white;
+    background-color: #3563e9;
+  }
 `;
 
 const DateTimeNavbar = styled.div`
@@ -90,4 +108,5 @@ const ShowBtn = styled.button`
   width: 100%;
   margin-right: 0.8rem;
 `;
+
 export default GroundTime;

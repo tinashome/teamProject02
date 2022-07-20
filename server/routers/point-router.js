@@ -195,7 +195,7 @@ pointRouter.patch('/:pointId', adminOnly, async function (req, res, next) {
  *         required: true
  *         description: 포인트 id 고유값을 입력하세요.
  *     responses:
- *       200:
+ *       204:
  *         description: 포인트가 삭제되었습니다.
 
  */

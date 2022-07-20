@@ -7,29 +7,36 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminContentState } from 'stores/adminStore';
+import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
-import ContentLargetxt from 'components/atoms/ContentLargetxt';
-
-import AdminAddGround from './AdminAddGround';
+import groundImgSrc from 'mockData/groundImgSrc';
+import groundImgSrcTest from 'mockData/groundImgSrcTest';
 
 const AdminDashboard = () => {
-  // const [users, setUsers] = useRecoilState(adminUsers);
+  // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
-  const [role, setRole] = useState(false);
+  const [slice, setSlice] = useState(10);
+  const [amount, setAmount] = useState(10);
   const newUsers = [];
-  setContent(['경기장 추가', <AdminAddGround />]);
+  const groundData = [];
+  // eslint-disable-next-line no-unused-vars
+  const newGround = groundData.map((e, i) => ({
+    // groundImg: [].push(groundImgSrc[i % groundImgSrc.length]),
+    ...e,
+  }));
+  // eslint-disable-next-line no-unused-vars
+  const newGrounds = newGround.map((e, i) =>
+    e.groundImg.push(groundImgSrc[`${i % 10}`]),
+  );
+  console.log(newGround);
+  // setContent(['경기장 삭제', <AdminDeleteGround />]);
 
-  // 관리자로그인함수
-  const signin = async (email, pass) => {
+  // 로그인함수
+  const signin = async (email, password) => {
     try {
-      const result = await Api.post('auth/signin', {
-        email,
-        password: pass,
-      });
+      const result = await Api.post('auth/signin', { email, password });
       const { token } = result.data;
       localStorage.setItem('token', token);
-      setRole(localStorage.getItem('token'));
     } catch (err) {
       console.log(err);
     }
@@ -48,45 +55,30 @@ const AdminDashboard = () => {
     });
   };
 
-  // // 사용자목록조회 api요청
-  // const getUsers = async () => {
-  //   try {
-  //     const result = await Api.get('users');
-  //     setUsers(result.data);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  //   localStorage.getItem('token');
-  //   setRole(localStorage.getItem('token'));
-  // };
-
-  // 유저목록 미리 로딩
-  // useEffect(() => {
-  //   // getUsers();
-  // }, []);
+  // 경기장 등록함수(테스트경기장 일괄 등록시 사용)
+  const addGround = async (ground) => {
+    try {
+      const result = await Api.post(`grounds`, ground);
+      console.log(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
-    <ContentLargetxt>
-      관리자 페이지
+    <Wrapper>
+      관리자 페이지 대쉬보드
+      <ImgBoxContainers>
+        <ImgBox style={{ width: '700px' }}>
+          {[...groundImgSrc, ...groundImgSrcTest].map((e, i) => (
+            // <LoadedImage e={e} i={i} />
+            // eslint-disable-next-line react/no-array-index-key
+            <Img key={i} src={e} alt={`img${i}`} />
+          ))}
+        </ImgBox>
+      </ImgBoxContainers>
       <br />
-      첫화면
       <br />
-      admin:{role ? '로그인완료' : '로그인전'}
-      <br />
-      <Button
-      // onClick={() => {
-      //   console.log(users);
-      // }}
-      >
-        유저목록출력
-      </Button>
-      <Button
-        onClick={() => {
-          signin('admin@gamil.com', '1234');
-        }}
-      >
-        관리자로그인
-      </Button>
       <Button
         onClick={() => {
           signin('user@gmail.com', '12341234');
@@ -99,20 +91,57 @@ const AdminDashboard = () => {
           signup(newUsers.map((e) => signup(e)));
         }}
       >{`테스트계정 ${newUsers.length}개 일괄생성`}</Button>
-    </ContentLargetxt>
+      <Button
+        onClick={() => {
+          newGround.slice(slice, slice + amount).map((e) => addGround(e));
+        }}
+      >
+        {`테스트경기장 ${amount}개 일괄생성`}
+      </Button>
+      <input
+        style={{ width: '100px', fontSize: 30 }}
+        oncChange={(e) => {
+          setSlice(e.target.value);
+        }}
+      />
+      번부터
+      <input
+        style={{ width: '100px', fontSize: 30 }}
+        oncChange={(e) => {
+          setAmount(e.target.value);
+        }}
+      />
+      개 생성
+    </Wrapper>
   );
 };
-
+const Wrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 30px;
+`;
 const Button = styled.button`
-  // width: 80px;
-  // height: 50px;
   padding: 5px 20px;
-  margin-top: 10px;
+  margin: 20px;
   border-radius: 4px;
   background: #3563e9;
   color: white;
-  text-align: center;
   font-size: 20px;
+`;
+
+const ImgBoxContainers = styled.div`
+  display: flex;
+`;
+
+const ImgBox = styled.div`
+  display: flex;
+  width: 270px;
+  flex-wrap: wrap;
+`;
+const Img = styled.img`
+  display: flex;
+  width: 89px;
+  height: 89px;
 `;
 
 export default AdminDashboard;

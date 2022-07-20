@@ -86,12 +86,12 @@ const Header = () => {
 };
 
 const Container = styled.div`
-  position: fixed;
+  /* position: fixed; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 30px 120px;
+  padding: 20px 120px;
   background: #ffffff;
   z-index: 99;
   border-bottom: 1px solid #e9ecef;
