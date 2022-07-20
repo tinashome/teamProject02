@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 
 // .env에서 백엔드 포트번호를 설정해야 함.
