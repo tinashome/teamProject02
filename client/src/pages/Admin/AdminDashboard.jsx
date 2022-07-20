@@ -14,11 +14,12 @@ import AdminDeleteGround from './AdminDeleteGround';
 
 const AdminDashboard = () => {
   // const [users, setUsers] = useRecoilState(adminUsers);
+  // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
   const [role, setRole] = useState(false);
   const newUsers = [];
   const newGround = [];
-  setContent(['경기장 추가', <AdminDeleteGround />]);
+  setContent(['경기장 삭제', <AdminDeleteGround />]);
 
   // 관리자로그인함수
   const signin = async (email, pass) => {
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
   };
 
   // 경기장 등록함수(테스트경기장 일괄 등록시 사용)
+  // eslint-disable-next-line no-unused-vars
   const addGround = async (ground) => {
     const {
       groundName,

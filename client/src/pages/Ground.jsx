@@ -1,23 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import GroundSlide from 'components/organisms/GroundSlide';
 import GroundReservationCalendar from 'components/organisms/GroundReservationCalendar';
 import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
+import { Link, useParams } from 'react-router-dom';
+import * as Api from 'api/api';
 import GroundInfo from '../components/organisms/GroundInfo';
 
-const Ground = () => (
-  <>
-    <GroundSlide />
-    <Container>
-      <GroundInfo />
-      <GroundReservationCalendar />
-      <GroundTime />
-      <BackBtn>돌아가기</BackBtn>
-      <ReservationBtn>예약하기</ReservationBtn>
-    </Container>
-  </>
-);
+const Ground = () => {
+  const [detailInfo, setDetailInfo] = useState([]);
+  const params = useParams();
+
+  useEffect(
+    () => async () => {
+      const result = await Api.get(`grounds/${params.id}`);
+      return setDetailInfo(result.data);
+    },
+    [],
+  );
+
+  return (
+    <>
+      <GroundSlide info={detailInfo.groundImg} />
+      <Container>
+        <GroundInfo info={detailInfo} />
+        <GroundReservationCalendar />
+        <GroundTime />
+        <BackBtn>
+          <Link to='/'>돌아가기</Link>{' '}
+        </BackBtn>
+        <ReservationBtn>예약하기</ReservationBtn>
+      </Container>
+    </>
+  );
+};
 
 const Container = styled.div`
   width: 80%;
