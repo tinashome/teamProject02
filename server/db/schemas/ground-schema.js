@@ -54,7 +54,7 @@ const GroundSchema = new mongoose.Schema(
       default: null,
     },
     actInfo: {
-      type: String,
+      type: [String],
       required: false,
       default: null,
     },
