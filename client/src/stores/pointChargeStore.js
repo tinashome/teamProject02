@@ -2,7 +2,18 @@ import { atom } from 'recoil';
 
 const pointSelected = atom({
   key: 'pointSelected',
-  default: 0
+  default: 0,
 });
 
-export default pointSelected
+const chargeButton = atom({
+  key: 'chargeButton',
+  default: false,
+});
+
+const modalState = atom({
+  key: 'modalState',
+  default: false,
+});
+
+
+export { pointSelected, chargeButton, modalState };

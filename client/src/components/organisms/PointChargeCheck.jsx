@@ -5,7 +5,11 @@ import styled from 'styled-components';
 import Input from 'components/atoms/Input';
 import Button from 'components/atoms/Button';
 import { useRecoilState } from 'recoil';
-import pointSelected from 'stores/pointChargeStore';
+import {
+  pointSelected,
+  chargeButton,
+  modalState,
+} from 'stores/pointChargeStore';
 import * as Api from 'api/api';
 
 const PointChargeCheck = () => {
@@ -13,6 +17,8 @@ const PointChargeCheck = () => {
   const [paymentOption, setPaymentOption] = useState(false);
   const [checkValid, setCheckValid] = useState(false);
   const [paymentAmount, setPaymentAmount] = useRecoilState(pointSelected);
+  const [pointButton, setPointButton] = useRecoilState(chargeButton);
+  const [modalShow, setModalShow] = useRecoilState(modalState);
 
   const navigate = useNavigate();
 
@@ -32,10 +38,10 @@ const PointChargeCheck = () => {
       else {
         const setInfo = { paymentOption, paymentAmount };
         const result = await Api.post('points', setInfo);
-        if (result.status === 200) {
-          // 포인트 충전 상세 페이지로 이동
-          console.log(result);
-          console.log('포인트 충전 상세 페이지로 이동');
+        if (result.status === 201) {
+          // 포인트 충전 상세 모달 띄우기
+          setPointButton(!pointButton);
+          setModalShow(!modalShow);
         }
       }
     } catch (err) {

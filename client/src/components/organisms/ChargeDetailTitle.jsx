@@ -33,7 +33,7 @@ const Title = styled.h1`
   font-size: 30px;
   font-weight: bold;
   width: 100%;
-  margin-right: 10rem;
+  margin-right: 16rem;
 `;
 const BackArrow = styled.button`
   text-align: left;
