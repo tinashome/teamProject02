@@ -8,7 +8,11 @@ import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 
 const GroundReservationCalendar = () => {
   const [selectDate, setSelectDate] = useState(new Date());
-  // const [dateState, setDateState] = useState(true);
+  const [calendarShowBtn, setCalendarShowBtn] = useState(true);
+
+  const handleClick = () => {
+    setCalendarShowBtn(!calendarShowBtn);
+  };
 
   return (
     <Container>
@@ -18,12 +22,17 @@ const GroundReservationCalendar = () => {
           {moment(selectDate).format('YYYY년 MM월 DD일')}
         </DateText>
         <ShowBtn>
-          <BsArrowDownCircle />
-          <BsArrowUpCircle />
+          {calendarShowBtn ? (
+            <BsArrowDownCircle onClick={handleClick} />
+          ) : (
+            <BsArrowUpCircle onClick={handleClick} />
+          )}
         </ShowBtn>
       </DateNavbar>
 
-      <CalendarUI>
+      <CalendarUI
+        style={calendarShowBtn ? { display: 'flex' } : { display: 'none' }}
+      >
         <StyleCalendar onChange={setSelectDate} value={selectDate} />
       </CalendarUI>
     </Container>
@@ -35,11 +44,9 @@ const StyleCalendar = styled(Calendar)`
 
 const Container = styled.div`
   width: 100%;
-  margin: 1.5rem 0 0 0;
 `;
 
 const CalendarUI = styled.div`
-  display: flex;
   justify-content: center;
 `;
 
