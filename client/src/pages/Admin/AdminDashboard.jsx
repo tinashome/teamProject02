@@ -10,7 +10,6 @@ import { useRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import ContentLargetxt from 'components/atoms/ContentLargetxt';
-import groundData from 'mockData/groundData2';
 import AdminDeleteGround from './AdminDeleteGround';
 
 const AdminDashboard = () => {

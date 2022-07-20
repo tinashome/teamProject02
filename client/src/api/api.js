@@ -32,6 +32,22 @@ async function post(endpoint, data) {
   });
 }
 
+async function put(endpoint, data) {
+  // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
+  // 예시: {name: "Kim"} => {"name": "Kim"}
+  const bodyData = JSON.stringify(data);
+
+  console.log(`%cPATCH 요청: ${baseUrl + endpoint}`, 'color: #059c4b;');
+  console.log(`%cPATCH 요청 데이터: ${bodyData}`, 'color: #059c4b;');
+
+  return axios.put(baseUrl + endpoint, bodyData, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+}
+
 async function patch(endpoint, data) {
   // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
   // 예시: {name: "Kim"} => {"name": "Kim"}
@@ -77,4 +93,4 @@ async function postImg(endpoint, formdata) {
 
 // 아래처럼 export한 후, import * as A 방식으로 가져오면,
 // A.get, A.post 로 쓸 수 있음.
-export { get, post, put, del as delete, postImg };
+export { get, post, put, patch, del as delete, postImg };
