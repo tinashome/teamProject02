@@ -11,7 +11,7 @@ import imgbox from '../../assets/image/imgbox.png';
 
 const AdminAddGround = () => {
   const { register, handleSubmit } = useForm();
-  const [inputPointValue, setInputPointValue] = useState(0);
+  const [inputPointValue, setInputPointValue] = useState(null);
   const [postCode, setPostCode] = useState([]);
   // 업로드 된 이미지 주소를 배열로 저장하여 화면에보여주고 경기장 생성시 주소를 전송
   const [uplodedImgsSrc, setUplodedImgsSrc] = useState(null);
@@ -106,7 +106,7 @@ const AdminAddGround = () => {
 
     try {
       const result = await Api.post(`grounds`, newGroundData);
-      setModal({ success: true, ...newGroundData });
+      // setModal({ success: true, ...newGroundData });
       setModal({ success: true, ...result.data });
       // console.log(result.data, groundImg);
     } catch (err) {
@@ -588,7 +588,6 @@ const ModalDiv = styled.div`
   background-color:#fff;
   font-size:24px;
   justify-content: center;
-  // text-align: right;
   align-items: center;
   white-space: pre-wrap;
 `;
