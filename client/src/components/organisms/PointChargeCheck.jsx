@@ -22,7 +22,7 @@ const PointChargeCheck = () => {
       const userRole = jwtDecode(token).role;
       const regex = /[가-힣]+/u;
 
-      if (userRole == null) alert('로그인이 필요합니다.')
+      if (userRole == null) alert('로그인이 필요합니다.');
       else if (paymentAmount === 0) alert('충전하실 포인트를 선택해 주세요.');
       else if (depositorName.length < 2) alert('이름을 2자 이상 입력해주세요.');
       else if (!regex.test(depositorName)) alert('이름을 확인해주세요.');

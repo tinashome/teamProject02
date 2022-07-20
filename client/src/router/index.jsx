@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Ground from 'pages/Ground';
-import PointChargeInfo from 'pages/PointChargeInfo';
+import ChargeDetailInfo from 'pages/ChargeDetailInfo';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
@@ -22,7 +22,7 @@ const Router = () => (
         <Route path='/login' element={<Login />} />
         <Route path='/grounds/:id' element={<Ground />} />
         <Route path='/pointCharge' element={<PointCharge />} />
-        <Route path='/pointChargeInfo' element={<PointChargeInfo />} />
+        <Route path='/ChargeDetailInfo' element={<ChargeDetailInfo />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/admin' element={<Admin />} />
         <Route path='/myinfo' element={<MyPage />}>
