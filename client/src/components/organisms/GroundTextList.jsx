@@ -52,7 +52,7 @@ const GroundTextList = ({ location, searchInput }) => {
           {groundList.data?.map((ground) => (
             <GroundInfo>
               <p>{ground.groundAddress.address1}</p>
-              <Link to={`/detail/${ground._id}`}>{ground.groundName}</Link>
+              <Link to={`/grounds/${ground._id}`}>{ground.groundName}</Link>
               <p>{addCommas(ground.paymentPoint)}P</p>
               <p>
                 {ground.startTime}~{ground.endTime}
