@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Ground from 'pages/Ground';
-import ChargeDetailInfo from 'pages/ChargeDetailInfo';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
