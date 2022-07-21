@@ -161,14 +161,9 @@ authRouter.post('/signin', async (req, res, next) => {
  */
 authRouter.post('/signup/kakao', async (req, res, next) => {
   try {
-    const { email } = req.body;
-
-    const userInfo = {
-      email,
-    };
-    const newUser = await userService.addUserWithKakao(userInfo);
-
-    res.status(201).json(newUser);
+    const { authorizationCode } = req.body;
+    const token = await userService.addUserWithKakao(authorizationCode);
+    res.status(201).json({ token });
   } catch (error) {
     next(error);
   }

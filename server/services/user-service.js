@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import { userModel } from '../db/index.js';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
+import qs from 'qs';
 
 class UserService {
   // 본 파일의 맨 아래에서, new UserService(userModel) 하면, 이 함수의 인자로 전달됨
@@ -40,37 +42,76 @@ class UserService {
   }
 
   // 카카오 Oauth 회원가입
-  async addUserWithKakao(userInfo) {
-    const { email, nickName, phoneNumber } = userInfo;
+  async addUserWithKakao(authorizationCode) {
+    const tokenResponse = await axios({
+      method: 'POST',
+      url: 'https://kauth.kakao.com/oauth/token',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      data: qs.stringify({
+        grant_type: 'authorization_code',
+        client_id: process.env.KAKAO_REST_API_KEY,
+        redirect_uri: process.env.KAKAO_REDIRECT_URI,
+        code: authorizationCode,
+      }),
+    });
+
+    const accessToken = tokenResponse.data.access_token;
+
+    const userResponse = await axios({
+      method: 'GET',
+      url: 'https://kapi.kakao.com/v2/user/me',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const authData = {
+      ...tokenResponse.data,
+      ...userResponse.data,
+    };
+
+    const {
+      profile: { nickname },
+      email,
+    } = authData.kakao_account;
 
     if (!email) {
       throw new Error('회원가입을 위해서는 이메일과 이름이 필요합니다');
     }
 
-    // 이메일 중복 확인
-    const user = await this.userModel.findByEmail(email);
-    if (user) {
-      throw new Error(
-        '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.',
-      );
-    }
-
-    // 비밀번호는 임시로 설정
-    const password = 'kakao';
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUserInfo = {
-      email,
-      nickName,
-      phoneNumber,
-      password: hashedPassword,
-      isOAuth: true,
-    };
+    // 카카오 로그인 했던 적이 있는지 확인
+    let user = await this.userModel.findByEmail(email);
 
     // db에 저장
-    const createdNewUser = await this.userModel.create(newUserInfo);
+    if (!user) {
+      // 비밀번호는 임시로 설정
+      const password = 'kakao';
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    return createdNewUser;
+      const newUserInfo = {
+        email,
+        name: nickname,
+        password: hashedPassword,
+        isOAuth: true,
+      };
+
+      user = await this.userModel.create(newUserInfo);
+    }
+
+    const secretKey = process.env.JWT_SECRET_KEY || 'secret-key';
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        name: user.name,
+        role: user.role,
+        isOAuth: user.isOAuth,
+      },
+      secretKey,
+    );
+
+    return token;
   }
 
   // 로그인
