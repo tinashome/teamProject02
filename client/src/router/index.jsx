@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Ground from 'pages/Ground';
 import PointChargeInfo from 'pages/PointChargeInfo';
+import KakaoRedirectHandler from 'pages/KakaoRedirectHandler';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
@@ -32,6 +33,7 @@ const Router = () => (
           <Route path='rental' element={<RentalManagement />} />
         </Route>
       </Route>
+      <Route path='/oauth/callback/kakao' element={<KakaoRedirectHandler />} />
     </Routes>
   </BrowserRouter>
 );
