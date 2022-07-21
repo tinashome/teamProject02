@@ -33,10 +33,10 @@ const SideMenu = () => (
       <SideTitle>포인트 충전</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo'>포인트 충전</NavLink>
+          <NavLink to='/pointCharge'>포인트 충전</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo'>포인트 충전 내역</NavLink>
+          <NavLink to='/myinfo/point'>포인트 충전 내역</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>

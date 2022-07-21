@@ -14,6 +14,7 @@ import UserInfoChange from '../pages/UserInfoChange';
 import UnRegister from '../pages/UnRegister';
 import RentalManagement from '../pages/RentalManagement';
 import PointCharge from '../pages/PointCharge';
+import UserPointHistory from '../pages/UserPointHistory';
 
 const Router = () => (
   <BrowserRouter>
@@ -32,6 +33,7 @@ const Router = () => (
           <Route path='password' element={<PasswordChange />} />
           <Route path='withdrawal' element={<UnRegister />} />
           <Route path='rental' element={<RentalManagement />} />
+          <Route path='point' element={<UserPointHistory />} />
         </Route>
       </Route>
     </Routes>
