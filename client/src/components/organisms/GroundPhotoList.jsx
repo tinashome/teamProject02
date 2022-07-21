@@ -3,12 +3,10 @@ import { useRecoilState } from 'recoil';
 import { groundPhotoListState } from 'stores/groundStore';
 import * as Api from 'api/api';
 import styled from 'styled-components';
-import Spinner from 'components/atoms/Spinner';
 import GroundCard from './GroundCard';
 import Pagination from './Pagination';
 
 const GroundPhotoList = ({ location, searchInput }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [groundList, setGroundList] = useRecoilState(groundPhotoListState);
   const [page, setPage] = useState(1);
   const listPerPage = 8;
@@ -20,7 +18,6 @@ const GroundPhotoList = ({ location, searchInput }) => {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
       const result = await Api.get(
         `grounds?location=${location}&search=${searchInput}&offset=${
           (page - 1) * listPerPage
@@ -30,23 +27,16 @@ const GroundPhotoList = ({ location, searchInput }) => {
         length: result.data.length,
         data: result.data.grounds,
       });
-      setIsLoading(false);
     })();
   }, [location, searchInput, page]);
 
-  if (groundList.length === 0) return null;
-
   return (
     <>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <Container>
-          {groundList.data?.map((ground) => (
-            <GroundCard ground={ground} key={ground._id} />
-          ))}
-        </Container>
-      )}
+      <Container>
+        {groundList.data?.map((ground) => (
+          <GroundCard ground={ground} key={ground._id} />
+        ))}
+      </Container>
       <Pagination
         totalPage={totalPage}
         limit={5}
