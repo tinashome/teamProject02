@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import pointList from 'constants/PointList';
 import PointBtn from 'components/atoms/PointBtn';
 import { useRecoilState } from 'recoil';
-import pointSelected from 'stores/pointChargeStore';
+import {pointSelected} from 'stores/pointChargeStore';
 
 const PointChargeCard = () => {
   const [selectBtn, setSelectBtn] = useState(false);
