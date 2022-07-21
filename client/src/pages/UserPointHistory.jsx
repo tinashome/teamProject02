@@ -10,6 +10,18 @@ const UserPointHistory = () => {
     setPointHistory(result.data);
   };
 
+  const getCurrentDate = (data) => {
+    const currentDate = new Date(data);
+
+    const year = currentDate.getFullYear();
+    const month = `0${currentDate.getMonth() + 1}`.slice(-2);
+    const day = `0${currentDate.getDate()}`.slice(-2);
+
+    const dateString = `${year}-${month}-${day}`;
+
+    return dateString;
+  };
+
   useEffect(() => {
     getPoint();
   }, []);
@@ -27,7 +39,7 @@ const UserPointHistory = () => {
           {pointHistory.map((item) => (
             <Content key={item._id}>
               <PointInfo>
-                <div>{item.createdAt.substr(0, 10)}</div>
+                <div>{getCurrentDate(item.createdAt)}</div>
                 <div>{item.paymentAmount.toLocaleString()}P</div>
                 {item.isCharged ? (
                   <Approval
