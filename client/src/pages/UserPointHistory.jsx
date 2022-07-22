@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Api from '../api/api';
+import Pagination from '../components/organisms/Pagination';
 
 const UserPointHistory = () => {
   const [pointHistory, setPointHistory] = useState([]);
+  const [page, setPage] = useState(1);
+  const listPerPage = 10;
+  const totalPage = Math.ceil(pointHistory.length / listPerPage);
+  const offset = (page - 1) * listPerPage;
 
   const getPoint = async () => {
-    const result = await Api.get('points/user');
-    setPointHistory(result.data);
+    try {
+      const result = await Api.get(`points/user?count=Infinity`);
+      setPointHistory(result.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const getCurrentDate = (data) => {
@@ -36,7 +45,7 @@ const UserPointHistory = () => {
           <p>승인 여부</p>
         </PointHeader>
         <Contents>
-          {pointHistory.map((item) => (
+          {pointHistory.slice(offset, offset + listPerPage).map((item) => (
             <Content key={item._id}>
               <PointInfo>
                 <div>{getCurrentDate(item.createdAt)}</div>
@@ -60,6 +69,12 @@ const UserPointHistory = () => {
           ))}
         </Contents>
       </Wrapper>
+      <Pagination
+        totalPage={totalPage}
+        limit={5}
+        page={page}
+        setPage={setPage}
+      />
     </Container>
   );
 };
@@ -92,19 +107,19 @@ const Wrapper = styled.div`
 `;
 
 const PointHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.5rem;
+  margin-bottom: 1.125rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 0.0625rem solid #9e9e9e;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
-  font-size: 24px;
-  line-height: 24px;
-  display: flex;
-  align-items: center;
+  font-size: 1.5rem;
   text-align: center;
-  letter-spacing: 0.46px;
-  border-bottom: 1px solid #9e9e9e;
-  margin-bottom: 1.125rem;
-  padding-bottom: 0.75rem;
-  justify-content: space-between;
+  letter-spacing: 0.02875rem;
 
   & p:nth-child(1) {
     margin-left: 0.5rem;
@@ -119,24 +134,16 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  & input {
-    width: 50%;
-    padding: 0.875rem 1rem;
-    margin: 0.5rem 5rem 0.5rem 1rem;
-    border: 0.0625rem solid #ced4da;
-    border-radius: 0.25rem;
-  }
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
+  line-height: 1.8125rem;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
-  font-size: 24px;
-  line-height: 29px;
+  font-size: 1.5rem;
 `;
 
 const PointInfo = styled.div`

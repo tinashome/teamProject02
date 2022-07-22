@@ -4,14 +4,12 @@ import styled from 'styled-components';
 
 const SideMenu = () => (
   <Container>
-    <SidemenuName>
-      <NavLink to='/myinfo'>마이페이지</NavLink>
-    </SidemenuName>
+    <SidemenuName>마이페이지</SidemenuName>
     <SideItem>
       <SideTitle>예약 관리</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo/rental'>예약 조회</NavLink>
+          <NavLink to='/myinfo'>예약 조회</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>
