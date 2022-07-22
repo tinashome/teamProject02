@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 
-const Postcode = ({ setPostCode }) => {
+const Postcode = ({ setPostCode, setFindAddressRequired }) => {
   const open = useDaumPostcodePopup();
 
   const handleComplete = (data) => {
@@ -25,6 +25,7 @@ const Postcode = ({ setPostCode }) => {
 
   const handleClick = () => {
     open({ onComplete: handleComplete });
+    setFindAddressRequired(false);
   };
 
   return (
