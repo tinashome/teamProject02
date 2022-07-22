@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import KakaoRedirectHandler from 'pages/KakaoRedirectHandler';
 import Spinner from 'components/atoms/Spinner';
 import GlobalLayout from './GlobalLayout';
-import UserInformation from '../pages/UserInformation';
 import PasswordChange from '../pages/PasswordChange';
 import UserInfoChange from '../pages/UserInfoChange';
 import UnRegister from '../pages/UnRegister';
@@ -31,11 +30,10 @@ const Router = () => (
           <Route path='/signup' element={<SignUp />} />
           <Route path='/admin' element={<Admin />} />
           <Route path='/myinfo' element={<MyPage />}>
-            <Route path='' element={<UserInformation />} />
+            <Route path='' element={<RentalManagement />} />
             <Route path='change' element={<UserInfoChange />} />
             <Route path='password' element={<PasswordChange />} />
             <Route path='withdrawal' element={<UnRegister />} />
-            <Route path='rental' element={<RentalManagement />} />
             <Route path='point' element={<UserPointHistory />} />
           </Route>
         </Route>
