@@ -12,22 +12,27 @@ import IconCard from './IconCard';
 const GroundInfo = ({ info }) => {
   const infoContents = [
     {
+      id: 1,
       title: '풋살장 가는길',
       text: info.wayTo,
     },
     {
+      id: 2,
       title: '주차',
       text: info.parkingInfo,
     },
     {
+      id: 3,
       title: '흡연',
       text: info.smoking,
     },
     {
+      id: 4,
       title: '풋살화 대여',
       text: info.shoesRentalInfo,
     },
     {
+      id: 5,
       title: '화장실',
       text: info.toilet,
     },
@@ -45,7 +50,7 @@ const GroundInfo = ({ info }) => {
 
         {infoContents.map((list) => (
           <>
-            <GroundInfoTitle>
+            <GroundInfoTitle key={list.id}>
               <BoxBlanckIcon />
               {list.title}
             </GroundInfoTitle>

@@ -11,7 +11,6 @@ import GroundInfo from '../components/organisms/GroundInfo';
 const Ground = () => {
   const [detailInfo, setDetailInfo] = useState([]);
   const params = useParams();
-
   useEffect(
     () => async () => {
       const result = await Api.get(`grounds/${params.id}`);
@@ -19,14 +18,17 @@ const Ground = () => {
     },
     [],
   );
-
+  console.log(detailInfo)
   return (
     <>
       <GroundSlide info={detailInfo.groundImg} />
       <Container>
         <GroundInfo info={detailInfo} />
         <GroundReservationCalendar />
-        <GroundTime />
+        <GroundTime
+          startTime={detailInfo.startTime}
+          endTime={detailInfo.endTime}
+        />
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>

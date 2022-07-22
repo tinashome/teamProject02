@@ -1,36 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from 'react-icons/bi';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
+import { useRecoilState } from 'recoil';
+import { morningTimeValue, afternoonTimeValue } from 'stores/reservationStore';
 import TimeButton from '../atoms/TimeButton';
 
-const morningTimeValue = [
-  '07:00~08:00',
-  '08:00~09:00',
-  '09:00~10:00',
-  '10:00~11:00',
-  '11:00~12:00',
-];
-
-const afternoonTimeValue = [
-  '12:00~13:00',
-  '13:00~14:00',
-  '14:00~15:00',
-  '15:00~16:00',
-  '16:00~17:00',
-  '17:00~18:00',
-  '18:00~19:00',
-  '19:00~20:00',
-  '20:00~21:00',
-  '21:00~22:00',
-];
-
-const GroundTime = () => {
+const GroundTime = ({ startTime, endTime }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
+  const [morningTime, setMorningTime] = useRecoilState(morningTimeValue);
+  const [afternoonTime, setAfternoonTime] = useRecoilState(afternoonTimeValue);
+  const [startTimeValue, setStartTimeValue] = useState('');
+  const [endTimeValue, setEndTimeValue] = useState('');
+
+  const morningTimeState = () => {
+    const newMorningTime = [...morningTime];
+    const morningSliceResult = morningTime.map((list) =>
+      list.value.slice(0, 5),
+    );
+    const morningTimeIndex = morningSliceResult.indexOf(startTimeValue);
+    if (morningTimeIndex !== -1) {
+      for (let i = 0; i < morningTimeIndex; i += 1) {
+        newMorningTime[i] = { ...newMorningTime[i], reservation: true };
+      }
+    }
+    setMorningTime(newMorningTime);
+  };
+
+  const afternoonTimeState = () => {
+    const newAfternoonTime = [...afternoonTime];
+    const afternoonSliceResult = afternoonTime.map((list) =>
+      list.value.slice(6, 11),
+    );
+    const afternoonTimeIndex = afternoonSliceResult.indexOf(endTimeValue);
+    if (afternoonTimeIndex !== -1) {
+      for (
+        let i = afternoonTimeIndex + 1;
+        i < newAfternoonTime.length;
+        i += 1
+      ) {
+        newAfternoonTime[i] = { ...newAfternoonTime[i], reservation: true };
+      }
+    }
+    setAfternoonTime(newAfternoonTime);
+  };
+
+  useEffect(() => {
+    if (startTime) {
+      const startTimeFormat = `${startTime.slice(0, 2)}:${startTime.slice(
+        2,
+        4,
+      )}`;
+      const endTimeFormat = `${endTime.slice(0, 2)}:${endTime.slice(2, 4)}`;
+      setStartTimeValue(startTimeFormat);
+      setEndTimeValue(endTimeFormat);
+      console.log('1');
+    }
+  }, [startTime, endTime]);
+
+  useEffect(() => {
+    morningTimeState();
+    console.log('2');
+  }, [startTimeValue]);
+
+  useEffect(() => {
+    afternoonTimeState();
+    console.log('3');
+  }, [endTimeValue]);
 
   const handleClick = () => {
     setTimeBtnShow(!timeBtnShow);
   };
+
   return (
     <>
       <DateTimeNavbar>
@@ -48,14 +89,18 @@ const GroundTime = () => {
       <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
         <Title>오전</Title>
         <TimeBtns>
-          {morningTimeValue.map((list) => (
-            <Button>{list}</Button>
+          {morningTime.map((list) => (
+            <Button key={list.id} disabled={list.reservation}>
+              {list.value}
+            </Button>
           ))}
         </TimeBtns>
         <Title>오후</Title>
         <TimeBtns>
-          {afternoonTimeValue.map((list) => (
-            <Button>{list}</Button>
+          {afternoonTime.map((list) => (
+            <Button key={list.id} disabled={list.reservation}>
+              {list.value}
+            </Button>
           ))}
         </TimeBtns>
       </Container>
@@ -88,7 +133,7 @@ const TimeBtns = styled.div`
 
 const Button = styled(TimeButton)`
   &:hover {
-    color:white;
+    color: white;
     background-color: #3563e9;
   }
 `;

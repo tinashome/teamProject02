@@ -23,6 +23,14 @@ const PointChargeCheck = () => {
   const [orderNum, setOrderNum] = useRecoilState(orderNumber);
   const [createdDate, setCreatedDate] = useRecoilState(issuedDate);
 
+  const getCurrentDate = (data) => {
+    const date = new Date(data);
+    const year = date.getFullYear();
+    const month = String(1 + date.getMonth()).padStart(2, 0);
+    const day = String(date.getDate()).padStart(2, 0);
+    return `${year}년 ${month}월 ${day}일`;
+  };
+
   const navigate = useNavigate();
 
   const handleClick = async () => {
@@ -43,7 +51,7 @@ const PointChargeCheck = () => {
         const result = await Api.post('points', setInfo);
         const order = new Date().valueOf();
         const date = new Date();
-        const formatDate = moment(date).format('YYYY년 MM월 DD일 HH시');
+        const formatDate = getCurrentDate(date);
         if (result.status === 201) {
           setModalShow(!modalShow);
           setOrderNum(order);
