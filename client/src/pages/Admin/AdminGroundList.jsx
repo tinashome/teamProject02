@@ -1,18 +1,19 @@
-// 관리자페이지본문 메뉴3 경기장수정 AdminEditGround
-/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+// 관리자페이지본문 메뉴 경기장목록,삭제 구현 AdminGroundList
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-// eslint-disable-next-line no-unused-vars
-import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
+import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
+// eslint-disable-next-line import/no-cycle
+import AdminGroundInfo from './AdminGroundInfo';
+// eslint-disable-next-line import/no-cycle
+import AdminGroundEdit from './AdminGroundEdit';
 
-const AdminDeleteGround = () => {
+const AdminGroundList = () => {
   // 조회한유저목록을 저장하는 상태
-  // const [grounds, setGrounds] = useRecoilState(adminUsers);
-  const [grounds, setGrounds] = useState(null);
+  const [grounds, setGrounds] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(null);
@@ -20,15 +21,13 @@ const AdminDeleteGround = () => {
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
-  const [modal, setModal] = useState('');
+  const [modal, setModal] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [content, setContent] = useRecoilState(adminContentState);
 
   const getGrounds = async () => {
     // 경기장목록조회 api요청
-    // grounds?
-    // location=지역
-    // &search=검색어
-    // &offset=시작번호
-    // &count=조회할갯수
+    // grounds?location=지역&search=검색어&offset=시작번호&count=조회할갯수
     try {
       const result = await Api.get(
         `grounds?offset=${currentPage * pageSize}&count=${pageSize}`,
@@ -36,10 +35,44 @@ const AdminDeleteGround = () => {
       const resultData = await result.data;
       setGrounds(resultData.grounds);
       setTotalCount(resultData.length);
-      // console.log(totalCount);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
+    }
+  };
+
+  // 경기장정보조회클릭시 groundId만보내서 새컴포넌트 호출
+  const handleClickInfo = async (event) => {
+    const { id } = event.target;
+    setContent(['경기장 상세정보 조회', <AdminGroundInfo groundId={id} />]);
+  };
+
+  // 경기장정보수정클릭시
+  const handleEdit = async (event) => {
+    const { id } = event.target;
+    setContent(['경기장 등록정보 수정', <AdminGroundEdit groundId={id} />]);
+  };
+
+  // 경기장정보삭제 클릭시
+  const handleDelete = async (event) => {
+    const { id } = event.target;
+    const { name } = event.target;
+
+    // eslint-disable-next-line no-alert
+    const deleteConfirm = window.confirm(
+      `${name}의 경기장 정보를 정말 삭제 하시겠습니까?`,
+    );
+    if (deleteConfirm) {
+      try {
+        await Api.delete(`grounds/${id}`);
+        setModal({ success: true, groundName: name, time: 3 });
+        setTimeout(() => {
+          setModal(null);
+        }, 3000);
+        return;
+      } catch (err) {
+        setModal({ success: false, groundName: name });
+      }
     }
   };
 
@@ -51,39 +84,29 @@ const AdminDeleteGround = () => {
     setLastPage(Math.ceil(totalCount / pageSize) - 1);
   }, [totalCount]);
 
-  const handleClick = async (event) => {
-    // 경기장정보삭제 api요청
-    // eslint-disable-next-line no-alert
-    const deleteConfirm = window.confirm(
-      `${event.target.name}의 경기장 정보를 정말 삭제 하시겠습니까?`,
-    );
-    if (deleteConfirm) {
-      try {
-        await Api.delete(`grounds/${event.target.id}`);
-        setModal({ success: true, groundName: event.target.name });
-        return;
-      } catch (err) {
-        setModal({ success: false, groundName: event.target.name });
-      }
-    }
-  };
-
   return (
     <>
       <ModalWrapper
         modal={modal}
         onClick={() => {
-          setModal('');
+          setModal(null);
           getGrounds();
         }}
       >
         <ModalDiv>
-          {`${modal.groundName}\n\n삭제에 ${
-            modal.success ? '성공' : '실패'
-          } 하였습니다.\n`}
+          {modal &&
+            `경기장명:${
+              modal.groundName.length >= 10
+                ? `${modal.groundName.slice(0, 10)}...`
+                : modal.groundName
+            }\n\n삭제에 ${modal.success ? '성공' : '실패'} 하였습니다.\n\n`}
+          {modal &&
+            modal.success &&
+            `이 메세지는 ${modal.time}초후에 사라집니다.`}
+
           <ModalButton
             onClick={() => {
-              setModal('');
+              setModal(null);
               getGrounds();
             }}
           >
@@ -94,10 +117,9 @@ const AdminDeleteGround = () => {
       <TitleRow>
         <Text width='200'>경기장명</Text>
         <Text width='200'>위치</Text>
-        <Text width='80'>포인트</Text>
-        <Text>삭제</Text>
+        <Text width='100'>포인트</Text>
+        <Text width='200'>조회 / 삭제</Text>
       </TitleRow>
-      {/* <Wrapper> */}
       <Wrapper pageSize={pageSize}>
         {grounds &&
           grounds.map((e) => (
@@ -111,16 +133,36 @@ const AdminDeleteGround = () => {
               <Text width='80' style={{ justifyContent: 'flex-end' }}>
                 {e.paymentPoint.toLocaleString()}P
               </Text>
-              <Text>
-                <Button id={e._id} name={e.groundName} onClick={handleClick}>
-                  경기장삭제
+              <Text width='200'>
+                <Button
+                  id={e._id}
+                  name={e.groundName}
+                  onClick={handleClickInfo}
+                  style={{ margin: '0 5px' }}
+                >
+                  조회
+                </Button>
+                <Button
+                  id={e._id}
+                  name={e.groundName}
+                  onClick={handleEdit}
+                  style={{ margin: '0 5px' }}
+                >
+                  수정
+                </Button>
+                <Button
+                  id={e._id}
+                  name={e.groundName}
+                  onClick={handleDelete}
+                  style={{ margin: '0 5px' }}
+                >
+                  삭제
                 </Button>
               </Text>
             </Row>
           ))}
       </Wrapper>
-      {/* {grounds.length !== 0 && <Pagenation lastPage={lastPage} />} */}
-      <Pagenation lastPage={lastPage} />
+      {grounds.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
   );
 };
@@ -137,7 +179,7 @@ const TitleRow = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  // height: ${(props) => `${45 * props.pageSize}px`};
+  height: ${(props) => `${45 * props.pageSize}px`};
   align-self: end;
 `;
 
@@ -174,7 +216,7 @@ const Button = styled.button`
 `;
 
 const ModalWrapper = styled.div`
-  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
+  display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: fixed;
   z-index: 1000;
   top:0;
@@ -185,26 +227,23 @@ const ModalWrapper = styled.div`
   font-size: 24px;
   font-weight: 400;
   letter-spacing: -2px;
+  align-content: center;
   `;
 
 const ModalDiv = styled.div`
-  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
-  flex-direction: column;
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
   width: 350px;
   height: 250px;
   margin-left: -175px;
   margin-top: -125px;
-  // padding: 30px 10px;
+  padding: 30px 10px;
   border: solid 10px #3563e9;
   border-radius: 3px;
-  background-color:#fff;
-  font-size:24px;
-  justify-content: center;
-  text-align:center;
-  align-items: center;
+  background-color: #fff;
+  font-size: 24px;
+  text-align: center;
   white-space: pre-wrap;
 `;
 
@@ -220,4 +259,4 @@ const ModalButton = styled.button`
   font-size: 25px;
 `;
 
-export default AdminDeleteGround;
+export default AdminGroundList;

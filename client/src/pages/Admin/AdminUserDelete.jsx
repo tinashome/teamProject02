@@ -1,7 +1,4 @@
-// 관리자페이지본문 메뉴1 회원탈퇴 AdminDeleteMember
-/* eslint-disable no-console, no-alert  */
-/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-
+// 관리자페이지본문 메뉴1 회원탈퇴 AdminUserDelete
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
@@ -9,10 +6,9 @@ import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
 
-const AdminDeleteMember = () => {
+const AdminUserDelete = () => {
   // 조회한유저목록을 저장하는 상태
   const [users, setUsers] = useRecoilState(adminUsers);
-  // const [users, setUsers] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(null);
@@ -20,16 +16,11 @@ const AdminDeleteMember = () => {
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
-  const [modal, setModal] = useState('');
+  const [modal, setModal] = useState(null);
 
   const getUsers = async () => {
     // 사용자목록조회 api요청
-    // users?
-    // name=이름
-    // &email=이메일
-    // &phoneNumber=연락처
-    // &offset=시작번호
-    // &count=조회할갯수
+    // users?name=이름&email=이메일&phoneNumber=연락처&offset=시작번호&count=조회할갯수
     try {
       const result = await Api.get(
         `users?offset=${currentPage * pageSize}&count=${pageSize}`,
@@ -38,6 +29,7 @@ const AdminDeleteMember = () => {
       setUsers(resultData.users);
       setTotalCount(resultData.length);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
   };
@@ -50,24 +42,23 @@ const AdminDeleteMember = () => {
     setLastPage(Math.ceil(totalCount / pageSize) - 1);
   }, [totalCount]);
 
+  // 회원정보삭제 클릭시
   const handleClick = async (event) => {
-    // 회원정보삭제 api요청
+    const { id } = event.target;
+    const { name } = event.target;
+    // eslint-disable-next-line no-alert
     const deleteConfirm = window.confirm(
-      `${event.target.name}의 계정 정보를 정말 삭제 하시겠습니까?`,
-      console.log(event.target.id),
+      `${name}의 계정 정보를 정말 삭제 하시겠습니까?`,
     );
     if (deleteConfirm) {
       try {
-        const result = await Api.delete(`users/${event.target.id}`);
-        setModal(`계정정보 삭제성공
-        이름 : ${event.target.name}`);
-        console.log(result);
-        return;
+        await Api.delete(`users/${id}`);
+        setModal({ success: true, userName: name, time: 3 });
+        setTimeout(() => {
+          setModal(null);
+        }, 3000);
       } catch (err) {
-        setModal(
-          `계정정보 삭제실패
-            이름 : ${event.target.name}`,
-        );
+        setModal({ success: false, userName: name });
       }
     }
   };
@@ -77,15 +68,21 @@ const AdminDeleteMember = () => {
       <ModalWrapper
         modal={modal}
         onClick={() => {
-          setModal('');
+          setModal(null);
           getUsers();
         }}
       >
         <ModalDiv>
-          {modal}
+          {modal &&
+            `사용자 이름: ${modal.userName}\n\n삭제에 ${
+              modal.success ? '성공' : '실패'
+            } 하였습니다.\n\n`}
+          {modal &&
+            modal.success &&
+            `이 메세지는 ${modal.time}초후에 사라집니다.`}
           <ModalButton
             onClick={() => {
-              setModal('');
+              setModal(null);
               getUsers();
             }}
           >
@@ -107,10 +104,11 @@ const AdminDeleteMember = () => {
               <Text width='200'>{e.email}</Text>
               <Text width='80'>{e.name}</Text>
               <Text>
-                {e.phoneNumber.replace(
-                  /^(\d{2,3})(\d{3,4})(\d{4})$/,
-                  `$1-$2-$3`,
-                )}
+                {e.phoneNumber &&
+                  e.phoneNumber.replace(
+                    /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                    `$1-$2-$3`,
+                  )}
               </Text>
               <Text width='100'>{e.totalPoint.toLocaleString()}P</Text>
               <Text>
@@ -169,7 +167,7 @@ const Button = styled.button`
 `;
 
 const ModalWrapper = styled.div`
-  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
+  display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: fixed;
   z-index: 1000;
   top:0;
@@ -177,27 +175,27 @@ const ModalWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,0.4);
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 400;
   letter-spacing: -2px;
+  align-content: center;
   `;
 
 const ModalDiv = styled.div`
-  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
-  width: 300px;
-  height: 200px;
-  margin-left: -150px;
-  margin-top: -100px;
-  padding: 20px;
-  border-radius: 5px;
-  background-color:#fff;
-  justify-content: center;
+  width: 350px;
+  height: 250px;
+  margin-left: -175px;
+  margin-top: -125px;
+  padding: 30px 10px;
+  border: solid 10px #3563e9;
+  border-radius: 3px;
+  background-color: #fff;
+  font-size: 24px;
   text-align: center;
-  align-items: center;
-  flex-direction: column;
+  white-space: pre-wrap;
 `;
 
 const ModalButton = styled.button`
@@ -212,4 +210,4 @@ const ModalButton = styled.button`
   font-size: 25px;
 `;
 
-export default AdminDeleteMember;
+export default AdminUserDelete;
