@@ -3,70 +3,50 @@ import styled from 'styled-components';
 import { BiTimeFive } from 'react-icons/bi';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
-import { morningTimeValue, afternoonTimeValue } from 'stores/reservationStore';
+import timeValue from 'stores/reservationStore';
 import TimeButton from '../atoms/TimeButton';
 
-const GroundTime = ({ startTime, endTime }) => {
+const GroundTime = ({ info }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
-  const [morningTime, setMorningTime] = useRecoilState(morningTimeValue);
-  const [afternoonTime, setAfternoonTime] = useRecoilState(afternoonTimeValue);
-  const [startTimeValue, setStartTimeValue] = useState('');
-  const [endTimeValue, setEndTimeValue] = useState('');
+  const [timeBtnValue, setTimeBtnValue] = useRecoilState(timeValue);
+  const [startTimeValue, setStartTimeValue] = useState(info.startTime);
+  const [endTimeValue, setEndTimeValue] = useState(info.endTime);
 
-  const morningTimeState = () => {
-    const newMorningTime = [...morningTime];
-    const morningSliceResult = morningTime.map((list) =>
-      list.value.slice(0, 5),
-    );
-    const morningTimeIndex = morningSliceResult.indexOf(startTimeValue);
-    if (morningTimeIndex !== -1) {
-      for (let i = 0; i < morningTimeIndex; i += 1) {
-        newMorningTime[i] = { ...newMorningTime[i], reservation: true };
-      }
-    }
-    setMorningTime(newMorningTime);
-  };
+  const timeBtnState = () => {
+    const newTimeList = [...timeBtnValue];
+    const startTimeSlice = newTimeList.map((list) => list.value.slice(0, 5)); // 11:00
+    const endTimeSlice = newTimeList.map((list) => list.value.slice(6, 11)); // 21:00 ~ 22:00
+    const startTimeIndex = startTimeSlice.indexOf(startTimeValue);
+    const endTimeIndex = endTimeSlice.indexOf(endTimeValue);
 
-  const afternoonTimeState = () => {
-    const newAfternoonTime = [...afternoonTime];
-    const afternoonSliceResult = afternoonTime.map((list) =>
-      list.value.slice(6, 11),
-    );
-    const afternoonTimeIndex = afternoonSliceResult.indexOf(endTimeValue);
-    if (afternoonTimeIndex !== -1) {
-      for (
-        let i = afternoonTimeIndex + 1;
-        i < newAfternoonTime.length;
-        i += 1
-      ) {
-        newAfternoonTime[i] = { ...newAfternoonTime[i], reservation: true };
-      }
+    // 시작 시간 이전 버튼 비활성화
+    for (let i = 0; i < startTimeIndex; i += 1) {
+      newTimeList[i] = { ...newTimeList[i], reservation: true };
     }
-    setAfternoonTime(newAfternoonTime);
+
+    // 마감 시간 이후 버튼 비활성화
+    // for (let i = endTimeIndex + 1; i < newTimeList.length; i += 1) {
+    //   newTimeList[i] = { ...newTimeList[i], reservation: true };
+    // }
+    // console.log(newTimeList)
+    setTimeBtnValue(newTimeList);
   };
 
   useEffect(() => {
-    if (startTime) {
-      const startTimeFormat = `${startTime.slice(0, 2)}:${startTime.slice(
-        2,
-        4,
-      )}`;
-      const endTimeFormat = `${endTime.slice(0, 2)}:${endTime.slice(2, 4)}`;
-      setStartTimeValue(startTimeFormat);
-      setEndTimeValue(endTimeFormat);
-      console.log('1');
-    }
-  }, [startTime, endTime]);
+    const startTimeFormat = `${startTimeValue?.slice(
+      0,
+      2,
+    )}:${startTimeValue?.slice(2, 4)}`; // 0700 => 07:00
+    const endTimeFormat = `${endTimeValue?.slice(0, 2)}:${endTimeValue?.slice(
+      2,
+      4,
+    )}`; // 2300 => 23:00
+    setStartTimeValue(startTimeFormat);
+    setEndTimeValue(endTimeFormat);
+    timeBtnState();
+    console.log(info);
 
-  useEffect(() => {
-    morningTimeState();
-    console.log('2');
-  }, [startTimeValue]);
-
-  useEffect(() => {
-    afternoonTimeState();
-    console.log('3');
-  }, [endTimeValue]);
+  }, [startTimeValue, endTimeValue]);
 
   const handleClick = () => {
     setTimeBtnShow(!timeBtnShow);
@@ -87,19 +67,12 @@ const GroundTime = ({ startTime, endTime }) => {
         </ShowBtn>
       </DateTimeNavbar>
       <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
-        <Title>오전</Title>
+        <Title>오전 / 오후</Title>
         <TimeBtns>
-          {morningTime.map((list) => (
+          {/* */}
+          {timeBtnValue.map((list) => (
             <Button key={list.id} disabled={list.reservation}>
-              {list.value}
-            </Button>
-          ))}
-        </TimeBtns>
-        <Title>오후</Title>
-        <TimeBtns>
-          {afternoonTime.map((list) => (
-            <Button key={list.id} disabled={list.reservation}>
-              {list.value}
+              {list.value} 
             </Button>
           ))}
         </TimeBtns>

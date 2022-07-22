@@ -18,6 +18,10 @@ const Ground = () => {
     },
     [],
   );
+
+  useEffect(()=>{
+
+  },[detailInfo])
   console.log(detailInfo)
   return (
     <>
@@ -26,8 +30,7 @@ const Ground = () => {
         <GroundInfo info={detailInfo} />
         <GroundReservationCalendar />
         <GroundTime
-          startTime={detailInfo.startTime}
-          endTime={detailInfo.endTime}
+          info={detailInfo}
         />
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
