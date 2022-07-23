@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Title from 'components/atoms/Title';
 import * as Api from 'api/api';
 import React from 'react';
@@ -7,10 +8,12 @@ import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import userState from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
+import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
 import image from '../assets/image/soccer1.jpeg';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
   const navigate = useNavigate();
 
   const setUserInfo = useSetRecoilState(userState);
@@ -40,7 +43,14 @@ const Login = () => {
     <Container>
       <Image src={image} />
       <InputContainer>
-        <Title>풋살 예약은 풋닷컴</Title>
+        <StyledTitle>
+          "<span>풋살 </span>
+          <span>예약은 </span>
+          <span>풋닷컴</span>"
+        </StyledTitle>
+        <KakaoLogin href={KAKAO_AUTH_URL}>
+          <img src={kakaoLoginImg} alt={kakaoLoginImg} />
+        </KakaoLogin>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Input
             placeholder='이메일을 입력해주세요 :)'
@@ -78,6 +88,18 @@ const Image = styled.img`
   margin: 0 3rem;
 `;
 
+const StyledTitle = styled(Title)`
+  span {
+    &:first-child {
+      font-weight: 700;
+    }
+    &:last-child {
+      font-weight: 700;
+      color: #3563e9;
+    }
+  }
+`;
+
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -87,6 +109,10 @@ const InputContainer = styled.div`
 `;
 
 const Form = styled.form``;
+
+const KakaoLogin = styled.a`
+  margin: 2rem 0;
+`;
 
 const LoginButton = styled.input`
   width: 100%;

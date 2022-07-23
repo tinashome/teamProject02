@@ -15,16 +15,16 @@ const TimeButton = styled.button`
   }
 `;
 
-const TimeBtn = ({ renderTime, startTime, endTime }) => {
+const TimeBtn = ({ renderTime, startTime, endTime, reservationInfo }) => {
   // renderTime, startTime, endTime Slice 작업 필요 type도 number로 변경
   const startTimeSlice = Number(renderTime?.slice(0, 2));
   const endTimeSlice = Number(renderTime?.slice(6, 8));
   const startTimeFormat = Number(startTime?.slice(0, 2));
   const endTimeFormat = Number(endTime?.slice(0, 2));
+  
   // reservationTime.includes(renderTime) => 날짜마다 예약 일자 날짜도 넣기
-
   const isAble =
-    startTimeSlice < startTimeFormat || endTimeSlice > endTimeFormat;
+    startTimeSlice < startTimeFormat || endTimeSlice > endTimeFormat || reservationInfo.includes(renderTime);
   return (
     <TimeButton value={renderTime} disabled={isAble}>
       {renderTime}

@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment';
 import { BiCalendarCheck } from 'react-icons/bi';
 import 'react-calendar/dist/Calendar.css';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
+import { useRecoilState } from 'recoil';
+import reservationDateInfo from 'stores/reservationStore';
 
-const GroundReservationCalendar = () => {
+const GroundReservationCalendar = ({ info }) => {
   const [selectDate, setSelectDate] = useState(new Date());
   const [calendarShowBtn, setCalendarShowBtn] = useState(true);
+  const [reservationInfo, setReservationInfo] = useRecoilState(reservationDateInfo);
+
+  useEffect(() => {
+    const dateFormat = moment(selectDate).format('MMDD');
+    if (info && info.length > 0) {
+      const result = info
+        .filter((list) => list.reservationDate === dateFormat)
+        .map((list) => list.reservationTime);
+      setReservationInfo(result)
+    }
+  }, [info, selectDate]);
 
   const handleClick = () => {
     setCalendarShowBtn(!calendarShowBtn);

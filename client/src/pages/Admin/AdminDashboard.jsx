@@ -9,16 +9,29 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
-import groundImgSrc from 'mockData/groundImgSrc';
-import groundImgSrcTest from 'mockData/groundImgSrcTest';
+import AdminGroundList from './AdminGroundList';
+
+// testData
+// import groundImgSrc from '1test/groundImgSrc';
+// import groundImgSrcTest from '1test/groundImgSrcTest';
+// import groundData from '1test/groundData';
 
 const AdminDashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
-  const [slice, setSlice] = useState(10);
+  const [slice, setSlice] = useState(Math.ceil(Math.random(10) * 170));
   const [amount, setAmount] = useState(10);
   const newUsers = [];
+
+  // 구현중 첫페이지 바꿀때 사용
+  // eslint-disable-next-line no-unused-vars
+  // setContent(['경기장 목록 조회', <AdminGroundList />]);
+
+  // 1test대체
   const groundData = [];
+  const groundImgSrc = [];
+  const groundImgSrcTest = [];
+
   // eslint-disable-next-line no-unused-vars
   const newGround = groundData.map((e, i) => ({
     // groundImg: [].push(groundImgSrc[i % groundImgSrc.length]),
@@ -28,8 +41,6 @@ const AdminDashboard = () => {
   const newGrounds = newGround.map((e, i) =>
     e.groundImg.push(groundImgSrc[`${i % 10}`]),
   );
-  console.log(newGround);
-  // setContent(['경기장 삭제', <AdminDeleteGround />]);
 
   // 로그인함수
   const signin = async (email, password) => {
@@ -81,7 +92,7 @@ const AdminDashboard = () => {
       <br />
       <Button
         onClick={() => {
-          signin('user@gmail.com', '12341234');
+          signin('user@gmail.com', '1234');
         }}
       >
         사용자로그인
@@ -93,6 +104,7 @@ const AdminDashboard = () => {
       >{`테스트계정 ${newUsers.length}개 일괄생성`}</Button>
       <Button
         onClick={() => {
+          // console.log(slice, amount, newGround.slice(slice, slice + amount));
           newGround.slice(slice, slice + amount).map((e) => addGround(e));
         }}
       >
@@ -100,15 +112,17 @@ const AdminDashboard = () => {
       </Button>
       <input
         style={{ width: '100px', fontSize: 30 }}
-        oncChange={(e) => {
-          setSlice(e.target.value);
+        value={slice}
+        onChange={(e) => {
+          setSlice(e.target.value * 1);
         }}
       />
       번부터
       <input
         style={{ width: '100px', fontSize: 30 }}
-        oncChange={(e) => {
-          setAmount(e.target.value);
+        value={amount}
+        onChange={(e) => {
+          setAmount(e.target.value * 1);
         }}
       />
       개 생성

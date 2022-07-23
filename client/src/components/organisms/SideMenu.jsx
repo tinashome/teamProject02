@@ -4,14 +4,12 @@ import styled from 'styled-components';
 
 const SideMenu = () => (
   <Container>
-    <SidemenuName>
-      <NavLink to='/myinfo'>마이페이지</NavLink>
-    </SidemenuName>
+    <SidemenuName>마이페이지</SidemenuName>
     <SideItem>
       <SideTitle>예약 관리</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo/rental'>예약 조회</NavLink>
+          <NavLink to='/myinfo'>예약 조회</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>
@@ -33,10 +31,10 @@ const SideMenu = () => (
       <SideTitle>포인트 충전</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo'>포인트 충전</NavLink>
+          <NavLink to='/pointCharge'>포인트 충전</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo'>포인트 충전 내역</NavLink>
+          <NavLink to='/myinfo/point'>포인트 충전 내역</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>

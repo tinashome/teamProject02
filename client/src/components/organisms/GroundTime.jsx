@@ -4,15 +4,17 @@ import { BiTimeFive } from 'react-icons/bi';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
-import TimeButton, { TimeBtn } from '../atoms/TimeButton';
+import reservationDateInfo from 'stores/reservationStore';
+import { TimeBtn } from '../atoms/TimeButton';
 
 const GroundTime = ({ info }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
+  const [reservationInfo, setReservationInfo] =
+    useRecoilState(reservationDateInfo);
   const { startTime, endTime } = info;
   const handleClick = () => {
     setTimeBtnShow(!timeBtnShow);
   };
-
   return (
     <>
       <DateTimeNavbar>
@@ -31,13 +33,13 @@ const GroundTime = ({ info }) => {
         <Title>오전</Title>
         <TimeBtns>
           {morningTimeValue.map((renderTime) =>
-            TimeBtn({ renderTime, startTime, endTime }),
+            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
           )}
         </TimeBtns>
         <Title>오후</Title>
         <TimeBtns>
           {afternoonTimeValue.map((renderTime) =>
-            TimeBtn({ renderTime, startTime, endTime }),
+            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
           )}
         </TimeBtns>
       </Container>
@@ -67,7 +69,7 @@ const TimeBtns = styled.div`
   margin: 1rem 0 1rem 1rem;
   gap: 0.5rem 0;
   border: solid #bdbdbd;
-  padding:1rem;
+  padding: 1rem;
 `;
 
 const DateTimeNavbar = styled.div`

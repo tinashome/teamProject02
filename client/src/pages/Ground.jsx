@@ -10,28 +10,30 @@ import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
   const [detailInfo, setDetailInfo] = useState([]);
+  const [reservationInfo, setReservationInfo] = useState([]);
   const params = useParams();
-  useEffect(
-    () => async () => {
+
+  const getInfoList = async () => {
+    try {
       const result = await Api.get(`grounds/${params.id}`);
-      return setDetailInfo(result.data);
-    },
-    [],
-  );
+      const reservationResult = await Api.get(`rentals/ground/${params.id}`);
+      setDetailInfo(result.data);
+      setReservationInfo(reservationResult.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  useEffect(()=>{
-
-  },[detailInfo])
-  console.log(detailInfo)
+  useEffect(() => {
+    getInfoList();
+  }, []);
   return (
     <>
       <GroundSlide info={detailInfo.groundImg} />
       <Container>
         <GroundInfo info={detailInfo} />
-        <GroundReservationCalendar />
-        <GroundTime
-          info={detailInfo}
-        />
+        <GroundReservationCalendar info={reservationInfo} />
+        <GroundTime info={detailInfo} />
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>

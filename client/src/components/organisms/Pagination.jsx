@@ -14,6 +14,10 @@ const Pagination = ({ totalPage, limit, page, setPage }) => {
   const [totalPageArray, setTotalPageArray] = useState([]);
 
   useEffect(() => {
+    if (page === totalPage) {
+      setCurrentPageArray(totalPageArray.at(-1));
+    }
+
     if (page % limit === 1) {
       setCurrentPageArray(totalPageArray[Math.floor(page / limit)]);
     } else if (page % limit === 0) {
@@ -34,7 +38,6 @@ const Pagination = ({ totalPage, limit, page, setPage }) => {
       <ButtonWrapper>
         {currentPageArray?.map((i) => (
           <PageButton
-            // eslint-disable-next-line react/no-array-index-key
             key={i + 1}
             onClick={() => setPage(i + 1)}
             aria-current={page === i + 1 ? 'page' : null}
