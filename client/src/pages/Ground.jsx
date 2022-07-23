@@ -6,13 +6,18 @@ import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
 import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
+import { useRecoilState } from 'recoil';
+import { selectBtnValue, selectDateValue } from 'stores/reservationStore';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
   const [detailInfo, setDetailInfo] = useState([]);
   const [reservationInfo, setReservationInfo] = useState([]);
-  const params = useParams();
+  const [reservationDate, setReservationDate] = useRecoilState(selectDateValue);
+  const [reservationTime, setReservationTime] = useRecoilState(selectBtnValue);
 
+  const params = useParams();
+  const groundId = params.id;
   const getInfoList = async () => {
     try {
       const result = await Api.get(`grounds/${params.id}`);
@@ -27,6 +32,16 @@ const Ground = () => {
   useEffect(() => {
     getInfoList();
   }, []);
+
+  const reservationClick = async () => {
+    try {
+      await Api.post('rentals', { groundId, reservationDate, reservationTime });
+      alert('예약되었습니다.');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <GroundSlide info={detailInfo.groundImg} />
@@ -37,7 +52,7 @@ const Ground = () => {
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>
-        <ReservationBtn>예약하기</ReservationBtn>
+        <ReservationBtn onClick={reservationClick}>예약하기</ReservationBtn>
       </Container>
     </>
   );

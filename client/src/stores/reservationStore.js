@@ -5,4 +5,14 @@ const reservationDateInfo = atom({
   default: [],
 });
 
-export default reservationDateInfo;
+const selectBtnValue = atom({
+  key: 'selectBtnValue',
+  default: '',
+});
+
+const selectDateValue = atom({
+  key: 'selectDateValue',
+  default: '',
+});
+
+export { reservationDateInfo, selectBtnValue, selectDateValue };

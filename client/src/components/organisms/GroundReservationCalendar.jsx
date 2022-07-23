@@ -6,20 +6,23 @@ import { BiCalendarCheck } from 'react-icons/bi';
 import 'react-calendar/dist/Calendar.css';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
-import reservationDateInfo from 'stores/reservationStore';
+import { reservationDateInfo, selectDateValue } from 'stores/reservationStore';
 
 const GroundReservationCalendar = ({ info }) => {
-  const [selectDate, setSelectDate] = useState(new Date());
+  const [selectDate, setSelectDate] = useRecoilState(selectDateValue);
   const [calendarShowBtn, setCalendarShowBtn] = useState(true);
-  const [reservationInfo, setReservationInfo] = useRecoilState(reservationDateInfo);
+  const [reservationInfo, setReservationInfo] =
+    useRecoilState(reservationDateInfo);
 
+  const [dateValue, setDateValue] = useState(new Date());
   useEffect(() => {
-    const dateFormat = moment(selectDate).format('MMDD');
+    const dateFormat = moment(dateValue).format('MMDD');
     if (info && info.length > 0) {
       const result = info
         .filter((list) => list.reservationDate === dateFormat)
         .map((list) => list.reservationTime);
-      setReservationInfo(result)
+      setReservationInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
+      setSelectDate(dateFormat);
     }
   }, [info, selectDate]);
 
@@ -32,7 +35,7 @@ const GroundReservationCalendar = ({ info }) => {
       <DateNavbar>
         <DateText>
           <BiCalendarCheck /> 예약 날짜{' '}
-          {moment(selectDate).format('YYYY년 MM월 DD일')}
+          {moment(dateValue).format('YYYY년 MM월 DD일')}
         </DateText>
         <ShowBtn>
           {calendarShowBtn ? (
@@ -46,7 +49,11 @@ const GroundReservationCalendar = ({ info }) => {
       <CalendarUI
         style={calendarShowBtn ? { display: 'flex' } : { display: 'none' }}
       >
-        <StyleCalendar onChange={setSelectDate} value={selectDate} />
+        <StyleCalendar
+          onChange={setDateValue}
+          minDate={new Date()}
+          value={dateValue}
+        />
       </CalendarUI>
     </Container>
   );

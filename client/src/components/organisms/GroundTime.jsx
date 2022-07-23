@@ -4,7 +4,7 @@ import { BiTimeFive } from 'react-icons/bi';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
-import reservationDateInfo from 'stores/reservationStore';
+import { reservationDateInfo } from 'stores/reservationStore';
 import { TimeBtn } from '../atoms/TimeButton';
 
 const GroundTime = ({ info }) => {
