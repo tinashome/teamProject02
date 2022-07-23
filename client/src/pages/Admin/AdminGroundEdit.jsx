@@ -170,7 +170,7 @@ const AdminGroundEdit = ({ groundId }) => {
     ground && (
       <>
         <ModalWrapper modal={modal} onClick={goGroundList}>
-          <ModalDiv>
+          <ModalDiv modal={modal}>
             {modal &&
               `
             등록결과	:  ${modal.success ? '성공' : '실패'}
@@ -230,7 +230,7 @@ const AdminGroundEdit = ({ groundId }) => {
                   {...register('paymentPoint', {
                     required: true,
                   })}
-                  value={inputPointValue}
+                  value={inputPointValue || ' '}
                   placeholder='필수입력 정보입니다.'
                   onChange={validatePoint}
                 />
@@ -685,7 +685,7 @@ const Img = styled.img`
 `;
 
 const ModalWrapper = styled.div`
-  display: ${(props) => (props.modal ? 'flex' : 'none')}};
+display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: fixed;
   z-index: 1000;
   top:0;
@@ -700,7 +700,7 @@ const ModalWrapper = styled.div`
   `;
 
 const ModalDiv = styled.div`
-  display: ${(props) => (props.modal ? 'none' : 'flex')}};
+display: ${(props) => (props.modal ? 'flex' : 'none')}};
   flex-direction: column;
   position:absolute;
   top: 50%;

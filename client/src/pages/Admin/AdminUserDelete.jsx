@@ -72,7 +72,7 @@ const AdminUserDelete = () => {
           getUsers();
         }}
       >
-        <ModalDiv>
+        <ModalDiv modal={modal}>
           {modal &&
             `사용자 이름: ${modal.userName}\n\n삭제에 ${
               modal.success ? '성공' : '실패'
@@ -110,7 +110,9 @@ const AdminUserDelete = () => {
                     `$1-$2-$3`,
                   )}
               </Text>
-              <Text width='100'>{e.totalPoint.toLocaleString()}P</Text>
+              <Text width='100'>
+                {e.totalPoint && e.totalPoint.toLocaleString()}P
+              </Text>
               <Text>
                 <Button id={e._id} name={e.name} onClick={handleClick}>
                   회원삭제
@@ -172,8 +174,8 @@ const ModalWrapper = styled.div`
   z-index: 1000;
   top:0;
   left:0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0,0,0,0.4);
   font-size: 24px;
   font-weight: 400;
@@ -182,6 +184,7 @@ const ModalWrapper = styled.div`
   `;
 
 const ModalDiv = styled.div`
+  // display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: absolute;
   top: 50%;
   left: 50%;

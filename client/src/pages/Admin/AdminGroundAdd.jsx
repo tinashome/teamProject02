@@ -99,8 +99,8 @@ const AdminGroundAdd = () => {
           ? inputPointValue.replaceAll(',', '')
           : inputPointValue,
       groundAddress: {
-        postalCode: data.postalCode,
-        address1: data.address1,
+        postalCode: postCode ? postCode[0] : data.postalCode,
+        address1: postCode ? postCode[1] : data.address1,
         address2: data.groundAddress.address2,
       },
       groundImg: uplodedImgsSrcArray,
@@ -125,6 +125,7 @@ const AdminGroundAdd = () => {
 
   const checkPostCode = (data) => {
     if (postCode[0]) {
+      console.log(data);
       onSubmit(data);
     } else {
       setFindAddressRequired(true);
@@ -139,7 +140,7 @@ const AdminGroundAdd = () => {
   return (
     <>
       <ModalWrapper modal={modal} onClick={goGroundList}>
-        <ModalDiv>
+        <ModalDiv modal={modal}>
           {modal &&
             `
             등록결과	:  ${modal.success ? '성공' : '실패'}
@@ -193,7 +194,7 @@ const AdminGroundAdd = () => {
             <InputContainers>
               <Input
                 {...register('paymentPoint', { required: true })}
-                value={inputPointValue}
+                value={inputPointValue || ' '}
                 placeholder='필수입력 정보입니다.'
                 onChange={validatePoint}
               />
@@ -584,21 +585,21 @@ const ModalWrapper = styled.div`
   display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: fixed;
   z-index: 1000;
-  top:0;
-  left:0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.4);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
   font-size: 24px;
   font-weight: 400;
   letter-spacing: -2px;
   align-content: center;
-  `;
+`;
 
 const ModalDiv = styled.div`
-  display: ${(props) => (props.modal ? 'none' : 'flex')}};
+  display: ${(props) => (props.modal ? 'flex' : 'none')}};
   flex-direction: column;
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
   width: 400px;
@@ -608,8 +609,8 @@ const ModalDiv = styled.div`
   padding: 30px 10px;
   border: solid 10px #3563e9;
   border-radius: 5px;
-  background-color:#fff;
-  font-size:24px;
+  background-color: #fff;
+  font-size: 24px;
   justify-content: center;
   align-items: center;
   white-space: pre-wrap;

@@ -82,7 +82,7 @@ const AdminGroundInfo = ({ groundId }) => {
             setModal(null);
           }}
         >
-          <ModalDiv>
+          <ModalDiv modal={modal}>
             {modal &&
               `${modal.groundName}\n\n삭제에 ${
                 modal.success ? '성공' : '실패'
@@ -256,14 +256,11 @@ const Wrapper = styled.div`
   font-size: 18px;
   letter-spacing: -1px;
   gap: 5px;
-  // border: 1px solid #919191;
 `;
 
 const TitleRow = styled.div`
-  // position: absolute;
   font-weight: 600;
   padding: 10px;
-  // border-top: 1px solid #919191;
   border-bottom: 1px solid #919191;
 `;
 
@@ -353,7 +350,7 @@ const ModalWrapper = styled.div`
   `;
 
 const ModalDiv = styled.div`
-  display: ${(props) => (props.modal === '' ? 'none' : 'flex')}};
+display: ${(props) => (props.modal ? 'flex' : 'none')}};
   flex-direction: column;
   position:absolute;
   top: 50%;
