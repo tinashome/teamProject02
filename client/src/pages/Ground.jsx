@@ -7,7 +7,7 @@ import Button from 'components/atoms/Button';
 import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
 import { useRecoilState } from 'recoil';
-import { selectBtnValue, selectDateValue } from 'stores/reservationStore';
+import { selectBtnValue, selectDateValue, selectCalendarDate } from 'stores/reservationStore';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -15,16 +15,40 @@ const Ground = () => {
   const [reservationInfo, setReservationInfo] = useState([]);
   const [reservationDate, setReservationDate] = useRecoilState(selectDateValue);
   const [reservationTime, setReservationTime] = useRecoilState(selectBtnValue);
+  const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
 
   const params = useParams();
   const groundId = params.id;
+
   const getInfoList = async () => {
     try {
-      const result = await Api.get(`grounds/${params.id}`);
-      const reservationResult = await Api.get(`rentals/ground/${params.id}`);
+      const result = await Api.get(`grounds/${groundId}`);
       setDetailInfo(result.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getReservation = async () => {
+    try {
+      const reservationResult = await Api.get(`rentals/ground/${groundId}`);
       setReservationInfo(reservationResult.data);
     } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const reservationClick = async () => {
+    try {
+      await Api.post('rentals', {
+        groundId,
+        reservationDate,
+        reservationTime,
+      });
+
+      alert('예약되었습니다.');
+    } catch (err) {
+      alert('날짜와 시간을 정확히 선택해주세요.');
       console.log(err);
     }
   };
@@ -33,14 +57,9 @@ const Ground = () => {
     getInfoList();
   }, []);
 
-  const reservationClick = async () => {
-    try {
-      await Api.post('rentals', { groundId, reservationDate, reservationTime });
-      alert('예약되었습니다.');
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  useEffect(() => {
+    getReservation();
+  }, [dateValue])
 
   return (
     <>

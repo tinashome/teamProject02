@@ -6,7 +6,7 @@ import { BiCalendarCheck } from 'react-icons/bi';
 import 'react-calendar/dist/Calendar.css';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
-import { reservationDateInfo, selectDateValue } from 'stores/reservationStore';
+import { reservationDateInfo, selectDateValue, selectCalendarDate } from 'stores/reservationStore';
 
 const GroundReservationCalendar = ({ info }) => {
   const [selectDate, setSelectDate] = useRecoilState(selectDateValue);
@@ -14,7 +14,8 @@ const GroundReservationCalendar = ({ info }) => {
   const [reservationInfo, setReservationInfo] =
     useRecoilState(reservationDateInfo);
 
-  const [dateValue, setDateValue] = useState(new Date());
+  const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
+  
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
     if (info && info.length > 0) {
@@ -24,7 +25,7 @@ const GroundReservationCalendar = ({ info }) => {
       setReservationInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
       setSelectDate(dateFormat);
     }
-  }, [info, selectDate]);
+  }, [info, selectDate, dateValue]);
 
   const handleClick = () => {
     setCalendarShowBtn(!calendarShowBtn);

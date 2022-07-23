@@ -11,10 +11,13 @@ const GroundTime = ({ info }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
   const [reservationInfo, setReservationInfo] =
     useRecoilState(reservationDateInfo);
+    
   const { startTime, endTime } = info;
+
   const handleClick = () => {
     setTimeBtnShow(!timeBtnShow);
   };
+
   return (
     <>
       <DateTimeNavbar>

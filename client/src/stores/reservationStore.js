@@ -15,4 +15,8 @@ const selectDateValue = atom({
   default: '',
 });
 
-export { reservationDateInfo, selectBtnValue, selectDateValue };
+const selectCalendarDate = atom({
+  key: 'selectDate',
+  default: new Date(),
+});
+export { reservationDateInfo, selectBtnValue, selectDateValue, selectCalendarDate };
