@@ -161,6 +161,7 @@ const AdminGroundList = () => {
               </Text>
             </Row>
           ))}
+        <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
       </Wrapper>
       {grounds.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>

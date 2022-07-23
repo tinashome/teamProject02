@@ -120,6 +120,7 @@ const AdminUserDelete = () => {
               </Text>
             </Row>
           ))}
+        <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
       </Wrapper>
       {users.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
