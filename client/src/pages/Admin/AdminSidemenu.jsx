@@ -6,12 +6,9 @@ import { useRecoilState } from 'recoil';
 import AdminUserDelete from './AdminUserDelete';
 import AdminGroundAdd from './AdminGroundAdd';
 import AdminGroundList from './AdminGroundList';
+import AdminPayment from './AdminPayment';
 
-import {
-  AdminReservations,
-  AdminDeleteReservations,
-  AdminPayment,
-} from './AdminPages';
+import { AdminReservations, AdminDeleteReservations } from './AdminPages';
 
 const AdminSidemenu = () => {
   // eslint-disable-next-line no-unused-vars

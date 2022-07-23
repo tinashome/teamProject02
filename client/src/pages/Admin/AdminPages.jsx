@@ -16,7 +16,7 @@ const AdminDeleteReservations = () => (
 // 관리자페이지본문 메뉴9 충전승인 AdminPayment
 const AdminPayment = () => (
   <ContentLargetxt>
-    관리자 페이지 <br /> 메뉴9 충전승인
+    관리자 페이지 <br /> 메뉴7 충전승인
   </ContentLargetxt>
 );
 

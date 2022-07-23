@@ -23,6 +23,7 @@ const AdminGroundAdd = () => {
   const [content, setContent] = useRecoilState(adminContentState);
   const [postCode, setPostCode] = useState([]);
   const [inputPointValue, setInputPointValue] = useState(null);
+  const [inputPointRequired, setInputPointRequired] = useState(false);
   const [findAddressRequired, setFindAddressRequired] = useState(false);
   // 업로드 된 이미지 주소를 배열로 저장하여 화면에보여주고 경기장 생성시 주소를 전송
   const [uplodedImgsSrc, setUplodedImgsSrc] = useState(null);
@@ -88,14 +89,16 @@ const AdminGroundAdd = () => {
     setTimes({ ...times, [name]: value });
   };
 
-  // 경기장 등록하기클릭시 checkPostCode 으로 postCode의 값이 있는지(우편번호찾기를 했는지)
+  // 경기장 등록하기클릭시 checkPostCodeAndPoint 으로
+  // postCode의 값이 있는지(우편번호찾기를 했는지)
+  // inputPointValu의 값이 있는지(포인트를 입력했는지)
   // 확인후 onSubmit 실행
   const onSubmit = async (data) => {
     const actInfoArray = data.actInfo.trim().split('\n');
     const newGroundData = {
       ...data,
       paymentPoint:
-        inputPointValue.length > 3
+        inputPointValue && inputPointValue.length > 3
           ? inputPointValue.replaceAll(',', '')
           : inputPointValue,
       groundAddress: {
@@ -123,12 +126,18 @@ const AdminGroundAdd = () => {
     }
   };
 
-  const checkPostCode = (data) => {
-    if (postCode[0]) {
-      console.log(data);
-      onSubmit(data);
+  const checkPostCodeAndPoint = (data) => {
+    // if (inputPointValue && inputPointValue * 1 !== 0) {
+    if (inputPointValue) {
+      setInputPointRequired(false);
+      if (postCode[0]) {
+        setFindAddressRequired(false);
+        onSubmit(data);
+      } else {
+        setFindAddressRequired(true);
+      }
     } else {
-      setFindAddressRequired(true);
+      setInputPointRequired(true);
     }
   };
 
@@ -166,7 +175,7 @@ const AdminGroundAdd = () => {
           <ModalButton onClick={goGroundList}>닫기</ModalButton>
         </ModalDiv>
       </ModalWrapper>
-      <form onSubmit={handleSubmit(checkPostCode)}>
+      <form onSubmit={handleSubmit(checkPostCodeAndPoint)}>
         <Wrapper>
           <TitleRow>필수 입력 정보</TitleRow>
 
@@ -200,6 +209,7 @@ const AdminGroundAdd = () => {
               />
               <InputError>
                 {errors.paymentPoint && '숫자만 입력해주세요.'}
+                {inputPointRequired && '포인트를 입력해주세요.'}
               </InputError>
             </InputContainers>
           </Row>

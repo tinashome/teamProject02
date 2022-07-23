@@ -26,3 +26,16 @@ export const sliceArrayByLimit = (totalPage, limit) => {
     .fill()
     .map(() => totalPageArray.splice(0, limit));
 };
+
+// UTC 시간을 한국시간으로 변환, 포맷 : YYYY-MM-DD
+export const getCurrentDate = (data) => {
+  const currentDate = new Date(data);
+
+  const year = currentDate.getFullYear();
+  const month = `0${currentDate.getMonth() + 1}`.slice(-2);
+  const day = `0${currentDate.getDate()}`.slice(-2);
+
+  const dateString = `${year}-${month}-${day}`;
+
+  return dateString;
+};

@@ -1,14 +1,14 @@
-// 관리자페이지본문 메뉴1 회원탈퇴 AdminUserDelete
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
+// eslint-disable-next-line no-unused-vars
 import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
+import { addCommas, getCurrentDate } from 'util/useful-functions';
 import Pagenation from './AdminPagenation';
 
-const AdminUserDelete = () => {
-  // 조회한유저목록을 저장하는 상태
-  const [users, setUsers] = useRecoilState(adminUsers);
+const AdminPayment = () => {
+  const [charge, setCharge] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(null);
@@ -18,15 +18,15 @@ const AdminUserDelete = () => {
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
 
-  const getUsers = async () => {
-    // 사용자목록조회 api요청
-    // users?name=이름&email=이메일&phoneNumber=연락처&offset=시작번호&count=조회할갯수
+  const getCharge = async () => {
+    // 충전신청목록조회 api요청
+    // points?isCharged=승인여부&name=이름email=이메일&offset=시작위치&count=검색할갯수
     try {
       const result = await Api.get(
-        `users?offset=${currentPage * pageSize}&count=${pageSize}`,
+        `points?offset=${currentPage * pageSize}&count=${pageSize}`,
       );
       const resultData = await result.data;
-      setUsers(resultData.users);
+      setCharge(resultData.points);
       setTotalCount(resultData.length);
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -35,24 +35,26 @@ const AdminUserDelete = () => {
   };
 
   useEffect(() => {
-    getUsers();
+    getCharge();
   }, [currentPage, modal]);
 
   useEffect(() => {
     setLastPage(Math.ceil(totalCount / pageSize) - 1);
   }, [totalCount]);
 
-  // 회원정보삭제 클릭시
+  // 충전승인 클릭시
   const handleClick = async (event) => {
     const { id } = event.target;
     const { name } = event.target;
+    const { value } = event.target;
+    const bodyData = { isCharged: true };
     // eslint-disable-next-line no-alert
-    const deleteConfirm = window.confirm(
-      `${name}의 계정 정보를 정말 삭제 하시겠습니까?`,
+    const chargeConfirm = window.confirm(
+      `예금주: ${name} \n 충전금액: ${value} \n 승인하겠습니까?`,
     );
-    if (deleteConfirm) {
+    if (chargeConfirm) {
       try {
-        await Api.delete(`users/${id}`);
+        await Api.patch(`points/${id}`, bodyData);
         setModal({ success: true, userName: name, time: 3 });
         setTimeout(() => {
           setModal(null);
@@ -69,7 +71,7 @@ const AdminUserDelete = () => {
         modal={modal}
         onClick={() => {
           setModal(null);
-          getUsers();
+          getCharge();
         }}
       >
         <ModalDiv modal={modal}>
@@ -83,7 +85,7 @@ const AdminUserDelete = () => {
           <ModalButton
             onClick={() => {
               setModal(null);
-              getUsers();
+              getCharge();
             }}
           >
             닫기
@@ -91,38 +93,44 @@ const AdminUserDelete = () => {
         </ModalDiv>
       </ModalWrapper>
       <TitleRow>
-        <Text width='200'>이메일</Text>
         <Text width='80'>이름</Text>
-        <Text>연락처</Text>
-        <Text width='100'>포인트</Text>
-        <Text>삭제(탈퇴)</Text>
+        <Text width='200'>이메일</Text>
+        <Text width='100'>주문일자</Text>
+        <Text width='100'>주문P</Text>
+        <Text width='80'>예금주</Text>
+        <Text width='100'>승인</Text>
       </TitleRow>
       <Wrapper pageSize={pageSize}>
-        {users &&
-          users.map((e) => (
+        {charge &&
+          charge.map((e) => (
             <Row key={e._id}>
-              <Text width='200'>{e.email}</Text>
-              <Text width='80'>{e.name}</Text>
-              <Text>
-                {e.phoneNumber &&
-                  e.phoneNumber.replace(
-                    /^(\d{2,3})(\d{3,4})(\d{4})$/,
-                    `$1-$2-$3`,
-                  )}
+              <Text width='80'>{e.user.name}</Text>
+              <Text width='200'>{e.user.email}</Text>
+              <Text width='100'>{getCurrentDate(e.createdAt)}</Text>
+              <Text
+                width='100'
+                style={{ justifyContent: 'flex-end', paddingRight: '5px' }}
+              >
+                {/* {e.paymentAmount && e.paymentAmount.toLocaleString()}P */}
+                {e.paymentAmount && addCommas(e.paymentAmount)}P
               </Text>
+              <Text width='80'>{e.user.name}</Text>
               <Text width='100'>
-                {e.totalPoint && e.totalPoint.toLocaleString()}P
-              </Text>
-              <Text>
-                <Button id={e._id} name={e.name} onClick={handleClick}>
-                  회원삭제
+                <Button
+                  id={e._id}
+                  name={e.user.name}
+                  value={e.paymentAmount}
+                  onClick={handleClick}
+                  disabled={e.isCharged}
+                >
+                  {e.isCharged ? '충전완료' : '충전승인'}
                 </Button>
               </Text>
             </Row>
           ))}
         <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
       </Wrapper>
-      {users.length !== 0 && <Pagenation lastPage={lastPage} />}
+      {charge.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
   );
 };
@@ -164,8 +172,8 @@ const Button = styled.button`
   display: flex;
   padding: 5px 10px;
   border-radius: 4px;
-  background: #3563e9;
-  color: white;
+  background: ${(props) => (props.disabled ? '#D9D9D9' : '#3563e9')};
+  color: ${(props) => (props.disabled ? '#919191' : '#fff')};
   font-size: 16px;
 `;
 
@@ -213,5 +221,4 @@ const ModalButton = styled.button`
   text-align: center;
   font-size: 25px;
 `;
-
-export default AdminUserDelete;
+export default AdminPayment;
