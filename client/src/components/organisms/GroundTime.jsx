@@ -1,36 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from 'react-icons/bi';
 import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
-import TimeButton from '../atoms/TimeButton';
+import { useRecoilState } from 'recoil';
+import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
+import { reservationDateInfo } from 'stores/reservationStore';
+import { TimeBtn } from '../atoms/TimeButton';
 
-const morningTimeValue = [
-  '07:00~08:00',
-  '08:00~09:00',
-  '09:00~10:00',
-  '10:00~11:00',
-  '11:00~12:00',
-];
-
-const afternoonTimeValue = [
-  '12:00~13:00',
-  '13:00~14:00',
-  '14:00~15:00',
-  '15:00~16:00',
-  '16:00~17:00',
-  '17:00~18:00',
-  '18:00~19:00',
-  '19:00~20:00',
-  '20:00~21:00',
-  '21:00~22:00',
-];
-
-const GroundTime = () => {
+const GroundTime = ({ info }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
+  const [reservationInfo, setReservationInfo] =
+    useRecoilState(reservationDateInfo);
+    
+  const { startTime, endTime } = info;
 
   const handleClick = () => {
     setTimeBtnShow(!timeBtnShow);
   };
+
   return (
     <>
       <DateTimeNavbar>
@@ -48,15 +35,15 @@ const GroundTime = () => {
       <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
         <Title>오전</Title>
         <TimeBtns>
-          {morningTimeValue.map((list) => (
-            <Button>{list}</Button>
-          ))}
+          {morningTimeValue.map((renderTime) =>
+            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+          )}
         </TimeBtns>
         <Title>오후</Title>
         <TimeBtns>
-          {afternoonTimeValue.map((list) => (
-            <Button>{list}</Button>
-          ))}
+          {afternoonTimeValue.map((renderTime) =>
+            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+          )}
         </TimeBtns>
       </Container>
     </>
@@ -81,16 +68,11 @@ const Title = styled.h1`
 const TimeBtns = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  width: 100%;
+  width: 75rem;
   margin: 1rem 0 1rem 1rem;
   gap: 0.5rem 0;
-`;
-
-const Button = styled(TimeButton)`
-  &:hover {
-    color:white;
-    background-color: #3563e9;
-  }
+  border: solid #bdbdbd;
+  padding: 1rem;
 `;
 
 const DateTimeNavbar = styled.div`

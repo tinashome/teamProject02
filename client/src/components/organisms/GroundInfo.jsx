@@ -10,26 +10,32 @@ import IconCard from './IconCard';
 // contents
 
 const GroundInfo = ({ info }) => {
+  const { wayTo, parkingInfo, smoking, shoesRentallInfo, toilet, actInfo } = info;
   const infoContents = [
     {
+      id: 1,
       title: '풋살장 가는길',
-      text: info.wayTo,
+      text: wayTo,
     },
     {
+      id: 2,
       title: '주차',
-      text: info.parkingInfo,
+      text: parkingInfo,
     },
     {
+      id: 3,
       title: '흡연',
-      text: info.smoking,
+      text: smoking,
     },
     {
+      id: 4,
       title: '풋살화 대여',
-      text: info.shoesRentalInfo,
+      text: shoesRentallInfo,
     },
     {
+      id: 5,
       title: '화장실',
-      text: info.toilet,
+      text: toilet,
     },
   ];
 
@@ -43,9 +49,9 @@ const GroundInfo = ({ info }) => {
       <GroundDetailInformation>
         <GroundSubTitle>경기장 특이사항</GroundSubTitle>
 
-        {infoContents.map((list) => (
+        {infoContents?.map((list) => (
           <>
-            <GroundInfoTitle>
+            <GroundInfoTitle key={list.id}>
               <BoxBlanckIcon />
               {list.title}
             </GroundInfoTitle>
@@ -61,11 +67,11 @@ const GroundInfo = ({ info }) => {
           <BoxBlanckIcon /> 기타
         </GroundInfoTitle>
 
-        {/* {act.map((list) => (
+        {actInfo?.map((list) => (
           <GroundText>
             <li>{list}</li>
           </GroundText>
-        ))} */}
+        ))}
       </GroundDetailInformation>
     </>
   );
