@@ -12,9 +12,11 @@ import {
   selectDateValue,
   selectCalendarDate,
 } from 'stores/reservationStore';
+import Spinner from 'components/atoms/Spinner';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [detailInfo, setDetailInfo] = useState([]);
   const [reservationInfo, setReservationInfo] = useState([]);
   const [reservationDate, setReservationDate] = useRecoilState(selectDateValue);
@@ -27,6 +29,7 @@ const Ground = () => {
   const getInfoList = async () => {
     try {
       const result = await Api.get(`grounds/${groundId}`);
+      setIsLoading(true);
       setDetailInfo(result.data);
     } catch (err) {
       console.log(err);
@@ -37,6 +40,7 @@ const Ground = () => {
     try {
       const reservationResult = await Api.get(`rentals/ground/${groundId}`);
       setReservationInfo(reservationResult.data);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -65,9 +69,9 @@ const Ground = () => {
     getReservation();
   }, [dateValue]);
 
-  if (detailInfo === []) return null;
-
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <>
       <GroundSlide info={detailInfo.groundImg} />
       <Container>
