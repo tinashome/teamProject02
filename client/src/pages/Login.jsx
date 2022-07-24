@@ -9,7 +9,7 @@ import { useSetRecoilState } from 'recoil';
 import userState from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
 import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
-import image from '../assets/image/soccer1.jpeg';
+import { loginImgList } from 'constants/imgList';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
@@ -18,7 +18,7 @@ const Login = () => {
 
   const setUserInfo = useSetRecoilState(userState);
   const { register, handleSubmit } = useForm();
-  
+
   const onSubmit = async (userData) => {
     try {
       const result = await Api.post('auth/signin', userData);
@@ -41,7 +41,7 @@ const Login = () => {
 
   return (
     <Container>
-      <Image src={image} />
+      <Image src={loginImgList[0]} />
       <InputContainer>
         <StyledTitle>
           "<span>풋살 </span>

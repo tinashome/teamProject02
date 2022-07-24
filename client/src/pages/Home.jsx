@@ -2,18 +2,15 @@ import React, { useCallback, useState } from 'react';
 import { BiPhotoAlbum } from 'react-icons/bi';
 import { HiOutlineViewList } from 'react-icons/hi';
 import styled from 'styled-components';
+import locationList from 'constants/locationList';
+import { bannerList } from 'constants/imgList';
 import SearchBar from 'components/organisms/SearchBar';
 import LocationFilter from 'components/organisms/LocationFilter';
-import locationList from 'constants/locationList';
 import GroundSlide from 'components/organisms/GroundSlide';
 import GroundPhotoList from 'components/organisms/GroundPhotoList';
 import GroundTextList from 'components/organisms/GroundTextList';
 import { useRecoilState } from 'recoil';
 import { groundListTypeState } from 'stores/groundStore';
-
-import banner1 from 'assets/image/banner1.jpeg';
-import banner2 from 'assets/image/banner2.jpeg';
-import banner3 from 'assets/image/banner3.jpeg';
 
 const Home = () => {
   const [location, setLocation] = useState('');
@@ -43,7 +40,7 @@ const Home = () => {
 
   return (
     <>
-      <GroundSlide info={[banner1, banner2, banner3]} />
+      <GroundSlide info={bannerList} />
       <Container>
         <FilterWrapper>
           <LocationFilter
