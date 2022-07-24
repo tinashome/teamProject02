@@ -39,19 +39,12 @@ const GroundReservationCalendar = ({ info }) => {
 
   return (
     <Container>
-      <DateNavbar>
+      <DateNavbar onClick={handleClick}>
         <DateText>
           <BiCalendarCheck /> 예약 날짜{' '}
           {moment(dateValue).format('YYYY년 MM월 DD일')}
         </DateText>
-        <ShowBtn>
-          {/* onClick이 NavBar에 있는게 좋지 않을까요? */}
-          {calendarShowBtn ? (
-            <FaAngleUp onClick={handleClick} />
-          ) : (
-            <FaAngleDown onClick={handleClick} />
-          )}
-        </ShowBtn>
+        <ShowBtn>{calendarShowBtn ? <FaAngleUp /> : <FaAngleDown />}</ShowBtn>
       </DateNavbar>
 
       <CalendarUI
@@ -80,24 +73,21 @@ const CalendarUI = styled.div`
 
 const DateNavbar = styled.div`
   display: flex;
-  width: 100%;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  boder-bottom-color: #0000004d;
+  justify-content: space-between;
+  border-bottom: 1px solid #0000004d;
   margin: 4rem 0 2rem 0;
+  cursor: pointer;
 `;
 
 const DateText = styled.h1`
   font-size: 20px;
   text-align: left;
-  width: 100%;
   height: 2rem;
 `;
 
 const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
-  width: 100%;
   margin-right: 0.8rem;
 `;
 export default GroundReservationCalendar;

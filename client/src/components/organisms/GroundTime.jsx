@@ -21,17 +21,11 @@ const GroundTime = ({ info }) => {
 
   return (
     <>
-      <DateTimeNavbar>
+      <DateTimeNavbar onClick={handleClick}>
         <TimeText>
           <BiTimeFive /> 시간 선택
         </TimeText>
-        <ShowBtn>
-          {timeBtnShow ? (
-            <FaAngleUp onClick={handleClick} />
-          ) : (
-            <FaAngleDown onClick={handleClick} />
-          )}
-        </ShowBtn>
+        <ShowBtn>{timeBtnShow ? <FaAngleUp /> : <FaAngleDown />}</ShowBtn>
       </DateTimeNavbar>
       <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
         <Title>오전</Title>
@@ -53,7 +47,6 @@ const GroundTime = ({ info }) => {
 const TimeText = styled.h1`
   font-size: 20px;
   text-align: left;
-  width: 100%;
   height: 2rem;
 `;
 
@@ -78,17 +71,15 @@ const TimeBtns = styled.div`
 
 const DateTimeNavbar = styled.div`
   display: flex;
-  width: 100%;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  boder-bottom-color: #0000004d;
+  justify-content: space-between;
+  border-bottom: 1px solid #0000004d;
   margin: 2rem 0 1rem 0;
+  cursor: pointer;
 `;
 
 const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
-  width: 100%;
   margin-right: 0.8rem;
 `;
 
