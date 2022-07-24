@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 // eslint-disable-next-line no-unused-vars
-import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
+import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas, getCurrentDate } from 'util/useful-functions';
 import Pagenation from './AdminPagenation';
@@ -76,9 +76,9 @@ const AdminPayment = () => {
       >
         <ModalDiv modal={modal}>
           {modal &&
-            `사용자 이름: ${modal.userName}\n\n삭제에 ${
+            ` ${modal.userName}님이 신청하신 포인트 충전승인이 ${
               modal.success ? '성공' : '실패'
-            } 하였습니다.\n\n`}
+            } 하였습니다.\n(예금주: ${modal.userName})\n\n`}
           {modal &&
             modal.success &&
             `이 메세지는 ${modal.time}초후에 사라집니다.`}
