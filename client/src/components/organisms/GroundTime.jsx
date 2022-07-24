@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { BiTimeFive } from 'react-icons/bi';
-import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
+import { BiTimeFive } from '@react-icons/all-files/bi/BiTimeFive';
+import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
+import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
 import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
 import { reservationDateInfo } from 'stores/reservationStore';
@@ -11,7 +12,7 @@ const GroundTime = ({ info }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
   const [reservationInfo, setReservationInfo] =
     useRecoilState(reservationDateInfo);
-    
+
   const { startTime, endTime } = info;
 
   const handleClick = () => {
@@ -26,9 +27,9 @@ const GroundTime = ({ info }) => {
         </TimeText>
         <ShowBtn>
           {timeBtnShow ? (
-            <BsArrowDownCircle onClick={handleClick} />
+            <FaAngleUp onClick={handleClick} />
           ) : (
-            <BsArrowUpCircle onClick={handleClick} />
+            <FaAngleDown onClick={handleClick} />
           )}
         </ShowBtn>
       </DateTimeNavbar>

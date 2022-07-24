@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaAngleDown } from 'react-icons/fa';
+import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import styled from 'styled-components';
 
 const LocationFilter = ({ filterName, handleClick }) => (

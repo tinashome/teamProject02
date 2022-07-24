@@ -1,26 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { AiOutlineQuestionCircle, AiOutlineArrowLeft } from 'react-icons/ai';
+import { AiOutlineQuestionCircle } from '@react-icons/all-files/ai/AiOutlineQuestionCircle';
+import { AiOutlineArrowLeft } from '@react-icons/all-files/ai/AiOutlineArrowLeft';
 
 const PointChargeTitle = () => {
   const navigate = useNavigate();
 
-  return(
-  <Container>
-    <BackArrow onClick={()=>navigate(-1)}>
-      <AiOutlineArrowLeft />
-      이전 페이지
-    </BackArrow>
+  return (
+    <Container>
+      <BackArrow onClick={() => navigate(-1)}>
+        <AiOutlineArrowLeft />
+        이전 페이지
+      </BackArrow>
 
-    <Title>포인트 충전</Title>
+      <Title>포인트 충전</Title>
 
-    <ChargeInfoBtn>
-      <Link to="/"><AiOutlineQuestionCircle /> 충전내역</Link>
-    </ChargeInfoBtn>
-  </Container>
-)};
+      <ChargeInfoBtn>
+        <Link to='/'>
+          <AiOutlineQuestionCircle /> 충전내역
+        </Link>
+      </ChargeInfoBtn>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import 'react-datepicker/dist/react-datepicker.css';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { RiCheckboxBlankFill } from '@react-icons/all-files/ri/RiCheckboxBlankFill';
 
 import IconCard from './IconCard';
 
@@ -10,7 +10,8 @@ import IconCard from './IconCard';
 // contents
 
 const GroundInfo = ({ info }) => {
-  const { wayTo, parkingInfo, smoking, shoesRentallInfo, toilet, actInfo } = info;
+  const { wayTo, parkingInfo, smoking, shoesRentallInfo, toilet, actInfo } =
+    info;
   const infoContents = [
     {
       id: 1,

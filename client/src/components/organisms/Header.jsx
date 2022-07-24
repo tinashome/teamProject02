@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaFutbol, FaUserCircle } from 'react-icons/fa';
+import { FaFutbol } from '@react-icons/all-files/fa/FaFutbol';
+import { FaUserCircle } from '@react-icons/all-files/fa/FaUserCircle';
+
 import { useRecoilState } from 'recoil';
 import userState from 'stores/userStore';
 import { getToken, isExistToken } from 'util/useful-functions';

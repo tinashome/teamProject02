@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaAngleLeft,
-  FaAngleRight,
-} from 'react-icons/fa';
+import { FaAngleDoubleLeft } from '@react-icons/all-files/fa/FaAngleDoubleLeft';
+import { FaAngleDoubleRight } from '@react-icons/all-files/fa/FaAngleDoubleRight';
+import { FaAngleLeft } from '@react-icons/all-files/fa/FaAngleLeft';
+import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
+
 import styled from 'styled-components';
 import { sliceArrayByLimit } from 'util/useful-functions';
 

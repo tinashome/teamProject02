@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment';
-import { BiCalendarCheck } from 'react-icons/bi';
+import { BiCalendarCheck } from '@react-icons/all-files/bi/BiCalendarCheck';
 import 'react-calendar/dist/Calendar.css';
-import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
+import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
+import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
+
 import { useRecoilState } from 'recoil';
-import { reservationDateInfo, selectDateValue, selectCalendarDate } from 'stores/reservationStore';
+import {
+  reservationDateInfo,
+  selectDateValue,
+  selectCalendarDate,
+} from 'stores/reservationStore';
 
 const GroundReservationCalendar = ({ info }) => {
   const [selectDate, setSelectDate] = useRecoilState(selectDateValue);
@@ -15,7 +21,7 @@ const GroundReservationCalendar = ({ info }) => {
     useRecoilState(reservationDateInfo);
 
   const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
-  
+
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
     if (info && info.length > 0) {
@@ -39,10 +45,11 @@ const GroundReservationCalendar = ({ info }) => {
           {moment(dateValue).format('YYYY년 MM월 DD일')}
         </DateText>
         <ShowBtn>
+          {/* onClick이 NavBar에 있는게 좋지 않을까요? */}
           {calendarShowBtn ? (
-            <BsArrowDownCircle onClick={handleClick} />
+            <FaAngleUp onClick={handleClick} />
           ) : (
-            <BsArrowUpCircle onClick={handleClick} />
+            <FaAngleDown onClick={handleClick} />
           )}
         </ShowBtn>
       </DateNavbar>

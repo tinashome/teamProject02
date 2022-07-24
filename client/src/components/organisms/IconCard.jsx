@@ -1,15 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CgClose } from 'react-icons/cg';
+import { CgClose } from '@react-icons/all-files/cg/CgClose';
 import IconDataList from 'constants/IconDataList';
 
 const IconCard = ({ info }) => {
   // GroundInfo 에서 groundSize(경기장 크기값 => iconName에 넣기) ,showerPlace, parking, shoesRental, sportsWearRental 넘겨 받기
   // 아이콘 상태 값 저장 (idx => 0은 map때문에 무조건 true 값으로 지정)
   // 배열로 저장하영 상태값을 관리
-  const { showerPlace, parking, sportswearRental, shoesRental, groundSize }= info
+  const { showerPlace, parking, sportswearRental, shoesRental, groundSize } =
+    info;
 
-  const iconStateFlag = [true, showerPlace, parking, sportswearRental, shoesRental];
+  const iconStateFlag = [
+    true,
+    showerPlace,
+    parking,
+    sportswearRental,
+    shoesRental,
+  ];
   return (
     <GroundIcons>
       {IconDataList.map((list, idx) => (

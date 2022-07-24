@@ -1,18 +1,20 @@
 import React from 'react';
-import { TbSoccerField } from 'react-icons/tb';
-import { MdOutlineShower } from 'react-icons/md';
-import { AiFillCar } from 'react-icons/ai';
-import { GiClothes, GiRunningShoe } from 'react-icons/gi';
+
+import { GiSoccerField } from '@react-icons/all-files/gi/GiSoccerField';
+import { FaShower } from '@react-icons/all-files/fa/FaShower';
+import { AiFillCar } from '@react-icons/all-files/ai/AiFillCar';
+import { GiClothes } from '@react-icons/all-files/gi/GiClothes';
+import { GiRunningShoe } from '@react-icons/all-files/gi/GiRunningShoe';
 
 const IconDataList = [
   {
     id: 1,
-    icon: <TbSoccerField />,
+    icon: <GiSoccerField />,
     iconName: '경기장크기',
   },
   {
     id: 2,
-    icon: <MdOutlineShower />,
+    icon: <FaShower />,
     iconName: '샤워실',
   },
   {

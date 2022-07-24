@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { BiPhotoAlbum } from 'react-icons/bi';
-import { HiOutlineViewList } from 'react-icons/hi';
+import { BiPhotoAlbum } from '@react-icons/all-files/bi/BiPhotoAlbum';
+import { HiOutlineViewList } from '@react-icons/all-files/hi/HiOutlineViewList';
 import styled from 'styled-components';
 import locationList from 'constants/locationList';
 import { bannerList } from 'constants/imgList';
