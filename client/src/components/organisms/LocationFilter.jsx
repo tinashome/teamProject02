@@ -12,7 +12,10 @@ const LocationFilter = ({ filterName, handleClick }) => (
 const Container = styled.button`
   display: flex;
   align-items: center;
+  padding: 0.5rem 1rem;
   margin-right: 2rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
   button {
     margin-right: 0.5rem;
   }

@@ -11,6 +11,10 @@ import GroundTextList from 'components/organisms/GroundTextList';
 import { useRecoilState } from 'recoil';
 import { groundListTypeState } from 'stores/groundStore';
 
+import banner1 from 'assets/image/banner1.jpeg';
+import banner2 from 'assets/image/banner2.jpeg';
+import banner3 from 'assets/image/banner3.jpeg';
+
 const Home = () => {
   const [location, setLocation] = useState('');
   const [searchInput, setSearchInput] = useState('');
@@ -39,7 +43,7 @@ const Home = () => {
 
   return (
     <>
-      <GroundSlide />
+      <GroundSlide info={[banner1, banner2, banner3]} />
       <Container>
         <FilterWrapper>
           <LocationFilter
@@ -62,16 +66,16 @@ const Home = () => {
           <SearchBar placeholder='구장 찾기' onKeyDown={handleSearch} />
           <ListTypeButton>
             <BiPhotoAlbum
-              onClick={() => setListType('그림')}
-              disabled={listType === '그림'}
+              onClick={() => setListType('photo')}
+              disabled={listType === 'photo'}
             />
             <HiOutlineViewList
-              onClick={() => setListType('글')}
-              disabled={listType === '글'}
+              onClick={() => setListType('text')}
+              disabled={listType === 'text'}
             />
           </ListTypeButton>
         </FilterWrapper>
-        {listType === '그림' ? (
+        {listType === 'photo' ? (
           <GroundPhotoList location={location} searchInput={searchInput} />
         ) : (
           <GroundTextList location={location} searchInput={searchInput} />

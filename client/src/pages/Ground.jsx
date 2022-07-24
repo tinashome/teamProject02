@@ -12,13 +12,12 @@ const Ground = () => {
   const [detailInfo, setDetailInfo] = useState([]);
   const params = useParams();
 
-  useEffect(
-    () => async () => {
-      const result = await Api.get(`grounds/${params.id}`);
-      return setDetailInfo(result.data);
-    },
-    [],
-  );
+  useEffect(() => async () => {
+    const result = await Api.get(`grounds/${params.id}`);
+    setDetailInfo(result.data);
+  });
+
+  if (detailInfo === []) return null;
 
   return (
     <>
