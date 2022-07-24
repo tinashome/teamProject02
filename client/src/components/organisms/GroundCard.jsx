@@ -16,8 +16,8 @@ const GroundCard = ({ ground }) => {
     <Container>
       <Link to={`grounds/${_id}`}>
         <GroundImage src={groundImg[0]} alt={_id} />
-        <GroundAddress>{`${address1?.slice(0, 10)}`}</GroundAddress>
-        <GroundName>{groundName.split(' ')[0].slice(0, 10)}</GroundName>
+        <GroundAddress>{address1}</GroundAddress>
+        <GroundName>{groundName}</GroundName>
         <Wrapper>
           <PaymentPoint>{addCommas(paymentPoint)}P</PaymentPoint>
         </Wrapper>
@@ -29,12 +29,13 @@ const GroundCard = ({ ground }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: fit-content;
+  /* min-width: fit-content; */
   margin: 1rem;
   border: 1px solid #adb5bd;
   border-radius: 4px;
   text-align: center;
   transition: background 0.5s ease;
+
   &:hover {
     background: #3563e9;
     opacity: 0.7;
@@ -47,14 +48,24 @@ const GroundImage = styled.img`
   border: none;
 `;
 
-const GroundAddress = styled.p`
-  margin: 1.5rem 0 0.5rem 0;
+const GroundAddress = styled.div`
+  margin: 1.5rem auto 0.5rem auto;
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-const GroundName = styled.p`
+const GroundName = styled.div`
+  height: 2rem;
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 1.5rem;
+
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Wrapper = styled.div`

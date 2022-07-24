@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { groundTextListState } from 'stores/groundStore';
+import { groundTextListState, pageState } from 'stores/groundStore';
 import * as Api from 'api/api';
 import styled from 'styled-components';
 import { addCommas } from 'util/useful-functions';
@@ -10,25 +10,26 @@ import Pagination from './Pagination';
 
 const GroundTextList = ({ location, searchInput }) => {
   const [groundList, setGroundList] = useRecoilState(groundTextListState);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRecoilState(pageState);
+
   const listPerPage = 15;
   const totalPage = Math.ceil(groundList.length / listPerPage);
 
   useEffect(() => {
-    setPage(1);
-  }, [location, searchInput]);
-
-  useEffect(() => {
     (async () => {
-      const result = await Api.get(
-        `grounds?location=${location}&search=${searchInput}&offset=${
-          (page - 1) * listPerPage
-        }&count=${listPerPage}`,
-      );
-      setGroundList({
-        length: result.data.length,
-        data: result.data.grounds,
-      });
+      try {
+        const result = await Api.get(
+          `grounds?location=${location}&search=${searchInput}&offset=${
+            (page - 1) * listPerPage
+          }&count=${listPerPage}`,
+        );
+        setGroundList({
+          length: result.data.length,
+          data: result.data.grounds,
+        });
+      } catch (err) {
+        alert(err.response.data.reason);
+      }
     })();
   }, [location, searchInput, page]);
 
@@ -43,16 +44,14 @@ const GroundTextList = ({ location, searchInput }) => {
         </GrounndListHeader>
         {groundList.data?.map((ground) => (
           <GroundInfo key={ground._id}>
-            <p>
-              {ground.groundAddress.address1.length >= 15
-                ? `${ground.groundAddress.address1.slice(0, 15)}...`
-                : ground.groundAddress.address1}
-            </p>
-            <Link to={`/grounds/${ground._id}`}>{ground.groundName}</Link>
-            <p>{addCommas(ground.paymentPoint)}P</p>
-            <p>
+            <div>{ground.groundAddress.address1}</div>
+            <Link to={`/grounds/${ground._id}`}>
+              <div>{ground.groundName}</div>
+            </Link>
+            <div>{addCommas(ground.paymentPoint)}P</div>
+            <div>
               {ground.startTime}~{ground.endTime}
-            </p>
+            </div>
           </GroundInfo>
         ))}
       </Container>
@@ -62,9 +61,6 @@ const GroundTextList = ({ location, searchInput }) => {
         page={page}
         setPage={setPage}
       />
-      {searchInput && !groundList.isLoading && (
-        <NoResult>검색 결과가 없습니다.</NoResult>
-      )}
     </>
   );
 };
@@ -96,8 +92,15 @@ const GroundInfo = styled.div`
   }
 
   a,
-  p {
-    margin: 0 auto;
+  div {
+    width: 100%;
+    text-align: center;
+  }
+
+  div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   a {

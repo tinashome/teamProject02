@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { groundPhotoListState } from 'stores/groundStore';
+import { groundPhotoListState, pageState } from 'stores/groundStore';
 import * as Api from 'api/api';
 import styled from 'styled-components';
 import NoResult from 'components/atoms/NoResult';
@@ -9,25 +9,25 @@ import Pagination from './Pagination';
 
 const GroundPhotoList = ({ location, searchInput }) => {
   const [groundList, setGroundList] = useRecoilState(groundPhotoListState);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRecoilState(pageState);
   const listPerPage = 8;
   const totalPage = Math.ceil(groundList.length / listPerPage);
 
   useEffect(() => {
-    setPage(1);
-  }, [location, searchInput]);
-
-  useEffect(() => {
     (async () => {
-      const result = await Api.get(
-        `grounds?location=${location}&search=${searchInput}&offset=${
-          (page - 1) * listPerPage
-        }&count=${listPerPage}`,
-      );
-      setGroundList({
-        length: result.data.length,
-        data: result.data.grounds,
-      });
+      try {
+        const result = await Api.get(
+          `grounds?location=${location}&search=${searchInput}&offset=${
+            (page - 1) * listPerPage
+          }&count=${listPerPage}`,
+        );
+        setGroundList({
+          length: result.data.length,
+          data: result.data.grounds,
+        });
+      } catch (err) {
+        alert(err.response.data.reason);
+      }
     })();
   }, [location, searchInput, page]);
 
@@ -44,9 +44,6 @@ const GroundPhotoList = ({ location, searchInput }) => {
         page={page}
         setPage={setPage}
       />
-      {searchInput && !groundList.isLoading && (
-        <NoResult>검색 결과가 없습니다.</NoResult>
-      )}
     </>
   );
 };

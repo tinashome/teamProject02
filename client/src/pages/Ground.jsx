@@ -6,7 +6,7 @@ import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
 import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   selectBtnValue,
   selectDateValue,
@@ -28,8 +28,8 @@ const Ground = () => {
 
   const getInfoList = async () => {
     try {
-      const result = await Api.get(`grounds/${groundId}`);
       setIsLoading(true);
+      const result = await Api.get(`grounds/${groundId}`);
       setDetailInfo(result.data);
     } catch (err) {
       console.log(err);

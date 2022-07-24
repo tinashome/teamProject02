@@ -3,7 +3,6 @@ import { atom } from 'recoil';
 export const groundPhotoListState = atom({
   key: 'groundPhotoListState',
   default: {
-    isLoading: false,
     length: 0,
     data: [],
   },
@@ -12,7 +11,6 @@ export const groundPhotoListState = atom({
 export const groundTextListState = atom({
   key: 'groundTextListState',
   default: {
-    isLoading: false,
     length: 0,
     data: [],
   },
@@ -21,4 +19,19 @@ export const groundTextListState = atom({
 export const groundListTypeState = atom({
   key: 'groundListTypeState',
   default: 'photo',
+});
+
+export const locationState = atom({
+  key: 'locationState',
+  default: '',
+});
+
+export const searchInputState = atom({
+  key: 'searchInputState',
+  default: '',
+});
+
+export const pageState = atom({
+  key: 'pageState',
+  default: 1,
 });

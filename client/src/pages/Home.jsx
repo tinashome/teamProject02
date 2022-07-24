@@ -9,12 +9,18 @@ import LocationFilter from 'components/organisms/LocationFilter';
 import GroundSlide from 'components/organisms/GroundSlide';
 import GroundPhotoList from 'components/organisms/GroundPhotoList';
 import GroundTextList from 'components/organisms/GroundTextList';
-import { useRecoilState } from 'recoil';
-import { groundListTypeState } from 'stores/groundStore';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  groundListTypeState,
+  locationState,
+  pageState,
+  searchInputState,
+} from 'stores/groundStore';
 
 const Home = () => {
-  const [location, setLocation] = useState('');
-  const [searchInput, setSearchInput] = useState('');
+  const [location, setLocation] = useRecoilState(locationState);
+  const [searchInput, setSearchInput] = useRecoilState(searchInputState);
+  const setPage = useSetRecoilState(pageState);
 
   // Toggle List Type
   const [listType, setListType] = useRecoilState(groundListTypeState);
@@ -23,6 +29,7 @@ const Home = () => {
   const handleSearch = async (e) => {
     if (e.key === 'Enter') {
       setSearchInput(e.target.value);
+      setPage(1);
     }
   };
 
@@ -35,6 +42,7 @@ const Home = () => {
   const getFilteredData = async (e) => {
     if (e.target.innerText === '모든 지역') setLocation('');
     else setLocation(e.target.innerText);
+    setPage(1);
     handleToggleFilterModal();
   };
 

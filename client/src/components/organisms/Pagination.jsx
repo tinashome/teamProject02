@@ -6,11 +6,14 @@ import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
 
 import styled from 'styled-components';
 import { sliceArrayByLimit } from 'util/useful-functions';
+import { useRecoilState } from 'recoil';
+import { pageState } from 'stores/groundStore';
 
-const Pagination = ({ totalPage, limit, page, setPage }) => {
+const Pagination = ({ totalPage, limit }) => {
   // 총 페이지 갯수에 따라 Pagination 갯수 정하기, limit 단위로 페이지 리스트 넘기기
   const [currentPageArray, setCurrentPageArray] = useState([]);
   const [totalPageArray, setTotalPageArray] = useState([]);
+  const [page, setPage] = useRecoilState(pageState);
 
   useEffect(() => {
     if (page === totalPage) {
