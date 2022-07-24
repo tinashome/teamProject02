@@ -7,7 +7,11 @@ import Button from 'components/atoms/Button';
 import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
 import { useRecoilState } from 'recoil';
-import { selectBtnValue, selectDateValue, selectCalendarDate } from 'stores/reservationStore';
+import {
+  selectBtnValue,
+  selectDateValue,
+  selectCalendarDate,
+} from 'stores/reservationStore';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -59,7 +63,9 @@ const Ground = () => {
 
   useEffect(() => {
     getReservation();
-  }, [dateValue])
+  }, [dateValue]);
+
+  if (detailInfo === []) return null;
 
   return (
     <>

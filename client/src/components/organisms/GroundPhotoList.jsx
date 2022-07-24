@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { groundPhotoListState } from 'stores/groundStore';
 import * as Api from 'api/api';
 import styled from 'styled-components';
+import NoResult from 'components/atoms/NoResult';
 import GroundCard from './GroundCard';
 import Pagination from './Pagination';
 
@@ -14,7 +15,7 @@ const GroundPhotoList = ({ location, searchInput }) => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchInput]);
+  }, [location, searchInput]);
 
   useEffect(() => {
     (async () => {
@@ -43,6 +44,9 @@ const GroundPhotoList = ({ location, searchInput }) => {
         page={page}
         setPage={setPage}
       />
+      {searchInput && !groundList.isLoading && (
+        <NoResult>검색 결과가 없습니다.</NoResult>
+      )}
     </>
   );
 };

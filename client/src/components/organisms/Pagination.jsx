@@ -31,6 +31,8 @@ const Pagination = ({ totalPage, limit, page, setPage }) => {
     setCurrentPageArray(slicedPageArray[0]);
   }, [totalPage]);
 
+  if (totalPage === 0) return null;
+
   return (
     <PaginationWrapper>
       <FaAngleDoubleLeft onClick={() => setPage(1)} disabled={page === 1} />
