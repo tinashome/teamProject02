@@ -8,6 +8,7 @@
   "dependencies": {
     "@sindresorhus/is": "^5.2.0",
     "aws-sdk": "^2.1174.0",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "concurrently": "^7.2.2",

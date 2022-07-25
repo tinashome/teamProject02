@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Title from 'components/atoms/Title';
 import * as Api from 'api/api';
 import React from 'react';
@@ -7,18 +8,20 @@ import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import userState from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
-import image from '../assets/image/soccer1.jpeg';
+import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
+import { loginImgList } from 'constants/imgList';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
   const navigate = useNavigate();
 
   const setUserInfo = useSetRecoilState(userState);
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (userData) => {
-    const result = await Api.post('auth/signin', userData);
-    if (result.status === 200) {
+    try {
+      const result = await Api.post('auth/signin', userData);
       const { token, isAdmin } = result.data;
       const { userId, name, role, isOAuth } = jwtDecode(token);
       localStorage.setItem('token', token);
@@ -31,16 +34,23 @@ const Login = () => {
         isLogin: true,
       });
       navigate('/');
-    } else {
-      alert('이메일 혹은 비밀번호가 일치하지 않습니다.');
+    } catch (err) {
+      alert(err.response.data.reason);
     }
   };
 
   return (
     <Container>
-      <Image src={image} />
+      <Image src={loginImgList[0]} />
       <InputContainer>
-        <Title>풋살 예약은 풋닷컴</Title>
+        <StyledTitle>
+          "<span>풋살 </span>
+          <span>예약은 </span>
+          <span>풋닷컴</span>"
+        </StyledTitle>
+        <KakaoLogin href={KAKAO_AUTH_URL}>
+          <img src={kakaoLoginImg} alt={kakaoLoginImg} />
+        </KakaoLogin>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Input
             placeholder='이메일을 입력해주세요 :)'
@@ -57,9 +67,7 @@ const Login = () => {
           <Link to='/signup'>
             <SignUpButton>회원가입</SignUpButton>
           </Link>
-          <span>
-            {'\u00A0'}•{'\u00A0'}
-          </span>
+          <span style={{ marginLeft: 5, marginRight: 5 }}>•</span>
           <FindPasswordButton>비밀번호 찾기</FindPasswordButton>
         </Wrapper>
       </InputContainer>
@@ -74,10 +82,22 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-  width: 550px;
-  height: 600px;
+  width: 450px;
+  height: 100%;
   border-radius: 4px;
   margin: 0 3rem;
+`;
+
+const StyledTitle = styled(Title)`
+  span {
+    &:first-child {
+      font-weight: 700;
+    }
+    &:last-child {
+      font-weight: 700;
+      color: #3563e9;
+    }
+  }
 `;
 
 const InputContainer = styled.div`
@@ -89,6 +109,10 @@ const InputContainer = styled.div`
 `;
 
 const Form = styled.form``;
+
+const KakaoLogin = styled.a`
+  margin: 2rem 0;
+`;
 
 const LoginButton = styled.input`
   width: 100%;
@@ -107,6 +131,9 @@ const LoginButton = styled.input`
 const Wrapper = styled.div`
   display: flex;
   margin-right: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   margin-top: 0.3rem;
   opacity: 0.5;
 `;

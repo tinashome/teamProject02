@@ -1,60 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { BiTimeFive } from 'react-icons/bi';
-import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
-import TimeButton from '../atoms/TimeButton';
+import { BiTimeFive } from '@react-icons/all-files/bi/BiTimeFive';
+import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
+import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
+import { useRecoilState } from 'recoil';
+import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
+import { reservationDateInfo } from 'stores/reservationStore';
+import { TimeBtn } from '../atoms/TimeButton';
 
-const morningTimeValue = [
-  '07:00~08:00',
-  '08:00~09:00',
-  '09:00~10:00',
-  '10:00~11:00',
-  '11:00~12:00',
-];
+const GroundTime = ({ info }) => {
+  const [timeBtnShow, setTimeBtnShow] = useState(true);
+  const [reservationInfo, setReservationInfo] =
+    useRecoilState(reservationDateInfo);
 
-const afternoonTimeValue = [
-  '12:00~13:00',
-  '13:00~14:00',
-  '14:00~15:00',
-  '15:00~16:00',
-  '16:00~17:00',
-  '17:00~18:00',
-  '18:00~19:00',
-  '19:00~20:00',
-  '20:00~21:00',
-  '21:00~22:00',
-];
+  const { startTime, endTime } = info;
 
-const GroundTime = () => (
-  <Container>
-    <DateTimeNavbar>
-      <TimeText>
-        <BiTimeFive /> 시간 선택
-      </TimeText>
-      <ShowBtn>
-        <BsArrowDownCircle />
-        <BsArrowUpCircle />
-      </ShowBtn>
-    </DateTimeNavbar>
+  const handleClick = () => {
+    setTimeBtnShow(!timeBtnShow);
+  };
 
-    <Title>오전</Title>
-    <ButtonContainer>
-      {morningTimeValue.map((list) => (
-        <TimeButton>{list}</TimeButton>
-      ))}
-    </ButtonContainer>
-    <Title>오후</Title>
-    <ButtonContainer>
-      {afternoonTimeValue.map((list) => (
-        <TimeButton>{list}</TimeButton>
-      ))}
-    </ButtonContainer>
-  </Container>
-);
+  return (
+    <>
+      <DateTimeNavbar onClick={handleClick}>
+        <TimeText>
+          <BiTimeFive /> 시간 선택
+        </TimeText>
+        <ShowBtn>{timeBtnShow ? <FaAngleUp /> : <FaAngleDown />}</ShowBtn>
+      </DateTimeNavbar>
+      <Container style={timeBtnShow ? { display: '' } : { display: 'none' }}>
+        <Title>오전</Title>
+        <TimeBtns>
+          {morningTimeValue.map((renderTime) =>
+            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+          )}
+        </TimeBtns>
+        <Title>오후</Title>
+        <TimeBtns>
+          {afternoonTimeValue.map((renderTime) =>
+            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+          )}
+        </TimeBtns>
+      </Container>
+    </>
+  );
+};
 const TimeText = styled.h1`
   font-size: 20px;
   text-align: left;
-  width: 100%;
   height: 2rem;
 `;
 
@@ -63,31 +55,32 @@ const Container = styled.div`
   height: auto;
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   font-size: 20px;
 `;
 
-const ButtonContainer = styled.div`
+const TimeBtns = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  width: 100%;
+  width: 75rem;
   margin: 1rem 0 1rem 1rem;
   gap: 0.5rem 0;
+  border: solid #bdbdbd;
+  padding: 1rem;
 `;
 
 const DateTimeNavbar = styled.div`
   display: flex;
-  width: 100%;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  boder-bottom-color: #0000004d;
+  justify-content: space-between;
+  border-bottom: 1px solid #0000004d;
   margin: 2rem 0 1rem 0;
+  cursor: pointer;
 `;
 
 const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
-  width: 100%;
   margin-right: 0.8rem;
 `;
+
 export default GroundTime;

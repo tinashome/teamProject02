@@ -1,41 +1,84 @@
 import React from 'react';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import userState from '../stores/userStore';
+import * as Api from '../api/api';
 
-const UnRegister = () => (
-  <Container>
-    <Title>회원 탈퇴</Title>
-    <Wrapper>
-      <Contents>
-        <Content
-          style={{
-            color: 'red',
-            textAlign: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          회원 탈퇴를 위해 아래 문장을 입력해 주세요
-        </Content>
-        <Content
-          style={{
-            color: 'red',
-            textAlign: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          입력 문장 : 정말 탈퇴 하겠습니다
-        </Content>
-        <Content>
-          문장 확인 <input />
-        </Content>
-      </Contents>
-      <ButtonBox>
-        <button type='button'>탈퇴하기</button>
-        <button type='button'>돌아가기</button>
-      </ButtonBox>
-    </Wrapper>
-  </Container>
-);
+const UnRegister = () => {
+  const setUserInfo = useSetRecoilState(userState);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
+  const onSubmit = async () => {
+    try {
+      const result = await Api.delete('users');
+      if (result.status === 200) {
+        alert('회원 탈퇴가 완료되었습니다.');
+      }
+      localStorage.removeItem('token');
+      setUserInfo({});
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <Container>
+      <Title>회원 탈퇴</Title>
+      <Wrapper>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Contents>
+            <Content
+              style={{
+                color: 'red',
+                textAlign: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              회원 탈퇴를 위해 아래 문장을 입력해 주세요
+            </Content>
+            <Content
+              style={{
+                color: 'red',
+                textAlign: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              입력 문장 : 정말 탈퇴 하겠습니다
+            </Content>
+            <Content>
+              문장 확인{' '}
+              <input
+                {...register('sentenceConfirmation', {
+                  required: '문장을 입력해 주세요.',
+                  validate: {
+                    matchesSentence: (value) =>
+                      value === '정말 탈퇴 하겠습니다' ||
+                      '입력 문장을 다시 확인해 주세요.',
+                  },
+                })}
+              />
+            </Content>
+            <ErrorMessage>{errors.sentenceConfirmation?.message}</ErrorMessage>
+          </Contents>
+          <ButtonBox>
+            <button type='submit'>탈퇴하기</button>
+            <button type='button'>
+              <NavLink to='/'>돌아가기</NavLink>
+            </button>
+          </ButtonBox>
+        </Form>
+      </Wrapper>
+    </Container>
+  );
+};
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -61,6 +104,11 @@ const Title = styled.div`
 const Wrapper = styled.div`
   height: 100%;
   margin: 0.9375rem 6.25rem;
+`;
+
+const Form = styled.form`
+  width: 100%;
+  height: 100%;
 `;
 
 const Contents = styled.div`
@@ -107,6 +155,12 @@ const Content = styled.div`
   font-weight: 400;
   font-size: 1.5rem;
   letter-spacing: -0.0625rem;
+  text-align: right;
+`;
+
+const ErrorMessage = styled.p`
+  color: #f03e3e;
+  margin: 0 5rem 0.5rem 0;
   text-align: right;
 `;
 

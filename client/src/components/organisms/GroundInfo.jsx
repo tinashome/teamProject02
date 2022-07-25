@@ -1,66 +1,82 @@
 import React from 'react';
 import styled from 'styled-components';
-import groundInfo from 'mockData/groundInfo';
 import 'react-datepicker/dist/react-datepicker.css';
-import IconDataList from 'components/atoms/IconDataList';
-import { RiCheckboxBlankFill } from 'react-icons/ri';
+import { RiCheckboxBlankFill } from '@react-icons/all-files/ri/RiCheckboxBlankFill';
 
-const info = groundInfo.groundInfo[0];
-const act = info.actInfo;
-const fontSize = { fontSize: 17 };
-const GroundInfo = () => (
-  <>
-    <GroundTitle>{info.groundName}</GroundTitle>
-    <GroundSubTitle>경기장 정보</GroundSubTitle>
-    <GroundIcons>
-      {IconDataList.map((list) => (
-        <GroundIcon key={list.id}>
-          {list.icon}
-          <GroundIconText>{list.iconName}</GroundIconText>
-        </GroundIcon>
-      ))}
-    </GroundIcons>
+import IconCard from './IconCard';
 
-    <GroundDetailInformation>
-      <GroundSubTitle>경기장 특이사항</GroundSubTitle>
+// 경기장 정보 값 받아오기 (api)
+// const act = info.actInfo;
+// contents
 
-      <GroundInfoTitle>
-        <RiCheckboxBlankFill style={fontSize} /> 풋살장 가는길
-      </GroundInfoTitle>
-      <GroundText>{info.wayTo}</GroundText>
+const GroundInfo = ({ info }) => {
+  const { wayTo, parkingInfo, smoking, shoesRentallInfo, toilet, actInfo } =
+    info;
+  const infoContents = [
+    {
+      id: 1,
+      title: '풋살장 가는길',
+      text: wayTo,
+    },
+    {
+      id: 2,
+      title: '주차',
+      text: parkingInfo,
+    },
+    {
+      id: 3,
+      title: '흡연',
+      text: smoking,
+    },
+    {
+      id: 4,
+      title: '풋살화 대여',
+      text: shoesRentallInfo,
+    },
+    {
+      id: 5,
+      title: '화장실',
+      text: toilet,
+    },
+  ];
 
-      <GroundInfoTitle>
-        <RiCheckboxBlankFill style={fontSize} /> 주차
-      </GroundInfoTitle>
-      <GroundText>{info.parkingInfo}</GroundText>
+  return (
+    <>
+      <GroundTitle>{info.groundName}</GroundTitle>
+      <GroundSubTitle>경기장 정보</GroundSubTitle>
+      {/* 아이콘  */}
+      <IconCard info={info} />
 
-      <GroundInfoTitle>
-        <RiCheckboxBlankFill style={fontSize} /> 흡연
-      </GroundInfoTitle>
-      <GroundText>{info.smoking}</GroundText>
+      <GroundDetailInformation>
+        <GroundSubTitle>경기장 특이사항</GroundSubTitle>
 
-      <GroundInfoTitle>
-        <RiCheckboxBlankFill style={fontSize} /> 풋살화 대여
-      </GroundInfoTitle>
-      <GroundText>{info.shoesRentalInfo}</GroundText>
+        {infoContents?.map((list) => (
+          <>
+            <GroundInfoTitle key={list.id}>
+              <BoxBlanckIcon />
+              {list.title}
+            </GroundInfoTitle>
+            {list.text == null ? (
+              <GroundText>정보없음</GroundText>
+            ) : (
+              <GroundText>{list.text}</GroundText>
+            )}
+          </>
+        ))}
 
-      <GroundInfoTitle>
-        <RiCheckboxBlankFill style={fontSize} /> 화장실
-      </GroundInfoTitle>
-      <GroundText>{info.toilet}</GroundText>
+        <GroundInfoTitle>
+          <BoxBlanckIcon /> 기타
+        </GroundInfoTitle>
 
-      <GroundInfoTitle>
-        <RiCheckboxBlankFill style={fontSize} /> 기타
-      </GroundInfoTitle>
-
-      {act.map((list) => (
-        <GroundText>
-          <li>{list}</li>
-        </GroundText>
-      ))}
-    </GroundDetailInformation>
-  </>
-);
+        {actInfo?.map((list) => (
+          <GroundText>
+            <li>{list}</li>
+          </GroundText>
+        ))}
+      </GroundDetailInformation>
+    </>
+  );
+};
 
 const GroundTitle = styled.h1`
   font-size: 2.8rem;
@@ -72,33 +88,7 @@ const GroundTitle = styled.h1`
 const GroundSubTitle = styled.h2`
   font-size: 30px;
   text-align: left;
-  margin: 2rem 0.3rem 1rem 1rem;
-`;
-
-const GroundIcons = styled.div`
-  display: flex;
-  width: 6rem;
-  height: 6rem;
-  margin: 0.3rem 0.3rem 0.3rem 2rem;
-`;
-
-const GroundIcon = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0.2rem;
-  margin: 0.2rem;
-  width: 6rem;
-  height: 6rem;
-  border: solid #bdbdbd;
-  border-radius: 5px;
-  font-size: 70px;
-`;
-
-const GroundIconText = styled.p`
-  font-size: 10px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 0.3rem;
+  margin: 2rem 0.3rem 1.5rem 1rem;
 `;
 
 const GroundDetailInformation = styled.div`
@@ -117,4 +107,7 @@ const GroundText = styled.p`
   margin: 1rem 0 2rem 4rem;
 `;
 
+const BoxBlanckIcon = styled(RiCheckboxBlankFill)`
+  font-size: 17px;
+`;
 export default GroundInfo;

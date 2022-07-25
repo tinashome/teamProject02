@@ -2,6 +2,7 @@ import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { userService } from '../services/index.js';
 import { adminOnly, loginRequired } from '../middlewares/index.js';
+import { rentalRouter } from './rental-router.js';
 
 /**
  * @swagger
@@ -107,9 +108,6 @@ authRouter.post('/signup', async (req, res, next) => {
  *                 isAdmin:
  *                   type: boolean
  *                   description: 어드민인지 확인 어드민일 경우 true
- *                 isOAuth:
- *                   type: boolean
- *                   description:  카카오계정일 경우 true
  */
 
 authRouter.post('/signin', async (req, res, next) => {
@@ -163,14 +161,9 @@ authRouter.post('/signin', async (req, res, next) => {
  */
 authRouter.post('/signup/kakao', async (req, res, next) => {
   try {
-    const { email } = req.body;
-
-    const userInfo = {
-      email,
-    };
-    const newUser = await userService.addUserWithKakao(userInfo);
-
-    res.status(201).json(newUser);
+    const { authorizationCode } = req.body;
+    const token = await userService.addUserWithKakao(authorizationCode);
+    res.status(201).json({ token });
   } catch (error) {
     next(error);
   }
@@ -206,9 +199,6 @@ authRouter.post('/signup/kakao', async (req, res, next) => {
  *                 isAdmin:
  *                   type: boolean
  *                   description: 어드민인지 확인 어드민일 경우 true
- *                 isOAuth:
- *                   type: boolean
- *                   description:  카카오계정일 경우 true
  */
 authRouter.post('/signin/kakao', async function (req, res, next) {
   try {
@@ -217,6 +207,50 @@ authRouter.post('/signin/kakao', async function (req, res, next) {
     const loginResult = await userService.getUserTokenWithKakao(email);
 
     res.status(200).json(loginResult);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/CheckPwd:
+ *   post:
+ *     summary: 패스워드를 확인합니다.
+ *     tags: [auth]
+ *     security:
+ *       - JWT: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: 패스워드
+ *     responses:
+ *       200:
+ *         description: 성공여부.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *                   description:  결과값
+
+ */
+authRouter.post('/CheckPwd', loginRequired, async function (req, res, next) {
+  try {
+    const userId = req.currentUserId;
+    const { password } = req.body;
+
+    const result = await userService.checkUserPassword(userId, password);
+
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

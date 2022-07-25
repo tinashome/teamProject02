@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 
 // .env에서 백엔드 포트번호를 설정해야 함.
@@ -37,10 +38,26 @@ async function put(endpoint, data) {
   // 예시: {name: "Kim"} => {"name": "Kim"}
   const bodyData = JSON.stringify(data);
 
-  console.log(`%cPUT 요청: ${baseUrl + endpoint}`, 'color: #059c4b;');
-  console.log(`%cPUT 요청 데이터: ${bodyData}`, 'color: #059c4b;');
+  console.log(`%cPATCH 요청: ${baseUrl + endpoint}`, 'color: #059c4b;');
+  console.log(`%cPATCH 요청 데이터: ${bodyData}`, 'color: #059c4b;');
 
   return axios.put(baseUrl + endpoint, bodyData, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+}
+
+async function patch(endpoint, data) {
+  // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
+  // 예시: {name: "Kim"} => {"name": "Kim"}
+  const bodyData = JSON.stringify(data);
+
+  console.log(`%cPATCH 요청: ${baseUrl + endpoint}`, 'color: #059c4b;');
+  console.log(`%cPATCH 요청 데이터: ${bodyData}`, 'color: #059c4b;');
+
+  return axios.patch(baseUrl + endpoint, bodyData, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -60,6 +77,21 @@ async function del(endpoint) {
   });
 }
 
+async function postImg(endpoint, formdata) {
+  // JSON.stringify 함수: Javascript 객체를 JSON 형태로 변환함.
+  // 예시: {name: "Kim"} => {"name": "Kim"}
+  // const bodyData = JSON.stringify(data);
+
+  console.log(`%cPOST 요청: ${baseUrl + endpoint}`, 'color: #296aba;');
+  console.log(`%cPOST 요청 데이터: ${formdata}`, 'color: #296aba;');
+
+  return axios.post(baseUrl + endpoint, formdata, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
 // 아래처럼 export한 후, import * as A 방식으로 가져오면,
 // A.get, A.post 로 쓸 수 있음.
-export { get, post, put, del as delete };
+export { get, post, put, patch, del as delete, postImg };

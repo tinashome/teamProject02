@@ -1,30 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment';
-import { BiCalendarCheck } from 'react-icons/bi';
+import { BiCalendarCheck } from '@react-icons/all-files/bi/BiCalendarCheck';
 import 'react-calendar/dist/Calendar.css';
-import { BsArrowDownCircle, BsArrowUpCircle } from 'react-icons/bs';
+import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
+import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
 
-const GroundReservationCalendar = () => {
-  const [selectDate, setSelectDate] = useState(new Date());
-  // const [dateState, setDateState] = useState(true);
+import { useRecoilState } from 'recoil';
+import {
+  reservationDateInfo,
+  selectDateValue,
+  selectCalendarDate,
+} from 'stores/reservationStore';
+
+const GroundReservationCalendar = ({ info }) => {
+  const [selectDate, setSelectDate] = useRecoilState(selectDateValue);
+  const [calendarShowBtn, setCalendarShowBtn] = useState(true);
+  const [reservationInfo, setReservationInfo] =
+    useRecoilState(reservationDateInfo);
+
+  const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
+
+  useEffect(() => {
+    const dateFormat = moment(dateValue).format('MMDD');
+    if (info && info.length > 0) {
+      const result = info
+        .filter((list) => list.reservationDate === dateFormat)
+        .map((list) => list.reservationTime);
+      setReservationInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
+      setSelectDate(dateFormat);
+    }
+  }, [info, selectDate, dateValue]);
+
+  const handleClick = () => {
+    setCalendarShowBtn(!calendarShowBtn);
+  };
 
   return (
     <Container>
-      <DateNavbar>
+      <DateNavbar onClick={handleClick}>
         <DateText>
           <BiCalendarCheck /> 예약 날짜{' '}
-          {moment(selectDate).format('YYYY년 MM월 DD일')}
+          {moment(dateValue).format('YYYY년 MM월 DD일')}
         </DateText>
-        <ShowBtn>
-          <BsArrowDownCircle />
-          <BsArrowUpCircle />
-        </ShowBtn>
+        <ShowBtn>{calendarShowBtn ? <FaAngleUp /> : <FaAngleDown />}</ShowBtn>
       </DateNavbar>
 
-      <CalendarUI>
-        <StyleCalendar onChange={setSelectDate} value={selectDate} />
+      <CalendarUI
+        style={calendarShowBtn ? { display: 'flex' } : { display: 'none' }}
+      >
+        <StyleCalendar
+          onChange={setDateValue}
+          minDate={new Date()}
+          value={dateValue}
+        />
       </CalendarUI>
     </Container>
   );
@@ -35,34 +65,29 @@ const StyleCalendar = styled(Calendar)`
 
 const Container = styled.div`
   width: 100%;
-  margin: 1.5rem 0 0 0;
 `;
 
 const CalendarUI = styled.div`
-  display: flex;
   justify-content: center;
 `;
 
 const DateNavbar = styled.div`
   display: flex;
-  width: 100%;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  boder-bottom-color: #0000004d;
+  justify-content: space-between;
+  border-bottom: 1px solid #0000004d;
   margin: 4rem 0 2rem 0;
+  cursor: pointer;
 `;
 
 const DateText = styled.h1`
   font-size: 20px;
   text-align: left;
-  width: 100%;
   height: 2rem;
 `;
 
 const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
-  width: 100%;
   margin-right: 0.8rem;
 `;
 export default GroundReservationCalendar;

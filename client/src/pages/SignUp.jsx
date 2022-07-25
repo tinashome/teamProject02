@@ -14,7 +14,11 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    await Api.post('auth/signup', data);
+    try {
+      await Api.post('auth/signup', data);
+    } catch (err) {
+      alert(err.response.data.reason);
+    }
   };
 
   return (

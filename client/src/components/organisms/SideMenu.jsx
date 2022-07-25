@@ -9,7 +9,7 @@ const SideMenu = () => (
       <SideTitle>예약 관리</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo/rental'>예약 조회</NavLink>
+          <NavLink to='/myinfo'>예약 조회</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>
@@ -20,10 +20,10 @@ const SideMenu = () => (
           <NavLink to='/myinfo/password'>비밀번호 변경</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo'>개인정보 변경</NavLink>
+          <NavLink to='/myinfo/change'>개인 정보 변경</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo/user'>회원 탈퇴</NavLink>
+          <NavLink to='/myinfo/withdrawal'>회원 탈퇴</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>
@@ -31,10 +31,10 @@ const SideMenu = () => (
       <SideTitle>포인트 충전</SideTitle>
       <SideList>
         <SideListItem>
-          <NavLink to='/myinfo'>포인트 충전</NavLink>
+          <NavLink to='/pointCharge'>포인트 충전</NavLink>
         </SideListItem>
         <SideListItem>
-          <NavLink to='/myinfo'>포인트 충전 내역</NavLink>
+          <NavLink to='/myinfo/point'>포인트 충전 내역</NavLink>
         </SideListItem>
       </SideList>
     </SideItem>

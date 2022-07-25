@@ -1,19 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { adminContentState } from 'stores/adminStore';
+import { adminContentState } from 'stores/adminUserStore';
 import { useRecoilState } from 'recoil';
 
-import AdminDeleteMember from './AdminDeleteMember';
-import {
-  AdminAddGround,
-  AdminEditGround,
-  AdminDeleteGround,
-  AdminReservations,
-  AdminDeleteReservations,
-  AdminPayment,
-} from './AdminPages';
+import AdminUserDelete from './AdminUserDelete';
+import AdminGroundAdd from './AdminGroundAdd';
+import AdminGroundList from './AdminGroundList';
+import AdminPayment from './AdminPayment';
+
+import { AdminReservations, AdminDeleteReservations } from './AdminPages';
 
 const AdminSidemenu = () => {
+  // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
   return (
     <SideMenuWrapper>
@@ -21,7 +19,7 @@ const AdminSidemenu = () => {
         <SideMenuTitle>사용자 관리</SideMenuTitle>
         <SideMenuLink
           onClick={() => {
-            setContent(['회원 탈퇴', <AdminDeleteMember />]);
+            setContent(['회원정보 삭제(탈퇴)', <AdminUserDelete />]);
           }}
         >
           회원 탈퇴
@@ -29,30 +27,43 @@ const AdminSidemenu = () => {
       </SideMenuContainer>
       <SideMenuContainer>
         <SideMenuTitle>경기장 관리</SideMenuTitle>
+
         <SideMenuLink
           onClick={() => {
-            setContent(['경기장 추가', <AdminAddGround />]);
+            setContent(['경기장 추가', <AdminGroundAdd />]);
           }}
         >
           경기장 추가
         </SideMenuLink>
+
         <SideMenuLink
           onClick={() => {
-            setContent(['경기장 수정', <AdminEditGround />]);
+            setContent(['경기장 목록 조회', <AdminGroundList />]);
+          }}
+        >
+          조회/수정/삭제
+        </SideMenuLink>
+
+        {/* <SideMenuLink
+          onClick={() => {
+            setContent(['경기장 수정 ', <AdminGroundEdit />]);
           }}
         >
           경기장 수정
-        </SideMenuLink>
-        <SideMenuLink
+        </SideMenuLink> */}
+
+        {/* <SideMenuLink
           onClick={() => {
-            setContent(['경기장 삭제', <AdminDeleteGround />]);
+            setContent(['경기장 삭제', <AdminGroundDelete />]);
           }}
         >
           경기장 삭제
-        </SideMenuLink>
+        </SideMenuLink> */}
       </SideMenuContainer>
+
       <SideMenuContainer>
         <SideMenuTitle>예약 관리</SideMenuTitle>
+
         <SideMenuLink
           onClick={() => {
             setContent(['예약상태 관리', <AdminReservations />]);
@@ -60,6 +71,7 @@ const AdminSidemenu = () => {
         >
           예약상태 관리
         </SideMenuLink>
+
         <SideMenuLink
           onClick={() => {
             setContent(['예약상태 취소', <AdminDeleteReservations />]);
@@ -68,8 +80,10 @@ const AdminSidemenu = () => {
           예약상태 취소
         </SideMenuLink>
       </SideMenuContainer>
+
       <SideMenuContainer>
         <SideMenuTitle>포인트 관리</SideMenuTitle>
+
         <SideMenuLink
           onClick={() => {
             setContent(['충전 관리', <AdminPayment />]);
@@ -100,7 +114,7 @@ const SideMenuTitle = styled.div`
   height: 50px;
   padding-top: 10px;
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
 `;
 
 const SideMenuLink = styled.button`
