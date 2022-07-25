@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const TimeBtn = ({
@@ -6,10 +6,11 @@ const TimeBtn = ({
   startTime,
   endTime,
   reservationDateInfo,
+  reservationTime,
   setReservationTime,
+
 }) => {
   const [isSelect, setIsSelect] = useState(false);
-
   // renderTime, startTime, endTime Slice 작업 필요 type도 number로 변경
   const startTimeSlice = Number(renderTime?.slice(0, 2));
   const endTimeSlice = Number(renderTime?.slice(6, 8));
@@ -21,14 +22,23 @@ const TimeBtn = ({
     endTimeSlice > endTimeFormat ||
     reservationDateInfo?.includes(renderTime);
 
+  const handleClick = (e) => {
+    setIsSelect(!isSelect);
+    if (isSelect === false) {
+      setReservationTime([...reservationTime, e.target.value]);
+    } else if (isSelect === true) {
+      const removeElement = reservationTime.filter((element) => element !== e.target.value);
+      setReservationTime(removeElement);
+    }
+  };
+  
   return (
     <TimeButton
       key={renderTime}
       value={renderTime}
       disabled={isAble}
       onClick={(e) => {
-        setReservationTime(e.target.value);
-        setIsSelect(!isSelect);
+        handleClick(e);
       }}
       isSelect={isSelect}
     >

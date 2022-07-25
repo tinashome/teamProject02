@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
 import { TimeBtn } from '../atoms/TimeButton';
 
-const GroundTime = ({ info, reservationDateInfo, setReservationTime }) => {
+const GroundTime = ({ info, reservationDateInfo, reservationTime, setReservationTime }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
   const { startTime, endTime } = info;
 
@@ -32,6 +32,7 @@ const GroundTime = ({ info, reservationDateInfo, setReservationTime }) => {
               startTime,
               endTime,
               reservationDateInfo,
+              reservationTime,
               setReservationTime,
             }),
           )}
@@ -44,6 +45,7 @@ const GroundTime = ({ info, reservationDateInfo, setReservationTime }) => {
               startTime,
               endTime,
               reservationDateInfo,
+              reservationTime,
               setReservationTime,
             }),
           )}

@@ -25,7 +25,6 @@ const Ground = () => {
   const [dateValue, setDateValue] = useState(new Date());
 
   const [reservationTime, setReservationTime] = useState([]);
-
   const params = useParams();
   const groundId = params.id;
 
@@ -89,6 +88,7 @@ const Ground = () => {
         <GroundTime
           info={detailInfo}
           reservationDateInfo={reservationDateInfo}
+          reservationTime={reservationTime}
           setReservationTime={setReservationTime}
         />
         <BackBtn>
