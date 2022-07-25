@@ -7,6 +7,7 @@ import {
   pointRouter,
   groundRouter,
   rentalRouter,
+  mailRouter,
 } from './routers/index.js';
 
 import cors from 'cors';
@@ -46,7 +47,7 @@ const options = {
     //'http://localhost:5000/'
     servers: [
       {
-        url: 'https://futsal-api-elice.herokuapp.com/',
+        url: 'http://localhost:5000/',
       },
     ],
   },
@@ -80,6 +81,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/grounds', groundRouter);
 app.use('/api/points', pointRouter);
 app.use('/api/rentals', rentalRouter);
+app.use('/api/mail', mailRouter);
 app.use(errorHandler);
 
 export { app };

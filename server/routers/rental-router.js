@@ -34,9 +34,10 @@ const rentalRouter = Router();
  *                 description: 날짜
  *                 required: true
  *               reservationTime:
- *                 type: string
+ *                 type: array
  *                 description: 시간
  *                 required: true
+ *                 default: []
  *     responses:
  *       200:
  *         description: 반환 값으로 예약 정보를 반환합니다.

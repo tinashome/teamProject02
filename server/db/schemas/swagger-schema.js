@@ -189,9 +189,10 @@
  *         description: 예약날짜
  *         required: true
  *       reservationTime:
- *         type: string
+ *         type: array
  *         description: 예약시간
  *         required: true
+ *         default: []
  *       isBooked:
  *         type: boolean
  *         description: 예약여부
@@ -237,18 +238,22 @@
  *           name:
  *             type: "string"
  *             description: 이름
+ *       payName:
+ *         type: "string"
+ *         description: 입금자
+ *         required: false
  *       paymentOption:
  *         type: boolean
  *         description: 페이옵션
- *         required: true
+ *         required: false
  *       paymentAmount:
  *         type: integer
  *         description: 요금
- *         required: true
+ *         required: false
  *       isCharged:
- *         type: string
+ *         type: boolean
  *         description: 충전 됬는지 여부
- *         required: true
+ *         required: false
  *       isDeleted:
  *         type: boolean
  *         description: 삭제여부
@@ -317,12 +322,12 @@
  *           startTime:
  *             type: string
  *             description: 매장 시작 시간
- *             default: '0700'
+ *             default: '07:00'
  *             required: false
  *           endTime:
  *             type: string
  *             description: 매장 종료 시간
- *             default: '2200'
+ *             default: '22:00'
  *             required: false
  *           shoesRentallInfo:
  *             type: string

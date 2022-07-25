@@ -38,9 +38,6 @@ const pointRouter = Router();
  *             schema:
  *               type: object
  *               properties:
- *                 length:
- *                   type: string
- *                   description: 길이
  *                 points:
  *                   type: "array"
  *                   $ref: '#/components/schemas/points'
@@ -76,13 +73,17 @@ pointRouter.get('/user', loginRequired, async function (req, res, next) {
  *           schema:
  *             type: object
  *             properties:
+ *               payName:
+ *                 type: string
+ *                 description: 입금자
+ *                 required: false
  *               paymentOption:
  *                 type: boolean
  *                 description: 페이옵션
  *               paymentAmount:
  *                 type: integer
  *                 description: 요금
- *                 required: true
+ *                 required: false
  *     responses:
  *       200:
  *         description: 반환 값으로 포인트 정보를 반환합니다.
@@ -102,13 +103,14 @@ pointRouter.post('/', loginRequired, async (req, res, next) => {
     }
     const userId = req.currentUserId;
     // req (request) 에서 데이터 가져오기
-    const { paymentOption, paymentAmount } = req.body;
+    const { paymentOption, paymentAmount, payName } = req.body;
 
     // 위 데이터를 카테고리 db에 추가하기
     const newPoint = await pointService.addPoint({
       userId,
       paymentOption,
       paymentAmount,
+      payName,
     });
 
     res.status(201).json(newPoint);
@@ -168,7 +170,11 @@ pointRouter.patch('/:pointId', adminOnly, async function (req, res, next) {
     };
     // 제품 정보를 업데이트함.
 
-    const updatedPoint = await pointService.setPoint(pointId, toUpdate);
+    const updatedPoint = await pointService.setPoint(
+      pointId,
+      toUpdate,
+      payName,
+    );
     if (!updatedPoint) {
       throw new Error(`${pointId} 정보가 수정되지 않았습니다.`);
     }

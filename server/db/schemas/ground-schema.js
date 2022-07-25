@@ -41,12 +41,12 @@ const GroundSchema = new mongoose.Schema(
     startTime: {
       type: String,
       required: false,
-      default: '0700',
+      default: '07:00',
     },
     endTime: {
       type: String,
       required: false,
-      default: '2200',
+      default: '22:00',
     },
     shoesRentallInfo: {
       type: String,
