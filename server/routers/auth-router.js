@@ -214,7 +214,7 @@ authRouter.post('/signin/kakao', async function (req, res, next) {
 
 /**
  * @swagger
- * /api/auth/CheckPwd:
+ * /api/auth/check-pwd:
  *   post:
  *     summary: 패스워드를 확인합니다.
  *     tags: [auth]
@@ -243,7 +243,7 @@ authRouter.post('/signin/kakao', async function (req, res, next) {
  *                   description:  결과값
 
  */
-authRouter.post('/CheckPwd', loginRequired, async function (req, res, next) {
+authRouter.post('/check-pwd', loginRequired, async function (req, res, next) {
   try {
     const userId = req.currentUserId;
     const { password } = req.body;

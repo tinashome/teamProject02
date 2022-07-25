@@ -13,12 +13,17 @@ class RentalService {
     if (!userInfo || !groundInfo) {
       throw new Error('구장정보 또는 유저 정보가 없습니다. 다시 확인해주세요.');
     }
-    if (groundInfo.paymentPoint > userInfo.totalPoint) {
+
+    if (
+      groundInfo.paymentPoint * reservationTime.length >
+      userInfo.totalPoint
+    ) {
       throw new Error(
         '유저의 포인트가 해당 구장의 포인트 값보다 작아서 예약을 할 수 없습니다. 다시 확인해 주세요.',
       );
     }
-    const changeTotalPoint = userInfo.totalPoint - groundInfo.paymentPoint;
+    const changeTotalPoint =
+      userInfo.totalPoint - groundInfo.paymentPoint * reservationTime.length;
 
     const toUpdateTotalPoint = {
       totalPoint: changeTotalPoint,
@@ -57,10 +62,14 @@ class RentalService {
 
     if (toUpdate.isBooked) {
       resultPoint =
-        updatedRental.userId.totalPoint - updatedRental.groundId.paymentPoint;
+        updatedRental.userId.totalPoint -
+        updatedRental.groundId.paymentPoint *
+          updatedRental.reservationTime.length;
     } else {
       resultPoint =
-        updatedRental.userId.totalPoint + updatedRental.groundId.paymentPoint;
+        updatedRental.userId.totalPoint +
+        updatedRental.groundId.paymentPoint *
+          updatedRental.reservationTime.length;
     }
     const toUpdateTotalPoint = {
       totalPoint: resultPoint,
@@ -86,7 +95,9 @@ class RentalService {
       if (!user) {
         throw new Error(`${user} 정보가 없습니다.`);
       }
-      const resultPoint = user.totalPoint + rental.groundId.paymentPoint;
+      const resultPoint =
+        user.totalPoint +
+        rental.groundId.paymentPoint * rental.reservationTime.length;
       const toUpdateTotalPoint = {
         totalPoint: resultPoint,
       };
