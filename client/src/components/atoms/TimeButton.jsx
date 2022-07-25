@@ -17,16 +17,21 @@ const TimeBtn = ({
   const startTimeFormat = Number(startTime?.slice(0, 2));
   const endTimeFormat = Number(endTime?.slice(0, 2));
 
-  
   useEffect(() => {
     setIsSelect(false);
     setReservationTime([]);
   }, [reservationDate]);
 
+  // 2차원 배열 1차원으로 만들기
+  let arr = [];
+  reservationDateInfo.forEach((element) => {
+    arr = [...arr, ...element];
+  });
+
   const isAble =
     startTimeSlice < startTimeFormat ||
     endTimeSlice > endTimeFormat ||
-    reservationDateInfo?.includes(renderTime);
+    arr.includes(renderTime);
 
   const handleClick = (e) => {
     setIsSelect(!isSelect);
@@ -34,8 +39,8 @@ const TimeBtn = ({
       setReservationTime([...reservationTime, e.target.value]);
     } else if (isSelect === true) {
       const removeElement = reservationTime.filter(
-          (element) => element !== e.target.value,
-        );
+        (element) => element !== e.target.value,
+      );
       setReservationTime(removeElement);
     }
   };
