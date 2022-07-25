@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { adminContentState } from 'stores/adminUserStore';
+import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
 import { useRecoilState } from 'recoil';
 
 import AdminUserDelete from './AdminUserDelete';
@@ -13,12 +13,14 @@ import { AdminReservations, AdminDeleteReservations } from './AdminPages';
 const AdminSidemenu = () => {
   // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
+  const [currentPage, setCurentPage] = useRecoilState(adminCurrentPage);
   return (
     <SideMenuWrapper>
       <SideMenuContainer>
         <SideMenuTitle>사용자 관리</SideMenuTitle>
         <SideMenuLink
           onClick={() => {
+            setCurentPage(0);
             setContent(['회원정보 삭제(탈퇴)', <AdminUserDelete />]);
           }}
         >
@@ -30,6 +32,7 @@ const AdminSidemenu = () => {
 
         <SideMenuLink
           onClick={() => {
+            setCurentPage(0);
             setContent(['경기장 추가', <AdminGroundAdd />]);
           }}
         >
@@ -38,27 +41,12 @@ const AdminSidemenu = () => {
 
         <SideMenuLink
           onClick={() => {
+            setCurentPage(0);
             setContent(['경기장 목록 조회', <AdminGroundList />]);
           }}
         >
           조회/수정/삭제
         </SideMenuLink>
-
-        {/* <SideMenuLink
-          onClick={() => {
-            setContent(['경기장 수정 ', <AdminGroundEdit />]);
-          }}
-        >
-          경기장 수정
-        </SideMenuLink> */}
-
-        {/* <SideMenuLink
-          onClick={() => {
-            setContent(['경기장 삭제', <AdminGroundDelete />]);
-          }}
-        >
-          경기장 삭제
-        </SideMenuLink> */}
       </SideMenuContainer>
 
       <SideMenuContainer>
@@ -66,6 +54,7 @@ const AdminSidemenu = () => {
 
         <SideMenuLink
           onClick={() => {
+            setCurentPage(0);
             setContent(['예약상태 관리', <AdminReservations />]);
           }}
         >
@@ -74,6 +63,7 @@ const AdminSidemenu = () => {
 
         <SideMenuLink
           onClick={() => {
+            setCurentPage(0);
             setContent(['예약상태 취소', <AdminDeleteReservations />]);
           }}
         >

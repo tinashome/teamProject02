@@ -77,6 +77,10 @@ const AdminGroundList = () => {
   };
 
   useEffect(() => {
+    setcurrentPage(0);
+  }, []);
+
+  useEffect(() => {
     getGrounds();
   }, [currentPage, modal]);
 
@@ -115,33 +119,46 @@ const AdminGroundList = () => {
         </ModalDiv>
       </ModalWrapper>
       <TitleRow>
-        <Text width='200'>경기장명</Text>
-        <Text width='200'>위치</Text>
-        <Text width='100'>포인트</Text>
-        <Text width='200'>조회 / 삭제</Text>
+        <Text>경기장명</Text>
+        <Text width='250'>위치</Text>
+        <Text width='80'>포인트</Text>
+        <Text>수정 / 삭제</Text>
       </TitleRow>
       <Wrapper pageSize={pageSize}>
         {grounds &&
           grounds.map((e) => (
             <Row key={e._id}>
-              <TextWide width='200' title={e.groundName}>
-                {e.groundName.length >= 10
-                  ? `${e.groundName.slice(0, 10)}...`
-                  : e.groundName}
-              </TextWide>
-              <TextWide width='200'>{e.groundAddress.address1}</TextWide>
-              <Text width='80' style={{ justifyContent: 'flex-end' }}>
-                {e.paymentPoint.toLocaleString()}P
+              <Text>
+                <TextWide
+                  id={e._id}
+                  style={{ textAlign: 'center' }}
+                  onClick={handleClickInfo}
+                >
+                  {e.groundName}
+                </TextWide>
               </Text>
-              <Text width='200'>
-                <Button
+              <Text width='250'>
+                <TextWide id={e._id} width='250' onClick={handleClickInfo}>
+                  {e.groundAddress.address1}
+                </TextWide>
+              </Text>
+              <Text
+                id={e._id}
+                width='80'
+                style={{ justifyContent: 'flex-end' }}
+                onClick={handleClickInfo}
+              >
+                {e.paymentPoint && e.paymentPoint.toLocaleString()} P
+              </Text>
+              <Text>
+                {/* <Button
                   id={e._id}
                   name={e.groundName}
                   onClick={handleClickInfo}
                   style={{ margin: '0 5px' }}
                 >
                   조회
-                </Button>
+                </Button> */}
                 <Button
                   id={e._id}
                   name={e.groundName}
@@ -192,19 +209,23 @@ const Row = styled.div`
   justify-content: space-between;
 `;
 
-const Text = styled.p`
+const Text = styled.div`
   display: flex;
   width: ${(props) => props.width ?? '150'}px;
   height: 24px;
   letter-spacing: 0.5px;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const TextWide = styled(Text)`
-  white-space: nowrap;
-  justify-content: flex-start;
+  display: block;
+  text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
+  line-height: 24px;
+  cursor: pointer;
 `;
 
 const Button = styled.button`
