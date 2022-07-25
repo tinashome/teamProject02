@@ -5,10 +5,10 @@ const TimeBtn = ({
   renderTime,
   startTime,
   endTime,
+  reservationDate,
   reservationDateInfo,
   reservationTime,
   setReservationTime,
-
 }) => {
   const [isSelect, setIsSelect] = useState(false);
   // renderTime, startTime, endTime Slice 작업 필요 type도 number로 변경
@@ -16,6 +16,12 @@ const TimeBtn = ({
   const endTimeSlice = Number(renderTime?.slice(6, 8));
   const startTimeFormat = Number(startTime?.slice(0, 2));
   const endTimeFormat = Number(endTime?.slice(0, 2));
+
+  
+  useEffect(() => {
+    setIsSelect(false);
+    setReservationTime([]);
+  }, [reservationDate]);
 
   const isAble =
     startTimeSlice < startTimeFormat ||
@@ -27,11 +33,13 @@ const TimeBtn = ({
     if (isSelect === false) {
       setReservationTime([...reservationTime, e.target.value]);
     } else if (isSelect === true) {
-      const removeElement = reservationTime.filter((element) => element !== e.target.value);
+      const removeElement = reservationTime.filter(
+          (element) => element !== e.target.value,
+        );
       setReservationTime(removeElement);
     }
   };
-  
+
   return (
     <TimeButton
       key={renderTime}

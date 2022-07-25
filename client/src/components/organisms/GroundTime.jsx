@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from '@react-icons/all-files/bi/BiTimeFive';
 import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
-import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
 import { TimeBtn } from '../atoms/TimeButton';
 
-const GroundTime = ({ info, reservationDateInfo, reservationTime, setReservationTime }) => {
+// reservationTime = [{day: '0727' , time: [11:00~12:00, 12:00~13:00]}, {}, {}]
+const GroundTime = ({
+  info,
+  reservationDate,
+  reservationDateInfo,
+  reservationTime,
+  setReservationTime,
+}) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
   const { startTime, endTime } = info;
 
@@ -31,6 +37,7 @@ const GroundTime = ({ info, reservationDateInfo, reservationTime, setReservation
               renderTime,
               startTime,
               endTime,
+              reservationDate,
               reservationDateInfo,
               reservationTime,
               setReservationTime,
@@ -44,6 +51,7 @@ const GroundTime = ({ info, reservationDateInfo, reservationTime, setReservation
               renderTime,
               startTime,
               endTime,
+              reservationDate,
               reservationDateInfo,
               reservationTime,
               setReservationTime,
