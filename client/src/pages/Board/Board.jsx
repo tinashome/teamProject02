@@ -7,86 +7,29 @@ import { boardListState, boardPageState } from 'stores/boardStore';
 import Pagination from 'components/organisms/Pagination';
 import Button from 'components/atoms/Button';
 
-const mockData = [
-  {
-    id: 1,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 2,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 3,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 4,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 1,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 5,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 6,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 7,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 8,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 9,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 10,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-  {
-    id: 11,
-    title: '예시용 데이터입니다',
-    author: 'test',
-    createdAt: '2022.07.25',
-  },
-];
-
 const Board = () => {
   const [boardList, setBoardList] = useRecoilState(boardListState);
   const [page, setPage] = useRecoilState(boardPageState);
   const listPerPage = 15;
   const totalPage = Math.ceil(boardList.length / listPerPage);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const result = await Api.get(
+  //         `grounds?location=${location}&search=${searchInput}&offset=${
+  //           (page - 1) * listPerPage
+  //         }&count=${listPerPage}`,
+  //       );
+  //       setGroundList({
+  //         length: result.data.length,
+  //         data: result.data.grounds,
+  //       });
+  //     } catch (err) {
+  //       alert(err.response.data.reason);
+  //     }
+  //   })();
+  // }, [location, searchInput, page]);
 
   return (
     <>

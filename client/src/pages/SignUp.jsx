@@ -63,12 +63,13 @@ const SignUp = () => {
         code: emailCode,
         mail: email,
       });
-      if (result.status === 200) {
-        alert(result.data.message);
+
+      if (result.data.result === 'success') {
+        alert('이메일 인증이 완료되었습니다.');
         setIsEmailValid(true);
         toggleModal();
       } else {
-        alert(result.data.message);
+        alert('인증 코드가 일치하지 않습니다. 이메일 인증이 실패하였습니다.');
       }
     } catch (err) {
       alert(err.response.data.reason);
