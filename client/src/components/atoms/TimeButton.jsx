@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const TimeBtn = ({ renderTime, startTime, endTime, reservationDataInfo, setReservationTime }) => {
+const TimeBtn = ({
+  renderTime,
+  startTime,
+  endTime,
+  reservationDateInfo,
+  setReservationTime,
+}) => {
   const [isSelect, setIsSelect] = useState(false);
 
   // renderTime, startTime, endTime Slice 작업 필요 type도 number로 변경
@@ -13,7 +19,7 @@ const TimeBtn = ({ renderTime, startTime, endTime, reservationDataInfo, setReser
   const isAble =
     startTimeSlice < startTimeFormat ||
     endTimeSlice > endTimeFormat ||
-    reservationDataInfo.includes(renderTime);
+    reservationDateInfo?.includes(renderTime);
 
   return (
     <TimeButton
@@ -36,7 +42,7 @@ const TimeButton = styled.button`
   height: 40px;
   font-size: 15px;
   font-weight: bold;
-  background-color: ${(props) => ( props.isSelect ? '#bdbdbd' : '#bac8ff')};
+  background-color: ${(props) => (props.isSelect ? '#bdbdbd' : '#bac8ff')};
   border: solid #bdbdbd;
   border-radius: 3px;
   margin: 3px;

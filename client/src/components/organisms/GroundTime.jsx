@@ -9,7 +9,6 @@ import { TimeBtn } from '../atoms/TimeButton';
 
 const GroundTime = ({ info, reservationDateInfo, setReservationTime }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
-
   const { startTime, endTime } = info;
 
   const handleClick = () => {

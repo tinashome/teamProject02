@@ -24,6 +24,7 @@ const GroundReservationCalendar = ({
         .map((list) => list.reservationTime);
       setReservationDateInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
       setReservationDate(dateFormat);
+
     }
   }, [info, dateValue]);
 
