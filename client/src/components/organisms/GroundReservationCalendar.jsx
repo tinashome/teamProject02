@@ -7,20 +7,14 @@ import 'react-calendar/dist/Calendar.css';
 import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
 
-import { useRecoilState } from 'recoil';
-import {
-  reservationDateInfo,
-  selectDateValue,
-  selectCalendarDate,
-} from 'stores/reservationStore';
-
-const GroundReservationCalendar = ({ info }) => {
-  const [selectDate, setSelectDate] = useRecoilState(selectDateValue);
+const GroundReservationCalendar = ({
+  info,
+  setReservationDate,
+  setReservationDateInfo,
+  dateValue,
+  setDateValue,
+}) => {
   const [calendarShowBtn, setCalendarShowBtn] = useState(true);
-  const [reservationInfo, setReservationInfo] =
-    useRecoilState(reservationDateInfo);
-
-  const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
 
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
@@ -28,10 +22,10 @@ const GroundReservationCalendar = ({ info }) => {
       const result = info
         .filter((list) => list.reservationDate === dateFormat)
         .map((list) => list.reservationTime);
-      setReservationInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
-      setSelectDate(dateFormat);
+      setReservationDateInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
+      setReservationDate(dateFormat);
     }
-  }, [info, selectDate, dateValue]);
+  }, [info, dateValue]);
 
   const handleClick = () => {
     setCalendarShowBtn(!calendarShowBtn);

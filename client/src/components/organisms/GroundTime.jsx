@@ -5,13 +5,10 @@ import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
 import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
-import { reservationDateInfo } from 'stores/reservationStore';
 import { TimeBtn } from '../atoms/TimeButton';
 
-const GroundTime = ({ info }) => {
+const GroundTime = ({ info, reservationDateInfo, setReservationTime }) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
-  const [reservationInfo, setReservationInfo] =
-    useRecoilState(reservationDateInfo);
 
   const { startTime, endTime } = info;
 
@@ -31,13 +28,25 @@ const GroundTime = ({ info }) => {
         <Title>오전</Title>
         <TimeBtns>
           {morningTimeValue.map((renderTime) =>
-            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+            TimeBtn({
+              renderTime,
+              startTime,
+              endTime,
+              reservationDateInfo,
+              setReservationTime,
+            }),
           )}
         </TimeBtns>
         <Title>오후</Title>
         <TimeBtns>
           {afternoonTimeValue.map((renderTime) =>
-            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+            TimeBtn({
+              renderTime,
+              startTime,
+              endTime,
+              reservationDateInfo,
+              setReservationTime,
+            }),
           )}
         </TimeBtns>
       </Container>

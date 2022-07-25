@@ -19,9 +19,12 @@ const Ground = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [detailInfo, setDetailInfo] = useState([]);
   const [reservationInfo, setReservationInfo] = useState([]);
-  const [reservationDate, setReservationDate] = useRecoilState(selectDateValue);
-  const [reservationTime, setReservationTime] = useRecoilState(selectBtnValue);
-  const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
+
+  const [reservationDate, setReservationDate] = useState('');
+  const [reservationDateInfo, setReservationDateInfo] = useState([]);
+  const [dateValue, setDateValue] = useState(new Date());
+
+  const [reservationTime, setReservationTime] = useState([]);
 
   const params = useParams();
   const groundId = params.id;
@@ -76,8 +79,18 @@ const Ground = () => {
       <GroundSlide info={detailInfo.groundImg} />
       <Container>
         <GroundInfo info={detailInfo} />
-        <GroundReservationCalendar info={reservationInfo} />
-        <GroundTime info={detailInfo} />
+        <GroundReservationCalendar
+          info={reservationInfo}
+          setReservationDate={setReservationDate}
+          setReservationDateInfo={setReservationDateInfo}
+          dateValue={dateValue}
+          setDateValue={setDateValue}
+        />
+        <GroundTime
+          info={detailInfo}
+          reservationDateInfo={reservationDateInfo}
+          setReservationTime={setReservationTime}
+        />
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>
