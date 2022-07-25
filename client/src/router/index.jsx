@@ -17,6 +17,9 @@ const SignUp = lazy(() => import('pages/SignUp'));
 const Admin = lazy(() => import('pages/Admin/Admin'));
 const PointCharge = lazy(() => import('pages/PointCharge'));
 const MyPage = lazy(() => import('pages/MyPage'));
+const Board = lazy(() => import('pages/Board/Board'));
+const BoardDetail = lazy(() => import('pages/Board/BoardDetail'));
+const BoardWrite = lazy(() => import('pages/Board/BoardWrite'));
 
 const Router = () => (
   <BrowserRouter>
@@ -29,6 +32,9 @@ const Router = () => (
           <Route path='/pointCharge' element={<PointCharge />} />
           <Route path='/signup' element={<SignUp />} />
           <Route path='/admin' element={<Admin />} />
+          <Route path='/board' element={<Board />} />
+          <Route path='/board/:id' element={<BoardDetail />} />
+          <Route path='/write' element={<BoardWrite />} />
           <Route path='/myinfo' element={<MyPage />}>
             <Route path='' element={<RentalManagement />} />
             <Route path='change' element={<UserInfoChange />} />
