@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers, adminContentState } from 'stores/adminUserStore';
+import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas } from 'util/useful-functions';
 import AdminPayment from './AdminPayment';
@@ -12,21 +12,22 @@ import AdminPayment from './AdminPayment';
 const AdminDashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
-  // 조회한유저목록을 저장하는 상태
-  const [users, setUsers] = useRecoilState(adminUsers);
+  // 조회한 유저목록을 저장하는 상태
+  const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(null);
   const [todaySignUp, setTodaySignUp] = useState(null);
-  // 조회한충전신청목록을 저장하는 상태
+  // 조회한 충전신청목록을 저장하는 상태
   const [orders, setOrders] = useState(null);
   const [totalOrders, setTotalOrders] = useState(0);
   const [unCharged, setUnCharged] = useState(null);
   const [points, setPoints] = useState(null);
-  // 조회한충전신청목록을 저장하는 상태
+  // 조회한 예약목록을 저장하는 상태
   const [rentals, setRentals] = useState(null);
   const [rentalsOfDay, setRentalsOfDay] = useState(null);
   const [todayRentalsPayment, setTodayRentalsPayment] = useState(null);
   const [yesterdayRentalsPayment, setYesterdayRentalsPayment] = useState(null);
 
+  // 오늘 날짜인지 확인하는 함수
   const isSameDate = (date) => {
     const today = new Date();
     const dates = new Date(date);
@@ -37,6 +38,7 @@ const AdminDashboard = () => {
     );
   };
 
+  // 어제 날짜인지 확인하는 함수
   const isSameDateYesterDay = (date) => {
     const today = new Date();
     const yesterday = new Date(today.setDate(today.getDate() - 1));
@@ -64,10 +66,13 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (users) {
+      // 오늘 가입자수
       const todayUser = users
         .map((e) => isSameDate(e.createdAt))
         .filter((e) => e).length;
       setTodaySignUp(todayUser);
+
+      // 총 예치금 잔고
       const pointValue =
         users && users.reduce((acc, cur) => acc + cur.totalPoint, 0);
       setPoints(pointValue);
@@ -75,7 +80,7 @@ const AdminDashboard = () => {
   }, [users]);
 
   const getOrders = async () => {
-    // 충전신청조회 api요청
+    // 충전신청목록조회 api요청
     try {
       const result = await Api.get(`points?count=999`);
       await setOrders(result.data.points);
@@ -88,17 +93,15 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (totalOrders) {
+      // 승인대기건수
       const unchargedOrder =
         orders && orders.filter((e) => !e.isCharged).length;
       setUnCharged(unchargedOrder);
-      const pointValue =
-        users && users.reduce((acc, cur) => acc + cur.totalPoint, 0);
-      setPoints(pointValue);
     }
   }, [orders]);
 
   const getRentals = async () => {
-    // 충전신청조회 api요청
+    // 예약목록조회 api요청
     try {
       const result = await Api.get(`rentals?count=999`);
       await setRentals(result.data.rentals);
@@ -111,14 +114,18 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (rentals) {
+      // 오늘 예약 건수
       const todayRentals =
         rentals &&
         rentals.map((e) => isSameDate(e.createdAt)).filter((e) => e).length;
+
+      // 어제 예약 건수
       const yesterDayRentals =
         rentals &&
         rentals.map((e) => isSameDateYesterDay(e.createdAt)).filter((e) => e)
           .length;
 
+      // 오늘 매출(오늘 예약한건)
       const todayRentalsPay =
         rentals &&
         rentals.reduce(
@@ -126,6 +133,8 @@ const AdminDashboard = () => {
             acc + (isSameDate(cur.createdAt) && cur.groundId.paymentPoint),
           0,
         );
+
+      // 어제 매출(어제 예약한건)
       const yesterdayRentalsPay =
         rentals &&
         rentals.reduce(
@@ -134,6 +143,7 @@ const AdminDashboard = () => {
             (isSameDateYesterDay(cur.createdAt) && cur.groundId.paymentPoint),
           0,
         );
+
       setRentalsOfDay([todayRentals, yesterDayRentals]);
       setTodayRentalsPayment(todayRentalsPay);
       setYesterdayRentalsPayment(yesterdayRentalsPay);
