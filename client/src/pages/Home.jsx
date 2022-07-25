@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { BiPhotoAlbum } from '@react-icons/all-files/bi/BiPhotoAlbum';
 import { HiOutlineViewList } from '@react-icons/all-files/hi/HiOutlineViewList';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import locationList from 'constants/locationList';
 import { bannerList } from 'constants/imgList';
 import SearchBar from 'components/organisms/SearchBar';
@@ -100,6 +100,15 @@ const FilterWrapper = styled.div`
   margin: 0 1rem 0.5rem 1rem;
 `;
 
+const fadein = keyframes`
+  from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
 const FilterModal = styled.div`
   position: absolute;
   display: flex;
@@ -111,7 +120,7 @@ const FilterModal = styled.div`
   background-color: #495057;
   border-radius: 4px;
   z-index: 9;
-
+  animation: ${fadein} 0.5s;
   p {
     margin-bottom: 1rem;
   }

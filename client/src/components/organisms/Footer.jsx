@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Footer = () => (
   <Container>
-    <MenuContainer>
+    {/* <MenuContainer>
       <MenuWrapper>
         <MenuTitle>메뉴 바로가기</MenuTitle>
         <MenuList>
@@ -21,7 +21,7 @@ const Footer = () => (
           <Menu>부산</Menu>
         </MenuList>
       </MenuWrapper>
-    </MenuContainer>
+    </MenuContainer> */}
     <DescriptionContainer>
       <Description>
         풋살 예약 닷컴 | 부산광역시 동구 초량3동 중앙대로
@@ -44,30 +44,30 @@ const Container = styled.div`
   background: #3563e9;
 `;
 
-const MenuContainer = styled.div`
-  display: flex;
-`;
+// const MenuContainer = styled.div`
+//   display: flex;
+// `;
 
-const MenuWrapper = styled.div`
-  margin-right: 4rem;
-`;
+// const MenuWrapper = styled.div`
+//   margin-right: 4rem;
+// `;
 
-const MenuTitle = styled.span`
-  display: block;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-`;
+// const MenuTitle = styled.span`
+//   display: block;
+//   font-size: 1rem;
+//   margin-bottom: 0.5rem;
+//   font-weight: 600;
+// `;
 
-const MenuList = styled.ul``;
+// const MenuList = styled.ul``;
 
-const Menu = styled.li`
-  padding: 0.3rem 0;
-  margin-left: 0.2rem;
-  font-size: 0.9rem;
-  opacity: 0.5;
-  cursor: pointer;
-`;
+// const Menu = styled.li`
+//   padding: 0.3rem 0;
+//   margin-left: 0.2rem;
+//   font-size: 0.9rem;
+//   opacity: 0.5;
+//   cursor: pointer;
+// `;
 
 const DescriptionContainer = styled.div`
   display: flex;

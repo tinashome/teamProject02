@@ -105,7 +105,8 @@ const GroundInfo = styled.div`
 
   a {
     &:hover {
-      text-decoration: underline;
+      color: #3563e9;
+      opacity: 0.7;
     }
   }
 `;
