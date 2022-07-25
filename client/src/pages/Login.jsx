@@ -52,11 +52,11 @@ const Login = () => {
           <img src={kakaoLoginImg} alt={kakaoLoginImg} />
         </KakaoLogin>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Input
+          <StyledInput
             placeholder='이메일을 입력해주세요 :)'
             {...register('email', { required: '이메일을 입력해주세요.' })}
           />
-          <Input
+          <StyledInput
             type='password'
             placeholder='비밀번호를 입력해주세요'
             {...register('password', { required: '비밀번호를 입력해주세요.' })}
@@ -98,6 +98,10 @@ const StyledTitle = styled(Title)`
       color: #3563e9;
     }
   }
+`;
+
+const StyledInput = styled(Input)`
+  margin-bottom: 1rem;
 `;
 
 const InputContainer = styled.div`
