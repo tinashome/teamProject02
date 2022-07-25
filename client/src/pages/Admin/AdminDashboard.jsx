@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers, adminContentState } from 'stores/adminUserStore';
+import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas } from 'util/useful-functions';
 import AdminPayment from './AdminPayment';
@@ -13,7 +13,6 @@ const AdminDashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
   // 조회한 유저목록을 저장하는 상태
-  // const [users, setUsers] = useRecoilState(adminUsers);
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(null);
   const [todaySignUp, setTodaySignUp] = useState(null);
