@@ -148,7 +148,7 @@ const AdminGroundInfo = ({ groundId }) => {
           <Text />
 
           <Div>
-            <StyledP> {ground.groundAddress.address2} </StyledP>
+            <StyledP> {ground.groundAddress&&ground.groundAddress.address2} </StyledP>
           </Div>
         </Row>
 
