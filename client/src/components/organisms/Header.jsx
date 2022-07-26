@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaFutbol } from '@react-icons/all-files/fa/FaFutbol';
 import { FaUserCircle } from '@react-icons/all-files/fa/FaUserCircle';
@@ -48,9 +48,12 @@ const Header = () => {
         </Logo>
       </NavLink>
       <ButtonContainer>
-        <HeaderButton>구장 리스트</HeaderButton>
-        <HeaderButton>문의 게시판</HeaderButton>
-        <HeaderButton>공지사항</HeaderButton>
+        <Link to='/pointcharge'>
+          <HeaderButton>포인트 충전</HeaderButton>
+        </Link>
+        <Link to='/board'>
+          <HeaderButton>자유 게시판</HeaderButton>
+        </Link>
 
         {isExistToken() ? (
           <>
@@ -87,7 +90,6 @@ const Header = () => {
 };
 
 const Container = styled.div`
-  /* position: fixed; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -106,12 +108,14 @@ const LogoTitle = styled.p`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
+  svg {
+    margin-left: 2rem;
+  }
 `;
 
 const UserProfile = styled.div`
   display: flex;
   flex-direction: column;
-
   p {
     font-size: 1.1rem;
   }

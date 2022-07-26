@@ -25,7 +25,7 @@ const RentalSchema = new mongoose.Schema(
       required: true,
     },
     reservationTime: {
-      type: String,
+      type: [String],
       required: true,
     },
 

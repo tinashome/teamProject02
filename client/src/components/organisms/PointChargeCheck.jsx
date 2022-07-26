@@ -68,10 +68,7 @@ const PointChargeCheck = () => {
       <Lcontainer>
         <CheckValue>
           <Title>입금자명</Title>
-          <TxtValid>
-            <InputTxt onChange={(e) => setDepositorName(e.target.value)} />
-            입금자명을 입력해주세요(최소 2자 이상)
-          </TxtValid>
+          <InputTxt onChange={(e) => setDepositorName(e.target.value)} />
         </CheckValue>
         <CheckValue>
           <Title>결제 방법</Title>
@@ -99,45 +96,39 @@ const PointChargeCheck = () => {
 const Container = styled.div`
   width: 100%;
   display: flex;
-  margin: 3rem 9rem 3rem 15rem;
+  justify-content: space-evenly;
+  margin: 2rem 0;
 `;
-const Rcontainer = styled.div`
-  width: 100%;
-  margin-right: 5rem;
-`;
-const Lcontainer = styled.div`
-  width: 100%;
-  margin-left: 7rem;
-`;
+const Rcontainer = styled.div``;
+
+const Lcontainer = styled.div``;
+
 const CheckValue = styled.div`
   display: flex;
-  margin-bottom: 2rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  :not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 20px;
   font-weight: bold;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
 `;
 const InputTxt = styled(Input)`
-  width: 20rem;
-  height: 1.5rem;
+  width: 65%;
+  padding: 6px 12px;
 `;
+
 const ChargeBtn = styled(Button)`
-  display: flex;
-  margin: 1.7rem 0 0 0.5rem;
+  width: 100%;
   font-size: 23px;
-  padding: 0.7rem 7rem;
 `;
-const TxtValid = styled.p`
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  margin-left: 0.5rem;
-  color: #bdbdbd;
-`;
+
 const CheckBox = styled.input`
-  width: 1rem;
-  margin: 0 0.5rem 0 0.5rem;
+  margin-right: 0.5rem;
 `;
+
 export default PointChargeCheck;

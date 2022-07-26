@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
+import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
 
 const AdminUserDelete = () => {
   // 조회한유저목록을 저장하는 상태
-  const [users, setUsers] = useRecoilState(adminUsers);
+  const [users, setUsers] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(null);
@@ -64,66 +64,68 @@ const AdminUserDelete = () => {
   };
 
   return (
-    <>
-      <ModalWrapper
-        modal={modal}
-        onClick={() => {
-          setModal(null);
-          getUsers();
-        }}
-      >
-        <ModalDiv modal={modal}>
-          {modal &&
-            `사용자 이름: ${modal.userName}\n\n삭제에 ${
-              modal.success ? '성공' : '실패'
-            } 하였습니다.\n\n`}
-          {modal &&
-            modal.success &&
-            `이 메세지는 ${modal.time}초후에 사라집니다.`}
-          <ModalButton
-            onClick={() => {
-              setModal(null);
-              getUsers();
-            }}
-          >
-            닫기
-          </ModalButton>
-        </ModalDiv>
-      </ModalWrapper>
-      <TitleRow>
-        <Text width='200'>이메일</Text>
-        <Text width='80'>이름</Text>
-        <Text>연락처</Text>
-        <Text width='100'>포인트</Text>
-        <Text>삭제(탈퇴)</Text>
-      </TitleRow>
-      <Wrapper pageSize={pageSize}>
-        {users &&
-          users.map((e) => (
-            <Row key={e._id}>
-              <Text width='200'>{e.email}</Text>
-              <Text width='80'>{e.name}</Text>
-              <Text>
-                {e.phoneNumber &&
-                  e.phoneNumber.replace(
-                    /^(\d{2,3})(\d{3,4})(\d{4})$/,
-                    `$1-$2-$3`,
-                  )}
-              </Text>
-              <Text width='100'>
-                {e.totalPoint && e.totalPoint.toLocaleString()}P
-              </Text>
-              <Text>
-                <Button id={e._id} name={e.name} onClick={handleClick}>
-                  회원삭제
-                </Button>
-              </Text>
-            </Row>
-          ))}
-        <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
-      </Wrapper>
-      {users.length !== 0 && <Pagenation lastPage={lastPage} />}
-    </>
+    users && (
+      <>
+        <ModalWrapper
+          modal={modal}
+          onClick={() => {
+            setModal(null);
+            getUsers();
+          }}
+        >
+          <ModalDiv modal={modal}>
+            {modal &&
+              `사용자 이름: ${modal.userName}\n\n삭제에 ${
+                modal.success ? '성공' : '실패'
+              } 하였습니다.\n\n`}
+            {modal &&
+              modal.success &&
+              `이 메세지는 ${modal.time}초후에 사라집니다.`}
+            <ModalButton
+              onClick={() => {
+                setModal(null);
+                getUsers();
+              }}
+            >
+              닫기
+            </ModalButton>
+          </ModalDiv>
+        </ModalWrapper>
+        <TitleRow>
+          <Text width='200'>이메일</Text>
+          <Text width='80'>이름</Text>
+          <Text>연락처</Text>
+          <Text width='100'>포인트</Text>
+          <Text>삭제(탈퇴)</Text>
+        </TitleRow>
+        <Wrapper pageSize={pageSize}>
+          {users &&
+            users.map((e) => (
+              <Row key={e._id}>
+                <Text width='200'>{e.email}</Text>
+                <Text width='80'>{e.name}</Text>
+                <Text>
+                  {e.phoneNumber &&
+                    e.phoneNumber.replace(
+                      /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                      `$1-$2-$3`,
+                    )}
+                </Text>
+                <Text width='100'>
+                  {e.totalPoint && e.totalPoint.toLocaleString()}P
+                </Text>
+                <Text>
+                  <Button id={e._id} name={e.name} onClick={handleClick}>
+                    회원삭제
+                  </Button>
+                </Text>
+              </Row>
+            ))}
+          <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
+        </Wrapper>
+        {users.length !== 0 && <Pagenation lastPage={lastPage} />}
+      </>
+    )
   );
 };
 

@@ -5,7 +5,7 @@ class PointService {
     this.pointModel = pointModel;
     this.userModel = userModel;
   }
-  async addPoint({ userId, paymentOption, paymentAmount }) {
+  async addPoint({ userId, paymentOption, paymentAmount, payName }) {
     const userInfo = await this.userModel.findById({ _id: userId });
 
     const user = {
@@ -17,6 +17,7 @@ class PointService {
       user,
       paymentOption,
       paymentAmount,
+      payName,
     };
     const createdNewPoint = await this.pointModel.create(pointInfo);
     return createdNewPoint;

@@ -5,3 +5,4 @@ export * from './auth-router.js';
 export * from './ground-router.js';
 export * from './point-router.js';
 export * from './rental-router.js';
+export * from './mail-router.js';

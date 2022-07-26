@@ -15,7 +15,11 @@ const PointSchema = new mongoose.Schema(
       ),
       required: true,
     },
-
+    payName: {
+      type: String,
+      required: false,
+      default: null,
+    },
     paymentOption: {
       type: Boolean,
       required: false,
