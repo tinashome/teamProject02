@@ -12,7 +12,11 @@ const BoardDetail = () => {
   const navigate = useNavigate();
   const [boardDetail, setBoardDetail] = useState({});
   const [isEdit, setIsEdit] = useState(false);
-  const [isEditAuth, setIsEditAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState({
+    edit: false,
+    delete: false,
+  });
+
   const user = useRecoilValue(userState);
 
   const { register, reset, getValues } = useForm({
@@ -31,17 +35,19 @@ const BoardDetail = () => {
       try {
         const result = await Api.get(`boards/${boardId}`);
         setBoardDetail(result.data);
+        if (result.data.userId._id === user.userId) {
+          setIsAuth({
+            edit: true,
+            delete: true,
+          });
+        } else if (user.role === 'admin') {
+          setIsAuth((prev) => ({ ...prev, delete: true }));
+        }
       } catch (err) {
         alert(err.response.data.reason);
       }
     })();
   }, []);
-
-  useEffect(() => {
-    if (user.role === 'admin' || boardDetail.userName === user.name) {
-      setIsEditAuth(true);
-    }
-  }, [boardDetail]);
 
   const handleSave = async () => {
     if (isEdit) {
@@ -100,25 +106,22 @@ const BoardDetail = () => {
         <Description>{boardDetail.contents}</Description>
       )}
 
-      {isEditAuth && (
+      {isAuth.delete && (
         <ButtonWrapper>
           {isEdit ? (
-            <StyledButton onClick={handleSave}>저장</StyledButton>
+            <>
+              {isAuth.edit && <Button onClick={handleSave}>저장</Button>}
+              <button type='button' onClick={toggleEdit}>
+                취소
+              </button>
+            </>
           ) : (
-            <StyledButton onClick={handleEdit}>수정</StyledButton>
-          )}
-
-          {!isEdit ? (
-            <StyledButton
-              onClick={handleDelete}
-              style={{ background: '#f03e3e' }}
-            >
-              삭제
-            </StyledButton>
-          ) : (
-            <button type='button' onClick={toggleEdit}>
-              취소
-            </button>
+            <>
+              {isAuth.edit && <Button onClick={handleEdit}>수정</Button>}
+              <Button onClick={handleDelete} style={{ background: '#f03e3e' }}>
+                삭제
+              </Button>
+            </>
           )}
         </ButtonWrapper>
       )}
@@ -132,7 +135,6 @@ const Container = styled.div`
   justify-content: center;
   width: 70%;
   margin: 5% auto;
-  overflow: auto;
 `;
 
 const Wrapper = styled.div`
@@ -194,18 +196,18 @@ const DescriptionInput = styled.textarea`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-
+  margin-top: 2rem;
   button {
+    width: 10%;
     font-size: 1.125rem;
     padding: 0.5rem 1.2rem;
     margin-left: 1rem;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  width: 10%;
-  & + & {
-    margin-left: 0.5rem;
+    border-radius: 4px;
+    &:last-child {
+      &:hover {
+        background: #ced4da;
+      }
+    }
   }
 `;
 
