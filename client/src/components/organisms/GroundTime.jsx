@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from '@react-icons/all-files/bi/BiTimeFive';
 import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
-import { useRecoilState } from 'recoil';
 import { morningTimeValue, afternoonTimeValue } from 'constants/TimeBtnValue';
-import { reservationDateInfo } from 'stores/reservationStore';
 import { TimeBtn } from '../atoms/TimeButton';
 
-const GroundTime = ({ info }) => {
+// reservationTime = [{day: '0727' , time: [11:00~12:00, 12:00~13:00]}, {}, {}]
+const GroundTime = ({
+  info,
+  dateValue,
+  reservationDateInfo,
+  reservationTime,
+  setReservationTime,
+}) => {
   const [timeBtnShow, setTimeBtnShow] = useState(true);
-  const [reservationInfo, setReservationInfo] =
-    useRecoilState(reservationDateInfo);
-
   const { startTime, endTime } = info;
 
   const handleClick = () => {
@@ -31,13 +33,29 @@ const GroundTime = ({ info }) => {
         <Title>오전</Title>
         <TimeBtns>
           {morningTimeValue.map((renderTime) =>
-            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+            TimeBtn({
+              renderTime,
+              startTime,
+              endTime,
+              reservationDateInfo,
+              reservationTime,
+              setReservationTime,
+              dateValue,
+            }),
           )}
         </TimeBtns>
         <Title>오후</Title>
         <TimeBtns>
           {afternoonTimeValue.map((renderTime) =>
-            TimeBtn({ renderTime, startTime, endTime, reservationInfo }),
+            TimeBtn({
+              renderTime,
+              startTime,
+              endTime,
+              reservationDateInfo,
+              reservationTime,
+              setReservationTime,
+              dateValue,
+            }),
           )}
         </TimeBtns>
       </Container>

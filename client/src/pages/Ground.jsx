@@ -6,12 +6,6 @@ import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
 import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  selectBtnValue,
-  selectDateValue,
-  selectCalendarDate,
-} from 'stores/reservationStore';
 import Spinner from 'components/atoms/Spinner';
 import GroundInfo from '../components/organisms/GroundInfo';
 
@@ -19,10 +13,12 @@ const Ground = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [detailInfo, setDetailInfo] = useState([]);
   const [reservationInfo, setReservationInfo] = useState([]);
-  const [reservationDate, setReservationDate] = useRecoilState(selectDateValue);
-  const [reservationTime, setReservationTime] = useRecoilState(selectBtnValue);
-  const [dateValue, setDateValue] = useRecoilState(selectCalendarDate);
 
+  const [reservationDate, setReservationDate] = useState('');
+  const [reservationDateInfo, setReservationDateInfo] = useState([]);
+  const [dateValue, setDateValue] = useState(new Date());
+
+  const [reservationTime, setReservationTime] = useState([]);
   const params = useParams();
   const groundId = params.id;
 
@@ -48,16 +44,18 @@ const Ground = () => {
 
   const reservationClick = async () => {
     try {
-      await Api.post('rentals', {
-        groundId,
-        reservationDate,
-        reservationTime,
-      });
-
-      alert('예약되었습니다.');
+      if (reservationTime.length > 0) {
+        await Api.post('rentals', {
+          groundId,
+          reservationDate,
+          reservationTime,
+        });
+        alert('예약되었습니다.');
+      } else {
+        alert('예약시간을 선택 해주세요.');
+      }
     } catch (err) {
-      alert('날짜와 시간을 정확히 선택해주세요.');
-      console.log(err);
+      alert(err.response.data.reason);
     }
   };
 
@@ -76,12 +74,27 @@ const Ground = () => {
       <GroundSlide info={detailInfo.groundImg} />
       <Container>
         <GroundInfo info={detailInfo} />
-        <GroundReservationCalendar info={reservationInfo} />
-        <GroundTime info={detailInfo} />
+        <GroundReservationCalendar
+          info={detailInfo}
+          reservationinfo={reservationInfo}
+          reservationDate={reservationDate}
+          setReservationDate={setReservationDate}
+          setReservationDateInfo={setReservationDateInfo}
+          dateValue={dateValue}
+          setDateValue={setDateValue}
+        />
+        <GroundTime
+          info={detailInfo}
+          dateValue={dateValue}
+          reservationDateInfo={reservationDateInfo}
+          reservationTime={reservationTime}
+          setReservationTime={setReservationTime}
+        />
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>
         <ReservationBtn onClick={reservationClick}>예약하기</ReservationBtn>
+
       </Container>
     </>
   );
