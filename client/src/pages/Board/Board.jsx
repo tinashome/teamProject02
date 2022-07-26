@@ -13,24 +13,6 @@ const Board = () => {
   const listPerPage = 15;
   const totalPage = Math.ceil(boardList.length / listPerPage);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const result = await Api.get(
-  //         `grounds?location=${location}&search=${searchInput}&offset=${
-  //           (page - 1) * listPerPage
-  //         }&count=${listPerPage}`,
-  //       );
-  //       setGroundList({
-  //         length: result.data.length,
-  //         data: result.data.grounds,
-  //       });
-  //     } catch (err) {
-  //       alert(err.response.data.reason);
-  //     }
-  //   })();
-  // }, [location, searchInput, page]);
-
   return (
     <>
       <Container>
@@ -41,16 +23,6 @@ const Board = () => {
           <p>작성자</p>
           <p>작성일</p>
         </BoardHeader>
-        {/* {mockData.map((data) => (
-          <BoardInfo key={data.id}>
-            <div>{data.id}</div>
-            <Link to={`${data.id}`}>
-              <div>{data.title}</div>
-            </Link>
-            <div>{data.author}</div>
-            <div>{data.createdAt}</div>
-          </BoardInfo>
-        ))} */}
       </Container>
       <Footer>
         <Pagination totalPage={5} limit={5} page={page} setPage={setPage} />
