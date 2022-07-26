@@ -8,6 +8,7 @@ import UserInfoChange from '../pages/UserInfoChange';
 import UnRegister from '../pages/UnRegister';
 import RentalManagement from '../pages/RentalManagement';
 import UserPointHistory from '../pages/UserPointHistory';
+import RentalChange from '../pages/RentalChange';
 import PrivateRoute from './PrivateRoute';
 
 // Route-based Code Splitting
@@ -41,6 +42,10 @@ const Router = () => (
             <Route path='/write' element={<BoardWrite />} />
             <Route path='/myinfo' element={<MyPage />}>
               <Route path='' element={<RentalManagement />} />
+              <Route
+                path='rental/:groundid/:rentalid'
+                element={<RentalChange />}
+              />
               <Route path='change' element={<UserInfoChange />} />
               <Route path='password' element={<PasswordChange />} />
               <Route path='withdrawal' element={<UnRegister />} />

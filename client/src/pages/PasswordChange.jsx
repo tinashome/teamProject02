@@ -17,6 +17,8 @@ const PasswordChange = () => {
       const result = await Api.patch('users/updatedPwd', data);
       if (result.status === 200) {
         alert('비밀번호 변경이 완료되었습니다.');
+      } else {
+        alert('비밀번호 변경에 실패하였습니다.');
       }
     } catch (err) {
       console.log(err);

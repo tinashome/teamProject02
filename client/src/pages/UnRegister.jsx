@@ -20,10 +20,13 @@ const UnRegister = () => {
       const result = await Api.delete('users');
       if (result.status === 200) {
         alert('회원 탈퇴가 완료되었습니다.');
+        localStorage.removeItem('token');
+        setUserInfo({});
+        navigate('/');
+      } else {
+        alert('회원 탈퇴에 실패하였습니다.')
       }
-      localStorage.removeItem('token');
-      setUserInfo({});
-      navigate('/');
+      
     } catch (err) {
       console.log(err);
     }
