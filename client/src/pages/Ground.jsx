@@ -84,29 +84,33 @@ const Ground = () => {
     <>
       <GroundSlide info={detailInfo.groundImg} />
       <Container>
-        <GroundInfo info={detailInfo} />
-        <GroundReservationCalendar
-          info={detailInfo}
-          reservationinfo={reservationInfo}
-          reservationDate={reservationDate}
-          setReservationDate={setReservationDate}
-          setReservationDateInfo={setReservationDateInfo}
-          dateValue={dateValue}
-          setDateValue={setDateValue}
-        />
-        <GroundTime
-          info={detailInfo}
-          dateValue={dateValue}
-          reservationDateInfo={reservationDateInfo}
-          reservationTime={reservationTime}
-          setReservationTime={setReservationTime}
-        />
-        <BackBtn>
-          <Link to='/'>돌아가기</Link>{' '}
-        </BackBtn>
-        <ReservationBtn onClick={() => setModalShow(!modalShow)}>
-          예약하기
-        </ReservationBtn>
+        <GroundInfoList>
+          <GroundInfo info={detailInfo} />
+        </GroundInfoList>
+        <ReservationList>
+          <GroundReservationCalendar
+            info={detailInfo}
+            reservationinfo={reservationInfo}
+            reservationDate={reservationDate}
+            setReservationDate={setReservationDate}
+            setReservationDateInfo={setReservationDateInfo}
+            dateValue={dateValue}
+            setDateValue={setDateValue}
+          />
+          <GroundTime
+            info={detailInfo}
+            dateValue={dateValue}
+            reservationDateInfo={reservationDateInfo}
+            reservationTime={reservationTime}
+            setReservationTime={setReservationTime}
+          />
+          <BackBtn>
+            <Link to='/'>돌아가기</Link>{' '}
+          </BackBtn>
+          <ReservationBtn onClick={() => setModalShow(!modalShow)}>
+            예약하기
+          </ReservationBtn>
+        </ReservationList>
 
         {modalShow && (
           <ModalWrapper onClick={() => setModalShow(!modalShow)}>
@@ -131,8 +135,9 @@ const Ground = () => {
               <InfoDetail>
                 <SubTitle>결제 포인트 :</SubTitle>
                 <Info>
-                  {detailInfo.paymentPoint *
-                    reservationTime.length.toLocaleString()}{' '}
+                  {(
+                    detailInfo.paymentPoint * reservationTime.length
+                  ).toLocaleString()}{' '}
                   P
                 </Info>
               </InfoDetail>
@@ -152,74 +157,19 @@ const Ground = () => {
     </>
   );
 };
-const ButtonList = styled.div`
-  justify-content: center;
-  margin-top: 0.5rem;
-`;
-
-const ReservationTimeList = styled.div`
-  font-size: 1rem;
-  width: 4.8rem;
-  border: solid 1px black;
-  border-radius: 5px;
-  padding: 0.1rem;
-  margin-right: 0.2rem;
-`;
-
-const CheckButton = styled(Button)`
-  margin: 0 1rem 0 1rem;
-  border: solid #bdbdbd;
-`;
-const CancelButton = styled(Button)`
-  color: black;
-  background-color: white;
-  border: solid #bdbdbd;
-  margin: 0 1rem 0 1rem;
-`;
-const ReservationCheckModal = styled(ModalDiv)`
-  justify-content: center;
-  width: 35rem;
-  height: 50%;
-  margin-left: -20rem;
-  margin-top: -10rem;
-`;
-
-const WarningText = styled.p`
-  font-size: 1rem;
-  color: red;
-  margin: 0.5rem 0 0.5rem 0;
-`;
-
-const SubTitle = styled.h2`
-  font-size: 1.35rem;
-  font-weight: bold;
-  width: 11rem;
-  text-align: right;
-`;
-
-const InfoDetail = styled.div`
-  display: flex;
-  align-items: flex-end;
-  margin: 0.5rem 0 0.5rem 0;
-  width: 100%;
-  height: 80%;
-`;
-
-const MainTitle = styled.h1`
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-`;
-
-const Info = styled.p`
-  display: flex;
-  font-size: 1.3rem;
-  text-align: left;
-  margin-left: 0.5rem;
-`;
 
 const Container = styled.div`
-  width: 80%;
-  margin: auto;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  margin: 0 auto;
+  width: 80rem;
+  border: solid black;
+`;
+
+const GroundInfoList = styled.div`
+  border: solid black;
+  width: 70%;
 `;
 
 const ReservationBtn = styled(Button)`
@@ -236,4 +186,80 @@ const BackBtn = styled(Button)`
   float: right;
   margin: 1rem 1rem 0 0;
 `;
+
+// 달력이랑 시간 버튼 css
+const ReservationList = styled.div`
+  border: solid black;
+  width: 30%;
+  height: 60%;
+`;
+
+const ReservationCheckModal = styled(ModalDiv)`
+  justify-content: center;
+  width: 45%;
+  height: 50%;
+  margin-left: -20rem;
+  margin-top: -10rem;
+`;
+
+const MainTitle = styled.h1`
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+`;
+
+const InfoDetail = styled.div`
+  display: flex;
+  align-items: flex-end;
+  margin: 0.5rem 0 0.5rem 0;
+  width: 100%;
+  height: 80%;
+`;
+
+const SubTitle = styled.h2`
+  font-size: 1.35rem;
+  font-weight: bold;
+  width: 11rem;
+  text-align: right;
+`;
+
+const Info = styled.p`
+  display: flex;
+  font-size: 1.3rem;
+  text-align: left;
+  margin-left: 0.5rem;
+`;
+
+const ReservationTimeList = styled.div`
+  font-size: 1rem;
+  width: 4.8rem;
+  border: solid 1px black;
+  border-radius: 0.25rem;
+  padding: 0.1rem;
+  margin-right: 0.2rem;
+`;
+
+const ButtonList = styled.div`
+  justify-content: center;
+  margin-top: 0.5rem;
+  font-weight: bold;
+`;
+
+const CheckButton = styled(Button)`
+  margin: 0 0.5rem 0 0.5rem;
+  border: solid #bdbdbd;
+`;
+
+const CancelButton = styled(Button)`
+  color: black;
+  background-color: white;
+  border: solid #bdbdbd;
+  margin: 0 0.5rem 0 0.5rem;
+`;
+
+const WarningText = styled.p`
+  font-size: 1rem;
+  color: red;
+  margin: 0.5rem 0 0.5rem 0;
+`;
+
 export default Ground;

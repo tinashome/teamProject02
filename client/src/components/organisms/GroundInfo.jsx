@@ -42,7 +42,6 @@ const GroundInfo = ({ info }) => {
 
   return (
     <>
-      <GroundTitle>{info.groundName}</GroundTitle>
       <GroundSubTitle>경기장 정보</GroundSubTitle>
       {/* 아이콘  */}
       <IconCard info={info} />

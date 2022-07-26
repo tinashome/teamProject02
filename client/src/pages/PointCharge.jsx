@@ -24,9 +24,6 @@ const PointCharge = () => {
   };
   return (
     <Container>
-      <button type='button' onClick={modalClose}>
-        버튼
-      </button>
       <PointChargeTitle />
       <PointChargeCard />
       <PointChargeCheck />
