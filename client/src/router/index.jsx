@@ -33,7 +33,7 @@ const Router = () => (
           <Route path='/signup' element={<SignUp />} />
           <Route path='/admin' element={<Admin />} />
           <Route path='/board' element={<Board />} />
-          <Route path='/board/:id' element={<BoardDetail />} />
+          <Route path='/board/:boardId' element={<BoardDetail />} />
           <Route path='/write' element={<BoardWrite />} />
           <Route path='/myinfo' element={<MyPage />}>
             <Route path='' element={<RentalManagement />} />

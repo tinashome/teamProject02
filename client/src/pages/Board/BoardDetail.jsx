@@ -1,27 +1,130 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import * as Api from 'api/api';
+import { useNavigate, useParams } from 'react-router-dom';
+import Button from 'components/atoms/Button';
+import { useForm } from 'react-hook-form';
+import { useRecoilValue } from 'recoil';
+import userState from 'stores/userStore';
 
-const BoardDetail = () => (
-  <Container>
-    <Wrapper>
-      <Title>레벨 시스템 개선!</Title>
-      <Date>2022.07.25</Date>
-    </Wrapper>
-    <Description>
-      더 정확한 레벨을 위해 레벨 시스템을 개선했어요. <br /> <br />
-      • 기존에는 어떤 레벨을 받아도 그대로 적용되어 억울하게 레벨이 낮아지는
-      일들이 있었어요. 이제 신뢰할 수 없는 레벨은 자동으로 탐지하고 제거해요.
-      <br />• 최근 5회에서 최근 10회로 레벨 산정 범위가 넓어져요. <br />• 10회
-      이상 레벨이 기록되면 내 레벨 옆에 인증 뱃지가 달려요. 레벨 인증 뱃지를
-      받은 플래버의 레벨은 더욱 신뢰할 수 있어요. <br />
-      <br />
-      2022년 7월 6일부터 새로운 레벨 시스템이 적용되어 내 레벨이 바뀔 수 있어요.
-      더 정확해진 레벨을 만나보세요! <br />
-      <br />
-      *내 레벨은 마이 페이지에서 확인해 주세요.
-    </Description>
-  </Container>
-);
+const BoardDetail = () => {
+  const { boardId } = useParams();
+  const navigate = useNavigate();
+  const [boardDetail, setBoardDetail] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
+  const [isEditAuth, setIsEditAuth] = useState(false);
+  const user = useRecoilValue(userState);
+
+  const { register, reset, getValues } = useForm({
+    defaultValues: {
+      title: boardDetail?.title,
+      contents: boardDetail?.contents,
+    },
+  });
+
+  const toggleEdit = () => {
+    setIsEdit((prev) => !prev);
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await Api.get(`boards/${boardId}`);
+        setBoardDetail(result.data);
+      } catch (err) {
+        alert(err.response.data.reason);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (user.role === 'admin' || boardDetail.userName === user.name) {
+      setIsEditAuth(true);
+    }
+  }, [boardDetail]);
+
+  const handleSave = async () => {
+    if (isEdit) {
+      try {
+        const { title, contents } = getValues();
+        await Api.patch(`boards/${boardId}`, {
+          title,
+          contents,
+        });
+        toggleEdit();
+        setBoardDetail((prev) => ({ ...prev, title, contents }));
+      } catch (err) {
+        alert(err.response.data.reason);
+      }
+    }
+  };
+
+  const handleEdit = () => {
+    reset(boardDetail);
+    toggleEdit();
+  };
+
+  const handleDelete = async () => {
+    try {
+      await Api.delete(`boards/${boardId}`);
+      alert('게시글이 정상적으로 삭제되었습니다.');
+      navigate('/board');
+    } catch (err) {
+      alert(err.response.data.reason);
+    }
+  };
+
+  return (
+    <Container>
+      <Wrapper>
+        {isEdit ? (
+          <TitleInput
+            type='text'
+            {...register('title', {
+              required: true,
+            })}
+          />
+        ) : (
+          <Title>{boardDetail.title}</Title>
+        )}
+        <Date>{boardDetail.createdAt?.slice(0, 10)}</Date>
+      </Wrapper>
+      {isEdit ? (
+        <DescriptionInput
+          type='text'
+          {...register('contents', {
+            required: true,
+          })}
+        />
+      ) : (
+        <Description>{boardDetail.contents}</Description>
+      )}
+
+      {isEditAuth && (
+        <ButtonWrapper>
+          {isEdit ? (
+            <StyledButton onClick={handleSave}>저장</StyledButton>
+          ) : (
+            <StyledButton onClick={handleEdit}>수정</StyledButton>
+          )}
+
+          {!isEdit ? (
+            <StyledButton
+              onClick={handleDelete}
+              style={{ background: '#f03e3e' }}
+            >
+              삭제
+            </StyledButton>
+          ) : (
+            <button type='button' onClick={toggleEdit}>
+              취소
+            </button>
+          )}
+        </ButtonWrapper>
+      )}
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
@@ -29,6 +132,7 @@ const Container = styled.div`
   justify-content: center;
   width: 70%;
   margin: 5% auto;
+  overflow: auto;
 `;
 
 const Wrapper = styled.div`
@@ -45,6 +149,15 @@ const Title = styled.p`
   font-weight: 600;
 `;
 
+const TitleInput = styled.input`
+  width: 80%;
+  font-size: 26px;
+  font-weight: 600;
+  border: none;
+  padding: 0 0 1rem 0.5rem;
+  outline: none;
+`;
+
 const Date = styled.span`
   position: absolute;
   right: 10px;
@@ -54,9 +167,46 @@ const Date = styled.span`
 
 const Description = styled.p`
   padding-left: 0.5rem;
+  min-height: 20rem;
+  font-size: 20px;
+  letter-spacing: 0.5px;
   word-spacing: 0.5px;
-  line-height: 1.5;
-  font-size: 18px;
+  line-height: 1.3;
+  white-space: pre-wrap;
+`;
+
+const DescriptionInput = styled.textarea`
+  padding-left: 0.5rem;
+  border: none;
+  min-height: 20rem;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  word-spacing: 0.5px;
+  line-height: 1.3;
+  resize: none;
+  outline: none;
+  white-space: pre-wrap;
+  &::placeholder {
+    font-size: 20px;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    font-size: 1.125rem;
+    padding: 0.5rem 1.2rem;
+    margin-left: 1rem;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  width: 10%;
+  & + & {
+    margin-left: 0.5rem;
+  }
 `;
 
 export default BoardDetail;

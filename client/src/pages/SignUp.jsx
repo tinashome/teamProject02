@@ -69,7 +69,7 @@ const SignUp = () => {
         setIsEmailValid(true);
         toggleModal();
       } else {
-        alert('인증 코드가 일치하지 않습니다. 이메일 인증이 실패하였습니다.');
+        alert('인증 코드가 일치하지 않습니다. 이메일 인증에 실패하였습니다.');
       }
     } catch (err) {
       alert(err.response.data.reason);
