@@ -23,7 +23,7 @@ const Board = () => {
     (async () => {
       try {
         const noticeBoardsResult = await Api.get(
-          `boards?&role=admin&count=${100}`,
+          `boards?&isNotified=true&count=${100}`,
         );
         setNoticesBoards(noticeBoardsResult.data.boards);
       } catch (err) {
@@ -120,7 +120,7 @@ const Title = styled.div`
 
 const BoardHeader = styled.div`
   display: grid;
-  grid-template-columns: 10% 60% 15% 15%;
+  grid-template-columns: 20% 40% 20% 20%;
   padding: 1rem;
   border-bottom: 1px solid #343a40;
 
@@ -133,9 +133,11 @@ const BoardHeader = styled.div`
 
 const BoardInfo = styled.div`
   display: grid;
-  grid-template-columns: 10% 60% 15% 15%;
+  grid-template-columns: 20% 40% 20% 20%;
   padding: 1rem;
   margin: 0 auto;
+  line-height: normal;
+
   &:not(:last-child) {
     border-bottom: 1px solid #e9ecef;
   }
@@ -153,6 +155,9 @@ const BoardInfo = styled.div`
   }
 
   a {
+    div {
+      text-align: left;
+    }
     &:hover {
       opacity: 0.5;
     }

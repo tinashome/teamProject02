@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Api from 'api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'components/atoms/Button';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue } from 'recoil';
-import userState from 'stores/userStore';
+import CheckBox from 'components/atoms/CheckBox';
+import jwtDecode from 'jwt-decode';
+import { getToken } from 'util/useful-functions';
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -16,8 +17,6 @@ const BoardDetail = () => {
     edit: false,
     delete: false,
   });
-
-  const user = useRecoilValue(userState);
 
   const { register, reset, getValues } = useForm({
     defaultValues: {
@@ -30,17 +29,24 @@ const BoardDetail = () => {
     setIsEdit((prev) => !prev);
   };
 
+  const [isNotified, setIsNotified] = useState(true);
+  const toggleChecked = useCallback(() => {
+    setIsNotified(!isNotified);
+  }, [isNotified]);
+
   useEffect(() => {
     (async () => {
       try {
         const result = await Api.get(`boards/${boardId}`);
         setBoardDetail(result.data);
-        if (result.data.userId._id === user.userId) {
+        setIsNotified(result.data.isNotified);
+        const { userId, role } = jwtDecode(getToken());
+        if (result.data.userId._id === userId) {
           setIsAuth({
             edit: true,
             delete: true,
           });
-        } else if (user.role === 'admin') {
+        } else if (role === 'admin') {
           setIsAuth((prev) => ({ ...prev, delete: true }));
         }
       } catch (err) {
@@ -56,6 +62,7 @@ const BoardDetail = () => {
         await Api.patch(`boards/${boardId}`, {
           title,
           contents,
+          isNotified,
         });
         toggleEdit();
         setBoardDetail((prev) => ({ ...prev, title, contents }));
@@ -84,16 +91,28 @@ const BoardDetail = () => {
     <Container>
       <Wrapper>
         {isEdit ? (
-          <TitleInput
-            type='text'
-            {...register('title', {
-              required: true,
-            })}
-          />
+          <>
+            <TitleInput
+              type='text'
+              {...register('title', {
+                required: true,
+              })}
+            />
+            <div>
+              <p>공지사항</p>
+              <CheckBox
+                text='notice'
+                checked={isNotified}
+                onChange={toggleChecked}
+              />
+            </div>
+          </>
         ) : (
-          <Title>{boardDetail.title}</Title>
+          <>
+            <Title>{boardDetail.title}</Title>
+            <Date>{boardDetail.createdAt?.slice(0, 10)}</Date>
+          </>
         )}
-        <Date>{boardDetail.createdAt?.slice(0, 10)}</Date>
       </Wrapper>
       {isEdit ? (
         <DescriptionInput
@@ -143,6 +162,16 @@ const Wrapper = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid #ced4da;
   margin-bottom: 2rem;
+
+  div {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    p {
+      color: #37b24d;
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 const Title = styled.p`
