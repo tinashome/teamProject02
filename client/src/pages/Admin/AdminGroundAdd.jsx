@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { adminCurrentPage, adminContentState } from 'stores/adminUserStore';
 import { useForm } from 'react-hook-form';
 import * as Api from 'api/api';
+import { AiFillCloseCircle } from '@react-icons/all-files/ai/AiFillCloseCircle';
 import imgbox from '../../assets/image/imgbox.png';
 import Postcode from './PostCode';
 import AdminGroundList from './AdminGroundList';
@@ -265,15 +266,15 @@ const AdminGroundAdd = () => {
             <ImgBoxContainers imgbox={imgbox}>
               {uplodedImgsSrcArray.map((e, i) => (
                 <ImgBox>
-                  <CancelText
+                  <CancelIcon
                     onClick={() => {
                       const arr = [...uplodedImgsSrcArray];
                       arr.splice(i, 1);
                       setUplodedImgsSrcArray([...arr]);
                     }}
                   >
-                    X
-                  </CancelText>
+                    <CloseIcon />
+                  </CancelIcon>
                   <Img
                     key={i}
                     src={e}
@@ -431,9 +432,7 @@ const AdminGroundAdd = () => {
                 <option value='19:00'>19:00</option>
                 <option value='20:00'>20:00</option>
                 <option value='21:00'>21:00</option>
-                <option value='22:00' selected>
-                  22:00
-                </option>
+                <option value='22:00'>22:00</option>
               </Select>
             </InputContainers>
           </Row>
@@ -604,7 +603,7 @@ const ImgBoxContainers = styled.div`
   display: flex;
   position: relative;
   width: 100%;
-  height: 222px;
+  height: 220px;
   margin: 0 10px;
   overflow-x: scroll;
   background-image: url(${(props) => props.imgbox});
@@ -616,23 +615,34 @@ const ImgBox = styled.div`
   justify-content: flex-end;
 `;
 
-const CancelText = styled.div`
-  display: flex;
-  position: absolute;
-  padding: 6px;
-  font-size: 22pt;
-  font-weight: 900;
-  color: #dc5d5d;
-  background-color: #fff;
-  cursor: pointer;
-`;
-
 const Img = styled.img`
   display: flex;
   width: 200px;
   height: 200px;
   cursor: pointer;
   object-fit: cover;
+`;
+
+const CancelText = styled.div`
+  display: flex;
+  position: absolute;
+  padding: 6px 0;
+  font-size: 18pt;
+  font-weight: 400;
+  color: #dc5d5d;
+  cursor: pointer;
+`;
+
+const CancelIcon = styled(CancelText)`
+  padding: 6px;
+  font-size: 18pt;
+  color: #fff;
+`;
+
+const CloseIcon = styled(AiFillCloseCircle)`
+  font-size: 30px;
+  background-color: #dc5d5d;
+  border-radius: 50%;
 `;
 
 export default AdminGroundAdd;

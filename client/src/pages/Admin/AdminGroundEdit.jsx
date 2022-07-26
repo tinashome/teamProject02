@@ -7,10 +7,12 @@ import { useRecoilState } from 'recoil';
 import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
 import { adminGround } from 'stores/adminGroundStore';
 import * as Api from 'api/api';
+import { AiFillCloseCircle } from '@react-icons/all-files/ai/AiFillCloseCircle';
 import Postcode from './PostCode';
 import imgbox from '../../assets/image/imgbox.png';
 // eslint-disable-next-line import/no-cycle
 import AdminGroundList from './AdminGroundList';
+// eslint-disable-next-line import/no-cycle
 import GroundInfoModal from './GroundInfoModal';
 
 const AdminGroundEdit = ({ groundId }) => {
@@ -300,15 +302,15 @@ const AdminGroundEdit = ({ groundId }) => {
                   {ground.groundImg !== 0 &&
                     ground.groundImg.map((e, i) => (
                       <ImgBox>
-                        <CancelText
+                        <CancelIcon
                           onClick={() => {
                             const arr = [...ground.groundImg];
                             arr.splice(i, 1);
                             setGround({ ...ground, groundImg: [...arr] });
                           }}
                         >
-                          X
-                        </CancelText>
+                          <CloseIcon />
+                        </CancelIcon>
                         <Img
                           key={i}
                           src={e}
@@ -352,15 +354,15 @@ const AdminGroundEdit = ({ groundId }) => {
               <ImgBoxContainers imgbox={imgbox}>
                 {uplodedImgsSrcArray.map((e, i) => (
                   <ImgBox>
-                    <CancelText
+                    <CancelIcon
                       onClick={() => {
                         const arr = [...uplodedImgsSrcArray];
                         arr.splice(i, 1);
                         setUplodedImgsSrcArray([...arr]);
                       }}
                     >
-                      X
-                    </CancelText>
+                      <CloseIcon />
+                    </CancelIcon>
                     <Img
                       key={i}
                       src={e}
@@ -803,7 +805,6 @@ const Select = styled.select`
   display: flex;
   width: ${(props) => props.width || '100px'};
   height: 45px;
-  // padding: 10px;
   border: 1px solid #919191;
   border-radius: 4px;
   font-size: 18px;
@@ -877,7 +878,7 @@ const ImgBoxContainers = styled.div`
   display: flex;
   position: relative;
   width: 100%;
-  height: 222px;
+  height: 220px;
   margin: 0 10px;
   overflow-x: scroll;
   background-image: url(${(props) => props.imgbox});
@@ -889,23 +890,34 @@ const ImgBox = styled.div`
   justify-content: flex-end;
 `;
 
-const CancelText = styled.div`
-  display: flex;
-  position: absolute;
-  padding: 6px;
-  font-size: 22pt;
-  font-weight: 900;
-  color: #dc5d5d;
-  background-color: #fff;
-  cursor: pointer;
-`;
-
 const Img = styled.img`
   display: flex;
   width: 200px;
   height: 200px;
   cursor: pointer;
   object-fit: cover;
+`;
+
+const CancelText = styled.div`
+  display: flex;
+  position: absolute;
+  padding: 6px 0;
+  font-size: 18pt;
+  font-weight: 400;
+  color: #dc5d5d;
+  cursor: pointer;
+`;
+
+const CancelIcon = styled(CancelText)`
+  padding: 6px;
+  font-size: 18pt;
+  color: #fff;
+`;
+
+const CloseIcon = styled(AiFillCloseCircle)`
+  font-size: 30px;
+  background-color: #dc5d5d;
+  border-radius: 50%;
 `;
 
 export default AdminGroundEdit;
