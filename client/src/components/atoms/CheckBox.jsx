@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const CheckBox = ({ text }) => (
+const CheckBox = ({ text, checked = false, onChange }) => (
   <StyledLabel htmlFor={text}>
-    <StyledInput type='checkbox' id={text} name={text} />
+    <StyledInput
+      type='checkbox'
+      id={text}
+      name={text}
+      onChange={onChange}
+      checked={checked}
+    />
   </StyledLabel>
 );
 
