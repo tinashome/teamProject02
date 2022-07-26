@@ -27,6 +27,7 @@ const Ground = () => {
       setIsLoading(true);
       const result = await Api.get(`grounds/${groundId}`);
       setDetailInfo(result.data);
+      console.log('getInfo')
     } catch (err) {
       console.log(err);
     }
@@ -44,18 +45,18 @@ const Ground = () => {
 
   const reservationClick = async () => {
     try {
-      if(reservationTime.length > 0){
-      await Api.post('rentals', {
-        groundId,
-        reservationDate,
-        reservationTime,
-      });
-      alert('예약되었습니다.');}
-      else {
-        alert('예약시간을 선택 해주세요.')
+      if (reservationTime.length > 0) {
+        await Api.post('rentals', {
+          groundId,
+          reservationDate,
+          reservationTime,
+        });
+        alert('예약되었습니다.');
+      } else {
+        alert('예약시간을 선택 해주세요.');
       }
     } catch (err) {
-      alert('날짜와 시간을 정확히 선택해주세요.');
+      alert(err.response.data.reason);
       console.log(err);
     }
   };
@@ -76,7 +77,9 @@ const Ground = () => {
       <Container>
         <GroundInfo info={detailInfo} />
         <GroundReservationCalendar
-          info={reservationInfo}
+          info={detailInfo}
+          reservationinfo={reservationInfo}
+          reservationDate={reservationDate}
           setReservationDate={setReservationDate}
           setReservationDateInfo={setReservationDateInfo}
           dateValue={dateValue}
@@ -86,7 +89,6 @@ const Ground = () => {
           info={detailInfo}
           dateValue={dateValue}
           reservationDateInfo={reservationDateInfo}
-          reservationDate={reservationDate}
           reservationTime={reservationTime}
           setReservationTime={setReservationTime}
         />

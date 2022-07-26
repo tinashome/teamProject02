@@ -5,10 +5,10 @@ const TimeBtn = ({
   renderTime,
   startTime,
   endTime,
-  reservationDate,
   reservationDateInfo,
   reservationTime,
   setReservationTime,
+  dateValue,
 }) => {
   const [isSelect, setIsSelect] = useState(false);
   // renderTime, startTime, endTime Slice 작업 필요 type도 number로 변경
@@ -20,7 +20,7 @@ const TimeBtn = ({
   useEffect(() => {
     setIsSelect(false);
     setReservationTime([]);
-  }, [reservationDate]);
+  }, [dateValue]);
 
   // 2차원 배열 1차원으로 만들기
   let arr = [];

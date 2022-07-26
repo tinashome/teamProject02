@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { BiTimeFive } from '@react-icons/all-files/bi/BiTimeFive';
 import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
@@ -9,7 +9,7 @@ import { TimeBtn } from '../atoms/TimeButton';
 // reservationTime = [{day: '0727' , time: [11:00~12:00, 12:00~13:00]}, {}, {}]
 const GroundTime = ({
   info,
-  reservationDate,
+  dateValue,
   reservationDateInfo,
   reservationTime,
   setReservationTime,
@@ -37,10 +37,10 @@ const GroundTime = ({
               renderTime,
               startTime,
               endTime,
-              reservationDate,
               reservationDateInfo,
               reservationTime,
               setReservationTime,
+              dateValue,
             }),
           )}
         </TimeBtns>
@@ -51,10 +51,10 @@ const GroundTime = ({
               renderTime,
               startTime,
               endTime,
-              reservationDate,
               reservationDateInfo,
               reservationTime,
               setReservationTime,
+              dateValue,
             }),
           )}
         </TimeBtns>

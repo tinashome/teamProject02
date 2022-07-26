@@ -9,6 +9,7 @@ import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
 
 const GroundReservationCalendar = ({
   info,
+  reservationinfo,
   setReservationDate,
   setReservationDateInfo,
   dateValue,
@@ -18,20 +19,17 @@ const GroundReservationCalendar = ({
 
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
-    if (info && info.length > 0) {
-      const result = info
+      const result = reservationinfo
         .filter((list) => list.reservationDate === dateFormat)
         .map((list) => list.reservationTime);
       setReservationDateInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
       setReservationDate(dateFormat);
-
-    }
-  }, [info, dateValue]);
+      console.log('timeFormat')
+  }, [info ,dateValue]);
 
   const handleClick = () => {
     setCalendarShowBtn(!calendarShowBtn);
   };
-
   return (
     <Container>
       <DateNavbar onClick={handleClick}>
