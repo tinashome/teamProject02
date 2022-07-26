@@ -34,11 +34,11 @@ const Router = () => (
           <Route path='/grounds/:id' element={<Ground />} />
           <Route path='/signup' element={<SignUp />} />
           <Route path='/board' element={<Board />} />
+          <Route path='/board/:boardId' element={<BoardDetail />} />
           <Route path='/pointCharge' element={<PointCharge />} />
           {/* 인증을 반드시 해야지만 접속 가능한 페이지 정의 (로그인) */}
           <Route element={<PrivateRoute />}>
             <Route path='/write' element={<BoardWrite />} />
-            <Route path='/board/:boardId' element={<BoardDetail />} />
             <Route path='/myinfo' element={<MyPage />}>
               <Route path='' element={<RentalManagement />} />
               <Route path='change' element={<UserInfoChange />} />
