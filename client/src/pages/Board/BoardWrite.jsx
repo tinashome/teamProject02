@@ -1,29 +1,46 @@
+import React from 'react';
 import Button from 'components/atoms/Button';
-import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import * as Api from 'api/api';
+import { useNavigate } from 'react-router-dom';
 
 const BoardWrite = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      await Api.post('boards', data);
+      alert('게시글 작성 완료');
+      navigate('/board');
+    } catch (err) {
+      alert(err.response.data.reason);
+    }
+  };
 
   return (
-    <Container>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <Title
+        type='text'
         placeholder='제목을 입력해주세요'
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        {...register('title', {
+          required: true,
+        })}
       />
       <Description
+        type='text'
         placeholder='내용을 입력해주세요'
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        {...register('contents', {
+          required: true,
+        })}
       />
-      <StyledButton>발행</StyledButton>
-    </Container>
+      <StyledButton>작성</StyledButton>
+    </Form>
   );
 };
 
-const Container = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;

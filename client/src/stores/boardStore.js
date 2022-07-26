@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 export const boardListState = atom({
-  key: 'groundPhotoListState',
+  key: 'boardListState',
   default: {
     length: 0,
     data: [],
