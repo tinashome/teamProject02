@@ -28,7 +28,6 @@ const AdminDashboard = () => {
   const [todayRentalsPayment, setTodayRentalsPayment] = useState(null);
   const [yesterdayRentalsPayment, setYesterdayRentalsPayment] = useState(null);
 
-  setContent(['예약 조회 구현중', <AdminRentalList />]);
   // 오늘 날짜인지 확인하는 함수
   const isSameDate = (date) => {
     const today = new Date();
