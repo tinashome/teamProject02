@@ -27,7 +27,6 @@ const Ground = () => {
       setIsLoading(true);
       const result = await Api.get(`grounds/${groundId}`);
       setDetailInfo(result.data);
-      console.log('getInfo')
     } catch (err) {
       console.log(err);
     }
@@ -57,7 +56,6 @@ const Ground = () => {
       }
     } catch (err) {
       alert(err.response.data.reason);
-      console.log(err);
     }
   };
 
@@ -96,6 +94,7 @@ const Ground = () => {
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>
         <ReservationBtn onClick={reservationClick}>예약하기</ReservationBtn>
+
       </Container>
     </>
   );

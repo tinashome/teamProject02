@@ -41,7 +41,7 @@ const Board = () => {
           <p>작성자</p>
           <p>작성일</p>
         </BoardHeader>
-        {mockData.map((data) => (
+        {/* {mockData.map((data) => (
           <BoardInfo key={data.id}>
             <div>{data.id}</div>
             <Link to={`${data.id}`}>
@@ -50,7 +50,7 @@ const Board = () => {
             <div>{data.author}</div>
             <div>{data.createdAt}</div>
           </BoardInfo>
-        ))}
+        ))} */}
       </Container>
       <Footer>
         <Pagination totalPage={5} limit={5} page={page} setPage={setPage} />
