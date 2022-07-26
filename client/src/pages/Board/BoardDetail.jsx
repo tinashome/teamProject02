@@ -34,13 +34,13 @@ const BoardDetail = () => {
     setIsNotified(!isNotified);
   }, [isNotified]);
 
+  const { userId, role } = jwtDecode(getToken());
   useEffect(() => {
     (async () => {
       try {
         const result = await Api.get(`boards/${boardId}`);
         setBoardDetail(result.data);
         setIsNotified(result.data.isNotified);
-        const { userId, role } = jwtDecode(getToken());
         if (result.data.userId._id === userId) {
           setIsAuth({
             edit: true,
@@ -98,14 +98,16 @@ const BoardDetail = () => {
                 required: true,
               })}
             />
-            <div>
-              <p>공지사항</p>
-              <CheckBox
-                text='notice'
-                checked={isNotified}
-                onChange={toggleChecked}
-              />
-            </div>
+            {role === 'admin' && (
+              <div>
+                <p>공지사항</p>
+                <CheckBox
+                  text='notice'
+                  checked={isNotified}
+                  onChange={toggleChecked}
+                />
+              </div>
+            )}
           </>
         ) : (
           <>
