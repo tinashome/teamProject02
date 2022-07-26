@@ -7,11 +7,9 @@ import AdminUserDelete from './AdminUserDelete';
 import AdminGroundAdd from './AdminGroundAdd';
 import AdminGroundList from './AdminGroundList';
 import AdminPayment from './AdminPayment';
-
-import { AdminReservations, AdminDeleteReservations } from './AdminPages';
+import AdminRentalList from './AdminRentalList';
 
 const AdminSidemenu = () => {
-  // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
   const [currentPage, setCurentPage] = useRecoilState(adminCurrentPage);
   return (
@@ -27,6 +25,7 @@ const AdminSidemenu = () => {
           회원 탈퇴
         </SideMenuLink>
       </SideMenuContainer>
+
       <SideMenuContainer>
         <SideMenuTitle>경기장 관리</SideMenuTitle>
 
@@ -55,20 +54,20 @@ const AdminSidemenu = () => {
         <SideMenuLink
           onClick={() => {
             setCurentPage(0);
-            setContent(['예약상태 관리', <AdminReservations />]);
+            setContent(['예약상태 관리', <AdminRentalList />]);
           }}
         >
-          예약상태 관리
+          예약조회/취소
         </SideMenuLink>
 
-        <SideMenuLink
+        {/* <SideMenuLink
           onClick={() => {
             setCurentPage(0);
             setContent(['예약상태 취소', <AdminDeleteReservations />]);
           }}
         >
           예약상태 취소
-        </SideMenuLink>
+        </SideMenuLink> */}
       </SideMenuContainer>
 
       <SideMenuContainer>
@@ -117,5 +116,4 @@ const SideMenuLink = styled.button`
   pointer: cursor;
 `;
 
-// AdminSidemenu 관리자페이지의 왼쪽 메뉴바 컴포넌트
 export default AdminSidemenu;

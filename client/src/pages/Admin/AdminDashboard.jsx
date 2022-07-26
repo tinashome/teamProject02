@@ -8,6 +8,7 @@ import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas } from 'util/useful-functions';
 import AdminPayment from './AdminPayment';
+import AdminRentalList from './AdminRentalList';
 
 const AdminDashboard = () => {
   // eslint-disable-next-line no-unused-vars
@@ -27,6 +28,7 @@ const AdminDashboard = () => {
   const [todayRentalsPayment, setTodayRentalsPayment] = useState(null);
   const [yesterdayRentalsPayment, setYesterdayRentalsPayment] = useState(null);
 
+  setContent(['예약 조회 구현중', <AdminRentalList />]);
   // 오늘 날짜인지 확인하는 함수
   const isSameDate = (date) => {
     const today = new Date();
@@ -269,7 +271,6 @@ const Title = styled.div`
   border-bottom: 1px solid #919191;
   justify-content: center;
   align-items: center;
-  // background-color: pink;
 `;
 
 const TextBold = styled.div`
