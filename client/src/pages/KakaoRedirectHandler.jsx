@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import * as Api from 'api/api';
 import Spinner from 'components/atoms/Spinner';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
 import userState from 'stores/userStore';

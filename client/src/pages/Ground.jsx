@@ -4,9 +4,12 @@ import GroundSlide from 'components/organisms/GroundSlide';
 import GroundReservationCalendar from 'components/organisms/GroundReservationCalendar';
 import GroundTime from 'components/organisms/GroundTime';
 import Button from 'components/atoms/Button';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import * as Api from 'api/api';
 import Spinner from 'components/atoms/Spinner';
+import ModalDiv from 'components/atoms/AdminModalDiv';
+import ModalWrapper from 'components/atoms/AdminModalWrapper';
+import moment from 'moment';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -19,16 +22,22 @@ const Ground = () => {
   const [dateValue, setDateValue] = useState(new Date());
 
   const [reservationTime, setReservationTime] = useState([]);
+
+  const [modalShow, setModalShow] = useState(false);
+
+  const [formatDate, setFormatDate] = useState(
+    moment(dateValue).format('MM월 DD일'),
+  );
   const params = useParams();
   const groundId = params.id;
-
+  const navigate = useNavigate();
   const getInfoList = async () => {
     try {
       setIsLoading(true);
       const result = await Api.get(`grounds/${groundId}`);
       setDetailInfo(result.data);
     } catch (err) {
-      console.log(err);
+      alert(err.response.data.reason);
     }
   };
 
@@ -38,7 +47,7 @@ const Ground = () => {
       setReservationInfo(reservationResult.data);
       setIsLoading(false);
     } catch (err) {
-      console.log(err);
+      alert(err.response.data.reason);
     }
   };
 
@@ -51,6 +60,7 @@ const Ground = () => {
           reservationTime,
         });
         alert('예약되었습니다.');
+        navigate('/');
       } else {
         alert('예약시간을 선택 해주세요.');
       }
@@ -65,6 +75,7 @@ const Ground = () => {
 
   useEffect(() => {
     getReservation();
+    setFormatDate(moment(dateValue).format('MM월 DD일'));
   }, [dateValue]);
 
   return isLoading ? (
@@ -93,12 +104,118 @@ const Ground = () => {
         <BackBtn>
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>
-        <ReservationBtn onClick={reservationClick}>예약하기</ReservationBtn>
+        <ReservationBtn onClick={() => setModalShow(!modalShow)}>
+          예약하기
+        </ReservationBtn>
 
+        {modalShow && (
+          <ModalWrapper onClick={() => setModalShow(!modalShow)}>
+            <ReservationCheckModal>
+              <MainTitle>[ 예약 확인 ]</MainTitle>
+              <InfoDetail>
+                <SubTitle>경기장 이름 :</SubTitle>
+                <Info>{detailInfo.groundName}</Info>
+              </InfoDetail>
+              <InfoDetail>
+                <SubTitle>예약 날짜 :</SubTitle>
+                <Info>{formatDate}</Info>
+              </InfoDetail>
+              <InfoDetail>
+                <SubTitle>예약 시간 :</SubTitle>
+                <Info>
+                  {reservationTime.map((list) => (
+                    <ReservationTimeList>{list}&nbsp;</ReservationTimeList>
+                  ))}
+                </Info>
+              </InfoDetail>
+              <InfoDetail>
+                <SubTitle>결제 포인트 :</SubTitle>
+                <Info>
+                  {detailInfo.paymentPoint *
+                    reservationTime.length.toLocaleString()}{' '}
+                  P
+                </Info>
+              </InfoDetail>
+              <WarningText>
+                ※ 예약 완료 후 24시간이 지나고 예약 취소가 가능합니다.
+              </WarningText>
+              <ButtonList>
+                <CheckButton onClick={() => reservationClick()}>
+                  확인
+                </CheckButton>
+                <CancelButton>취소</CancelButton>
+              </ButtonList>
+            </ReservationCheckModal>
+          </ModalWrapper>
+        )}
       </Container>
     </>
   );
 };
+const ButtonList = styled.div`
+  justify-content: center;
+  margin-top: 0.5rem;
+`;
+
+const ReservationTimeList = styled.div`
+  font-size: 1rem;
+  width: 4.8rem;
+  border: solid 1px black;
+  border-radius: 5px;
+  padding: 0.1rem;
+  margin-right: 0.2rem;
+`;
+
+const CheckButton = styled(Button)`
+  margin: 0 1rem 0 1rem;
+  border: solid #bdbdbd;
+`;
+const CancelButton = styled(Button)`
+  color: black;
+  background-color: white;
+  border: solid #bdbdbd;
+  margin: 0 1rem 0 1rem;
+`;
+const ReservationCheckModal = styled(ModalDiv)`
+  justify-content: center;
+  width: 35rem;
+  height: 50%;
+  margin-left: -20rem;
+  margin-top: -10rem;
+`;
+
+const WarningText = styled.p`
+  font-size: 1rem;
+  color: red;
+  margin: 0.5rem 0 0.5rem 0;
+`;
+
+const SubTitle = styled.h2`
+  font-size: 1.35rem;
+  font-weight: bold;
+  width: 11rem;
+  text-align: right;
+`;
+
+const InfoDetail = styled.div`
+  display: flex;
+  align-items: flex-end;
+  margin: 0.5rem 0 0.5rem 0;
+  width: 100%;
+  height: 80%;
+`;
+
+const MainTitle = styled.h1`
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+`;
+
+const Info = styled.p`
+  display: flex;
+  font-size: 1.3rem;
+  text-align: left;
+  margin-left: 0.5rem;
+`;
 
 const Container = styled.div`
   width: 80%;
