@@ -49,7 +49,7 @@ const GroundReservationCalendar = ({
           onChange={setDateValue}
           minDate={new Date()}
           value={dateValue}
-          calendarType="ISO 8601"
+          formatDay={(locale, date) => moment(date).format('DD')}
         />
       </CalendarUI>
     </Container>

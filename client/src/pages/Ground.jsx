@@ -171,7 +171,7 @@ const InfoMainTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   text-align: center;
-  margin: 1rem;
+  margin: 1rem 1rem 2rem 1rem;
 `;
 const GroundInfoList = styled.div`
   width: 60%;

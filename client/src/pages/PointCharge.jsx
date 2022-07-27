@@ -12,6 +12,8 @@ import {
   orderNumber,
   issuedDate,
 } from 'stores/pointChargeStore';
+import ClipboardCopy from 'components/atoms/ClipboardCopy';
+import Button from 'components/atoms/Button';
 
 const PointCharge = () => {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
@@ -46,6 +48,7 @@ const PointCharge = () => {
             <InfoDetail>
               <Title>고정 가상 계좌 : </Title>
               <Info>[국민은행] 104440-00-288818</Info>
+              <ClipboardCopy />
             </InfoDetail>
             <InfoDetail>
               <Title>결제방식 : </Title>
@@ -55,12 +58,14 @@ const PointCharge = () => {
               <Title>발급일시 : </Title>
               <Info>{createdDate}</Info>
             </InfoDetail>
+            <Button onClick={() => setModalOpen(!modalOpen)} > 확인</Button>
           </PointModalDiv>
         </ModalWrapper>
       )}
     </Container>
   );
 };
+
 
 const Container = styled.div`
   width: 85%;
