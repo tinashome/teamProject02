@@ -122,6 +122,9 @@ const SignUp = () => {
         <ModalWrapper onClick={toggleModal}>
           <EmailModal onClick={(e) => e.stopPropagation()}>
             <Title>인증 코드</Title>
+            <p>
+              이메일로 전송된 <span>인증코드</span>를 확인해주세요.
+            </p>
             <Wrapper>
               <Input
                 type='number'
@@ -241,14 +244,28 @@ const EmailModal = styled(ModalDiv)`
   justify-content: flex-start;
   align-items: baseline;
   width: 30%;
-  height: 25%;
+  height: auto;
   top: 45%;
   left: 45%;
   padding: 2rem;
 
   span {
     font-size: 27px;
-    margin: 1rem 0;
+    margin-left: 0.3rem;
+  }
+
+  p {
+    font-size: 13px;
+    margin: 0.8rem 0.5rem 1rem 0.5rem;
+    opacity: 0.7;
+    letter-spacing: 1.2px;
+
+    span {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f03e3e;
+      margin-left: 0;
+    }
   }
 
   div {
