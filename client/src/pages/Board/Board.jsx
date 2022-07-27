@@ -3,32 +3,52 @@ import * as Api from 'api/api';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { boardListState, boardPageState } from 'stores/boardStore';
+import {
+  userBoardListState,
+  adminBoardListState,
+  boardPageState,
+} from 'stores/boardStore';
 import Pagination from 'components/organisms/Pagination';
 import Button from 'components/atoms/Button';
 import { isExistToken } from 'util/useful-functions';
 
 const Board = () => {
-  const [boardList, setBoardList] = useRecoilState(boardListState);
+  const [noticeBoards, setNoticesBoards] = useRecoilState(adminBoardListState);
+  const [userBoards, setUserBoards] = useRecoilState(userBoardListState);
   const [page, setPage] = useRecoilState(boardPageState);
   const listPerPage = 15;
-  const totalPage = Math.ceil(boardList.length / listPerPage);
+  const totalPage = Math.ceil(userBoards.length / listPerPage);
 
   useEffect(() => {
     (async () => {
       try {
-        const result = await Api.get(
-          `boards?&offset=${(page - 1) * listPerPage}&count=${listPerPage}`,
+        const noticeBoardsResult = await Api.get(
+          `boards?&isNotified=true&count=${100}`,
         );
-        setBoardList({
-          length: result.data.length,
-          data: result.data.boards,
-        });
+        setNoticesBoards(noticeBoardsResult.data.boards);
       } catch (err) {
         alert(err.response.data.reason);
       }
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const userBoardsResult = await Api.get(
+          `boards?&role=basic-user&offset=${
+            (page - 1) * listPerPage
+          }&count=${listPerPage}`,
+        );
+        setUserBoards({
+          length: userBoardsResult.data.length,
+          data: userBoardsResult.data.boards,
+        });
+      } catch (err) {
+        alert(err.response.data.reason);
+      }
+    })();
+  }, [page]);
 
   return (
     <>
@@ -40,7 +60,20 @@ const Board = () => {
           <p>작성자</p>
           <p>작성일</p>
         </BoardHeader>
-        {boardList.data?.map((board) => (
+        {page === 1 &&
+          noticeBoards?.map((board) => (
+            <BoardInfo key={board._id}>
+              <Tag color={board.role === 'admin' ? '#ff6b6b' : '#4c6ef5'}>
+                {board.role === 'admin' ? '📢 공지사항 ' : '자유'}
+              </Tag>
+              <Link to={`${board._id}`}>
+                <div>{board.title}</div>
+              </Link>
+              <div>{board.userName}</div>
+              <div>{board.updatedAt.slice(0, 10)}</div>
+            </BoardInfo>
+          ))}
+        {userBoards.data?.map((board) => (
           <BoardInfo key={board._id}>
             <Tag color={board.role === 'admin' ? '#ff6b6b' : '#4c6ef5'}>
               {board.role === 'admin' ? '📢 공지사항 ' : '자유'}
@@ -53,21 +86,19 @@ const Board = () => {
           </BoardInfo>
         ))}
       </Container>
-      {boardList !== [] && (
-        <Footer>
-          <Pagination
-            totalPage={totalPage}
-            limit={5}
-            page={page}
-            setPage={setPage}
-          />
-          {isExistToken() && (
-            <Link to='/write'>
-              <StyledButton>글 작성</StyledButton>
-            </Link>
-          )}
-        </Footer>
-      )}
+      <Footer>
+        <Pagination
+          totalPage={totalPage}
+          limit={5}
+          page={page}
+          setPage={setPage}
+        />
+        {userBoards.data && isExistToken() && (
+          <Link to='/write'>
+            <StyledButton>글 작성</StyledButton>
+          </Link>
+        )}
+      </Footer>
     </>
   );
 };
@@ -89,7 +120,7 @@ const Title = styled.div`
 
 const BoardHeader = styled.div`
   display: grid;
-  grid-template-columns: 10% 60% 15% 15%;
+  grid-template-columns: 20% 40% 20% 20%;
   padding: 1rem;
   border-bottom: 1px solid #343a40;
 
@@ -102,9 +133,11 @@ const BoardHeader = styled.div`
 
 const BoardInfo = styled.div`
   display: grid;
-  grid-template-columns: 10% 60% 15% 15%;
+  grid-template-columns: 20% 40% 20% 20%;
   padding: 1rem;
   margin: 0 auto;
+  line-height: normal;
+
   &:not(:last-child) {
     border-bottom: 1px solid #e9ecef;
   }
@@ -122,6 +155,9 @@ const BoardInfo = styled.div`
   }
 
   a {
+    div {
+      text-align: left;
+    }
     &:hover {
       opacity: 0.5;
     }

@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Api from 'api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'components/atoms/Button';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue } from 'recoil';
-import userState from 'stores/userStore';
+import CheckBox from 'components/atoms/CheckBox';
+import jwtDecode from 'jwt-decode';
+import { getToken } from 'util/useful-functions';
 
 const BoardDetail = () => {
   const { boardId } = useParams();
   const navigate = useNavigate();
   const [boardDetail, setBoardDetail] = useState({});
   const [isEdit, setIsEdit] = useState(false);
-  const [isEditAuth, setIsEditAuth] = useState(false);
-  const user = useRecoilValue(userState);
+  const [isAuth, setIsAuth] = useState({
+    edit: false,
+    delete: false,
+  });
 
   const { register, reset, getValues } = useForm({
     defaultValues: {
@@ -26,22 +29,31 @@ const BoardDetail = () => {
     setIsEdit((prev) => !prev);
   };
 
+  const [isNotified, setIsNotified] = useState(true);
+  const toggleChecked = useCallback(() => {
+    setIsNotified(!isNotified);
+  }, [isNotified]);
+
+  const { userId, role } = jwtDecode(getToken());
   useEffect(() => {
     (async () => {
       try {
         const result = await Api.get(`boards/${boardId}`);
         setBoardDetail(result.data);
+        setIsNotified(result.data.isNotified);
+        if (result.data.userId._id === userId) {
+          setIsAuth({
+            edit: true,
+            delete: true,
+          });
+        } else if (role === 'admin') {
+          setIsAuth((prev) => ({ ...prev, delete: true }));
+        }
       } catch (err) {
         alert(err.response.data.reason);
       }
     })();
   }, []);
-
-  useEffect(() => {
-    if (user.role === 'admin' || boardDetail.userName === user.name) {
-      setIsEditAuth(true);
-    }
-  }, [boardDetail]);
 
   const handleSave = async () => {
     if (isEdit) {
@@ -50,6 +62,7 @@ const BoardDetail = () => {
         await Api.patch(`boards/${boardId}`, {
           title,
           contents,
+          isNotified,
         });
         toggleEdit();
         setBoardDetail((prev) => ({ ...prev, title, contents }));
@@ -78,16 +91,30 @@ const BoardDetail = () => {
     <Container>
       <Wrapper>
         {isEdit ? (
-          <TitleInput
-            type='text'
-            {...register('title', {
-              required: true,
-            })}
-          />
+          <>
+            <TitleInput
+              type='text'
+              {...register('title', {
+                required: true,
+              })}
+            />
+            {role === 'admin' && (
+              <div>
+                <p>공지사항</p>
+                <CheckBox
+                  text='notice'
+                  checked={isNotified}
+                  onChange={toggleChecked}
+                />
+              </div>
+            )}
+          </>
         ) : (
-          <Title>{boardDetail.title}</Title>
+          <>
+            <Title>{boardDetail.title}</Title>
+            <Date>{boardDetail.createdAt?.slice(0, 10)}</Date>
+          </>
         )}
-        <Date>{boardDetail.createdAt?.slice(0, 10)}</Date>
       </Wrapper>
       {isEdit ? (
         <DescriptionInput
@@ -100,25 +127,22 @@ const BoardDetail = () => {
         <Description>{boardDetail.contents}</Description>
       )}
 
-      {isEditAuth && (
+      {isAuth.delete && (
         <ButtonWrapper>
           {isEdit ? (
-            <StyledButton onClick={handleSave}>저장</StyledButton>
+            <>
+              {isAuth.edit && <Button onClick={handleSave}>저장</Button>}
+              <button type='button' onClick={toggleEdit}>
+                취소
+              </button>
+            </>
           ) : (
-            <StyledButton onClick={handleEdit}>수정</StyledButton>
-          )}
-
-          {!isEdit ? (
-            <StyledButton
-              onClick={handleDelete}
-              style={{ background: '#f03e3e' }}
-            >
-              삭제
-            </StyledButton>
-          ) : (
-            <button type='button' onClick={toggleEdit}>
-              취소
-            </button>
+            <>
+              {isAuth.edit && <Button onClick={handleEdit}>수정</Button>}
+              <Button onClick={handleDelete} style={{ background: '#f03e3e' }}>
+                삭제
+              </Button>
+            </>
           )}
         </ButtonWrapper>
       )}
@@ -132,7 +156,6 @@ const Container = styled.div`
   justify-content: center;
   width: 70%;
   margin: 5% auto;
-  overflow: auto;
 `;
 
 const Wrapper = styled.div`
@@ -141,6 +164,16 @@ const Wrapper = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid #ced4da;
   margin-bottom: 2rem;
+
+  div {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    p {
+      color: #37b24d;
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 const Title = styled.p`
@@ -194,18 +227,18 @@ const DescriptionInput = styled.textarea`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-
+  margin-top: 2rem;
   button {
+    width: 10%;
     font-size: 1.125rem;
     padding: 0.5rem 1.2rem;
     margin-left: 1rem;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  width: 10%;
-  & + & {
-    margin-left: 0.5rem;
+    border-radius: 4px;
+    &:last-child {
+      &:hover {
+        background: #ced4da;
+      }
+    }
   }
 `;
 

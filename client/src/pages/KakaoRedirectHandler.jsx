@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import * as Api from 'api/api';
 import Spinner from 'components/atoms/Spinner';
 import { useNavigate } from 'react-router-dom';

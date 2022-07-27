@@ -16,7 +16,6 @@ import {
   pageState,
   searchInputState,
 } from 'stores/groundStore';
-import { selectDateValue, selectCalendarDate } from 'stores/reservationStore';
 
 const Home = () => {
   const [location, setLocation] = useRecoilState(locationState);

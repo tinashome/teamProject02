@@ -27,6 +27,8 @@ const UserInfoChange = () => {
       if (result.status === 200) {
         setUser((prev) => ({ ...prev, ...result.data }));
         alert('개인 정보 변경이 완료되었습니다.');
+      } else {
+        alert('개인 정보 변경에 실패하였습니다.')
       }
     } catch (err) {
       console.log(err);

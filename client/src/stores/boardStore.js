@@ -1,11 +1,16 @@
 import { atom } from 'recoil';
 
-export const boardListState = atom({
-  key: 'boardListState',
+export const userBoardListState = atom({
+  key: 'userBoardListState',
   default: {
     length: 0,
     data: [],
   },
+});
+
+export const adminBoardListState = atom({
+  key: 'adminBoardListState',
+  default: [],
 });
 
 export const boardPageState = atom({

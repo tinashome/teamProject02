@@ -8,6 +8,7 @@ import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas } from 'util/useful-functions';
 import AdminPayment from './AdminPayment';
+import AdminRentalList from './AdminRentalList';
 
 const AdminDashboard = () => {
   // eslint-disable-next-line no-unused-vars
@@ -269,7 +270,6 @@ const Title = styled.div`
   border-bottom: 1px solid #919191;
   justify-content: center;
   align-items: center;
-  // background-color: pink;
 `;
 
 const TextBold = styled.div`
