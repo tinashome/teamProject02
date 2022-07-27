@@ -27,7 +27,8 @@ const GroundTime = ({
           &nbsp;
           <BiTimeFive /> 시간 선택
           <ReservationPaymentText>
-            {reservationTime.length>0 ? reservationTime.length : '0'}시간 / {(info.paymentPoint * reservationTime.length).toLocaleString()} P
+            {reservationTime.length > 0 ? reservationTime.length : '0'}시간 /{' '}
+            {(info.paymentPoint * reservationTime.length).toLocaleString()} P
           </ReservationPaymentText>
         </TimeText>
         <ShowBtn>{timeBtnShow ? <FaAngleUp /> : <FaAngleDown />}</ShowBtn>
@@ -68,7 +69,7 @@ const GroundTime = ({
 };
 const ReservationPaymentText = styled.div`
   font-size: 0.9rem;
-  color:#868e96;
+  color: #868e96;
   margin-top: 0.2rem;
   margin-left: 5rem;
 `;
@@ -96,7 +97,7 @@ const TimeBtns = styled.div`
   width: 21.5rem;
   margin: 1rem 0 1rem 1rem;
   gap: 0.5rem 0;
-  border: solid #f1f3f5;
+  border: solid 1px #dee2e6;
   padding: 1rem;
 `;
 

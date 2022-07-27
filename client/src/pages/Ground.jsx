@@ -171,7 +171,7 @@ const InfoMainTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   text-align: center;
-  margin:1rem;
+  margin: 1rem;
 `;
 const GroundInfoList = styled.div`
   width: 60%;
@@ -198,7 +198,7 @@ const BackBtn = styled(Button)`
 const ReservationList = styled.div`
   position: sticky;
   top: 0;
-  border: solid #f8f9fa;
+  border: solid 1px #ced4da;
   border-radius: 0.7rem;
   width: 30%;
   height: 60%;
@@ -256,13 +256,13 @@ const ButtonList = styled.div`
 
 const CheckButton = styled(Button)`
   margin: 0 0.5rem 0 0.5rem;
-  border: solid #bdbdbd;
+  border: solid 1px #bdbdbd;
 `;
 
 const CancelButton = styled(Button)`
   color: black;
   background-color: white;
-  border: solid #bdbdbd;
+  border: solid 1px #bdbdbd;
   margin: 0 0.5rem 0 0.5rem;
 `;
 

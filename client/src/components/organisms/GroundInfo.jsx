@@ -78,7 +78,7 @@ const IconCards = styled.div `
 
 const GroundIconList = styled.div`
   text-align: center;
-  border: solid #f8f9fa;
+  border: solid 1px #ced4da;
   border-radius: 0.7rem;
   margin: 0 1rem 0 1rem;
   height: 14rem;
@@ -92,7 +92,7 @@ const GroundSubTitle = styled.h2`
 `;
 
 const GroundDetailInformation = styled.div`
-  border: solid #f8f9fa;
+  border: solid 1px #ced4da;
   border-radius: 0.7rem;
   margin: 1rem;
 `;

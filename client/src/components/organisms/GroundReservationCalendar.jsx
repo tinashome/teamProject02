@@ -65,6 +65,7 @@ const DateSelectText = styled.div`
 
 const StyleCalendar = styled(Calendar)`
   width: 100%;
+  border: solid 1px #dee2e6;
 `;
 
 const Container = styled.div`
