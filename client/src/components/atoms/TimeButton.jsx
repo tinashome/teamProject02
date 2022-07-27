@@ -61,11 +61,11 @@ const TimeBtn = ({
 };
 
 const TimeButton = styled.button`
-  width: 210px;
-  height: 40px;
-  font-size: 15px;
+  width: 6rem;
+  height: 2rem;
+  font-size: 0.7rem;
   font-weight: bold;
-  background-color: ${(props) => (props.isSelect ? '#bdbdbd' : '#bac8ff')};
+  background-color: ${(props) => (props.isSelect ? '#ebfbee' : '#bac8ff')};
   border: solid #bdbdbd;
   border-radius: 3px;
   margin: 3px;

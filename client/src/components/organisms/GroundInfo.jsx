@@ -1,13 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import 'react-datepicker/dist/react-datepicker.css';
 import { RiCheckboxBlankFill } from '@react-icons/all-files/ri/RiCheckboxBlankFill';
 
 import IconCard from './IconCard';
-
-// 경기장 정보 값 받아오기 (api)
-// const act = info.actInfo;
-// contents
 
 const GroundInfo = ({ info }) => {
   const { wayTo, parkingInfo, smoking, shoesRentallInfo, toilet, actInfo } =
@@ -42,11 +37,11 @@ const GroundInfo = ({ info }) => {
 
   return (
     <>
-      <GroundTitle>{info.groundName}</GroundTitle>
-      <GroundSubTitle>경기장 정보</GroundSubTitle>
-      {/* 아이콘  */}
-      <IconCard info={info} />
-
+      <GroundIconList>
+        <GroundSubTitle>경기장 정보</GroundSubTitle>
+        {/* 아이콘  */}
+        <IconCards><IconCard info={info} /></IconCards>
+      </GroundIconList>
       <GroundDetailInformation>
         <GroundSubTitle>경기장 특이사항</GroundSubTitle>
 
@@ -65,7 +60,7 @@ const GroundInfo = ({ info }) => {
         ))}
 
         <GroundInfoTitle>
-          <BoxBlanckIcon /> 기타
+          <BoxBlanckIcon />기타
         </GroundInfoTitle>
 
         {actInfo?.map((list) => (
@@ -77,37 +72,45 @@ const GroundInfo = ({ info }) => {
     </>
   );
 };
+const IconCards = styled.div `
+  margin-left: 7rem;
+`
 
-const GroundTitle = styled.h1`
-  font-size: 2.8rem;
-  font-weight: bold;
-  margin: 0.3rem;
+const GroundIconList = styled.div`
   text-align: center;
+  border: solid 1px #ced4da;
+  border-radius: 0.7rem;
+  margin: 0 1rem 0 1rem;
+  height: 14rem;
 `;
 
 const GroundSubTitle = styled.h2`
-  font-size: 30px;
-  text-align: left;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
   margin: 2rem 0.3rem 1.5rem 1rem;
 `;
 
 const GroundDetailInformation = styled.div`
-  margin: 0.2rem;
+  border: solid 1px #ced4da;
+  border-radius: 0.7rem;
+  margin: 1rem;
 `;
 
 const GroundInfoTitle = styled.h3`
   font-size: 25px;
   text-align: left;
   font-weight: bold;
-  margin: 0.5rem 0 1rem 2rem;
+  margin: 0rem 0 1rem 2rem;
 `;
 
 const GroundText = styled.p`
-  font-size: 20px;
+  font-size: 1.2rem;
   margin: 1rem 0 2rem 4rem;
 `;
 
 const BoxBlanckIcon = styled(RiCheckboxBlankFill)`
-  font-size: 17px;
+  font-size: 0.7rem;
+  margin: 0 0.3rem 0.3rem 0;
 `;
 export default GroundInfo;

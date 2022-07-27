@@ -15,7 +15,7 @@ import {
 import * as Api from 'api/api';
 
 const PointChargeCheck = () => {
-  const [depositorName, setDepositorName] = useState('');
+  const [payName, setPayName] = useState('');
   const [paymentOption, setPaymentOption] = useState(false);
   const [checkValid, setCheckValid] = useState(false);
   const [paymentAmount, setPaymentAmount] = useRecoilState(pointSelected);
@@ -41,13 +41,13 @@ const PointChargeCheck = () => {
 
       if (userRole == null) alert('로그인이 필요합니다.');
       else if (paymentAmount === 0) alert('충전하실 포인트를 선택해 주세요.');
-      else if (depositorName.length < 2) alert('이름을 2자 이상 입력해주세요.');
-      else if (!regex.test(depositorName)) alert('이름을 확인해주세요.');
+      else if (payName.length < 2) alert('이름을 2자 이상 입력해주세요.');
+      else if (!regex.test(payName)) alert('이름을 확인해주세요.');
       else if (!paymentOption) alert('결제 방법을 선택해 주세요.');
       else if (!checkValid)
         alert('입금자명과 결제방식 확인항목을 확인해주세요.');
       else {
-        const setInfo = { paymentOption, paymentAmount };
+        const setInfo = { payName, paymentOption, paymentAmount };
         const result = await Api.post('points', setInfo);
         const order = new Date().valueOf();
         const date = new Date();
@@ -68,7 +68,7 @@ const PointChargeCheck = () => {
       <Lcontainer>
         <CheckValue>
           <Title>입금자명</Title>
-          <InputTxt onChange={(e) => setDepositorName(e.target.value)} />
+          <InputTxt onChange={(e) => setPayName(e.target.value)} />
         </CheckValue>
         <CheckValue>
           <Title>결제 방법</Title>
@@ -128,7 +128,20 @@ const ChargeBtn = styled(Button)`
 `;
 
 const CheckBox = styled.input`
+  appearance: none;
+  border: 1.5px solid gainsboro;
+  border-radius: 0.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
   margin-right: 0.5rem;
+  &:checked {
+    border-color: transparent;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-color: limegreen;
+  }
 `;
 
 export default PointChargeCheck;
