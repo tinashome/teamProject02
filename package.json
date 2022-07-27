@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "server": "cd server && nodemon server",
+    "server": "cd server && node server",
     "client": "cd client && npm start",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "npx webpack"
