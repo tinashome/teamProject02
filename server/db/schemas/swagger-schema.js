@@ -2,6 +2,100 @@
  * @swagger
  * components:
  *  schemas:
+ *   boards:
+ *     type: object
+ *     required:
+ *        - _id
+ *        - userId
+ *        - userName
+ *        - title
+ *        - contents
+ *     properties:
+ *       _id:
+ *         type: objectid
+ *         description: primary key
+ *       userId:
+ *         type: object
+ *         description: userObject입니다. poplutate용 생성이 userId값을 입력하세요.
+ *         required: true
+ *         properties:
+ *           _id:
+ *             type: objectid
+ *             description: primary key
+ *           name:
+ *             type: string
+ *             description: 이름
+ *             required: false
+ *             default: "null"
+ *           email:
+ *             type: string
+ *             description: 이메일
+ *             required: true
+ *           phoneNumber:
+ *             type: string
+ *             description: 전화번호
+ *             required: false
+ *           role:
+ *             type: string
+ *             description: basic-user, admin 넣기
+ *             default: "basic-user"
+ *             required: false
+ *           isOAuth:
+ *             type: boolean
+ *             description: 카카오 권한 확인
+ *             default: false
+ *             required: false
+ *           totalPoint:
+ *             type: integer
+ *             description: point를 가지고 있는 돈
+ *             default: 0
+ *             required: false
+ *           createAt:
+ *             type: "string"
+ *             format: "date-time"
+ *           updateAt:
+ *             type: "string"
+ *             format: "date-time"
+ *       userName:
+ *         type: string
+ *         description: 이름
+ *         required: true
+ *       title:
+ *         type: string
+ *         description: 제목
+ *         required: true
+ *       contents:
+ *         type: integer
+ *         description: 내용
+ *         required: true
+ *       role:
+ *         type: string
+ *         description: 권한 확인
+ *         required: false
+ *         default: 'basic-user'
+ *       isNotified:
+ *         type: boolean
+ *         description: 공지 확인
+ *         required: false
+ *         default: false
+ *       isDeleted:
+ *         type: boolean
+ *         description: 삭제여부
+ *         required: false
+ *         default: false
+ *       createAt:
+ *         type: "string"
+ *         format: "date-time"
+ *       updateAt:
+ *         type: "string"
+ *         format: "date-time"
+ *
+ */
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
  *   users:
  *     type: object
  *     required:
@@ -40,7 +134,7 @@
  *         default: false
  *         required: false
  *       totalPoint:
- *         type: intiger
+ *         type: integer
  *         description: point를 가지고 있는 돈
  *         default: 0
  *         required: false

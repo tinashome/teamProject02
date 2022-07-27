@@ -256,4 +256,60 @@ authRouter.post('/check-pwd', loginRequired, async function (req, res, next) {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/change-pwd:
+ *   post:
+ *     summary: 패스워드를 새로운 패스워드로 바꿉니다.
+ *     tags: [auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: userId 값
+ *               password:
+ *                 type: string
+ *                 description: 패스워드
+ *     responses:
+ *       200:
+ *         description: 성공여부.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *                   description:  성공여부
+ *                 message:
+ *                   type: string
+ *                   description:  메시지
+
+ */
+authRouter.post('/change-pwd', async function (req, res, next) {
+  try {
+    const { password, userId } = req.body;
+    const toUpdate = {
+      ...(password && { password }),
+    };
+
+    const user = await userService.changeUserPassword(userId, toUpdate);
+    if (!user) {
+      throw new Error('비밀번호 변경이 안되었습니다. 다시 확인해 주세요');
+    }
+
+    res.status(200).json({
+      result: 'success',
+      message: '다시 회원가입해주세요.',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export { authRouter };

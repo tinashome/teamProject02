@@ -23,8 +23,7 @@ export class RentalModel {
           isBookedDate: 1,
           paymentPoint: 1,
         },
-      })
-      .sort({ _id: -1 });
+      });
     return rental;
   }
 
@@ -189,7 +188,7 @@ export class RentalModel {
           paymentPoint: 1,
         },
       });
-    console.log(updatedrental);
+
     return updatedrental;
   }
 

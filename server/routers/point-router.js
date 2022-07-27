@@ -170,11 +170,7 @@ pointRouter.patch('/:pointId', adminOnly, async function (req, res, next) {
     };
     // 제품 정보를 업데이트함.
 
-    const updatedPoint = await pointService.setPoint(
-      pointId,
-      toUpdate,
-      payName,
-    );
+    const updatedPoint = await pointService.setPoint(pointId, toUpdate);
     if (!updatedPoint) {
       throw new Error(`${pointId} 정보가 수정되지 않았습니다.`);
     }
