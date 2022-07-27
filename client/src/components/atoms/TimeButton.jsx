@@ -65,7 +65,7 @@ const TimeButton = styled.button`
   height: 2rem;
   font-size: 0.7rem;
   font-weight: bold;
-  background-color: ${(props) => (props.isSelect ? '#bdbdbd' : '#bac8ff')};
+  background-color: ${(props) => (props.isSelect ? '#ebfbee' : '#bac8ff')};
   border: solid #bdbdbd;
   border-radius: 3px;
   margin: 3px;

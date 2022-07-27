@@ -83,6 +83,7 @@ const Ground = () => {
   ) : (
     <>
       <GroundSlide info={detailInfo.groundImg} />
+      <InfoMainTitle>{detailInfo.groundName}</InfoMainTitle>
       <Container>
         <GroundInfoList>
           <GroundInfo info={detailInfo} />
@@ -164,22 +165,28 @@ const Container = styled.div`
   justify-content: center;
   margin: 0 auto;
   width: 80rem;
-  border: solid black;
 `;
 
+const InfoMainTitle = styled.h1`
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin:1rem;
+`;
 const GroundInfoList = styled.div`
-  border: solid black;
-  width: 70%;
+  width: 60%;
 `;
 
 const ReservationBtn = styled(Button)`
-  font-size: 18px;
+  font-size: 0.8rem;
+  font-weight: bold;
   float: right;
   border: solid 1px black;
   margin: 1rem 1.5rem 2rem 0;
 `;
 const BackBtn = styled(Button)`
-  font-size: 18px;
+  font-size: 0.8rem;
+  font-weight: bold;
   color: #3563e9;
   background-color: white;
   border: solid 1px black;
@@ -189,7 +196,10 @@ const BackBtn = styled(Button)`
 
 // 달력이랑 시간 버튼 css
 const ReservationList = styled.div`
-  border: solid black;
+  position: sticky;
+  top: 0;
+  border: solid #f8f9fa;
+  border-radius: 0.7rem;
   width: 30%;
   height: 60%;
 `;

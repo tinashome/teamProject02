@@ -19,12 +19,12 @@ const GroundReservationCalendar = ({
 
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
-      const result = reservationinfo
-        .filter((list) => list.reservationDate === dateFormat)
-        .map((list) => list.reservationTime);
-      setReservationDateInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
-      setReservationDate(dateFormat);
-  }, [info ,dateValue]);
+    const result = reservationinfo
+      .filter((list) => list.reservationDate === dateFormat)
+      .map((list) => list.reservationTime);
+    setReservationDateInfo(result); // 0727 = [11:00~12:00, 13:00~14:00]
+    setReservationDate(dateFormat);
+  }, [info, dateValue]);
 
   const handleClick = () => {
     setCalendarShowBtn(!calendarShowBtn);
@@ -33,8 +33,11 @@ const GroundReservationCalendar = ({
     <Container>
       <DateNavbar onClick={handleClick}>
         <DateText>
+          &nbsp;
           <BiCalendarCheck /> 예약 날짜{' '}
-          {moment(dateValue).format('YYYY년 MM월 DD일')}
+          <DateSelectText>
+            {moment(dateValue).format('YYYY년 MM월 DD일')}
+          </DateSelectText>
         </DateText>
         <ShowBtn>{calendarShowBtn ? <FaAngleUp /> : <FaAngleDown />}</ShowBtn>
       </DateNavbar>
@@ -46,11 +49,20 @@ const GroundReservationCalendar = ({
           onChange={setDateValue}
           minDate={new Date()}
           value={dateValue}
+          calendarType="ISO 8601"
         />
       </CalendarUI>
     </Container>
   );
 };
+
+const DateSelectText = styled.div`
+  font-size: 0.9rem;
+  color: #868e96;
+  margin-top: 0.2rem;
+  margin-left: 5rem;
+`;
+
 const StyleCalendar = styled(Calendar)`
   width: 100%;
 `;
@@ -66,12 +78,13 @@ const CalendarUI = styled.div`
 const DateNavbar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #0000004d;
-  margin: 4rem 0 2rem 0;
+  border-bottom: 1px solid #ced4da;
+  margin: 1rem 0 2rem 0;
   cursor: pointer;
 `;
 
 const DateText = styled.h1`
+  display: flex;
   font-size: 20px;
   text-align: left;
   height: 2rem;
@@ -82,4 +95,5 @@ const ShowBtn = styled.button`
   text-align: right;
   margin-right: 0.8rem;
 `;
+
 export default GroundReservationCalendar;

@@ -60,12 +60,11 @@ const GroundIcons = styled.div`
 `;
 
 const GroundIcon = styled.div`
-  display: flex;
   flex-direction: column;
   padding: 0.2rem;
   margin: 0.2rem;
   width: 6rem;
-  height: 6rem;
+  height: 6.5rem;
   border: solid #bdbdbd;
   border-radius: 5px;
   font-size: 70px;
