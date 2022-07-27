@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { userPointState } from 'stores/userStore';
+import { userPointState, userState } from 'stores/userStore';
 import styled from 'styled-components';
+import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
+import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
 import * as Api from '../api/api';
 import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const RentalManagement = () => {
   const [rental, setRental] = useState([]);
   const setTotalPoint = useSetRecoilState(userPointState);
+  const setUser = useSetRecoilState(userState);
   const [page, setPage] = useState(1);
+  const [openTimes, setOpenTimes] = useState(null);
   const listPerPage = 6;
   const totalPage = Math.ceil(rental.length / listPerPage);
   const offset = (page - 1) * listPerPage;
@@ -25,8 +29,18 @@ const RentalManagement = () => {
     }
   };
 
+  const userInformation = async () => {
+    try {
+      const result = await Api.get('users/user');
+      setUser((prev) => ({ ...prev, ...result.data }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     rentalInformation();
+    userInformation();
   }, []);
 
   const handleClick = async (rentalId) => {
@@ -90,7 +104,45 @@ const RentalManagement = () => {
               </RentalDate>
               <RentalInfo>
                 <GroundName>{item.groundName}</GroundName>
-                <Time>{getRentalTime(item.reservationTime).join(' ')}</Time>
+                <Time>
+                  <div
+                    id={item._id}
+                    open={openTimes}
+                    style={{ alignItems: 'center' }}
+                  >
+                    {getRentalTime(item.reservationTime)[0]}
+                    {getRentalTime(item.reservationTime)[1] && (
+                      <>
+                        <OpenIcon
+                          id={item._id}
+                          open={openTimes}
+                          onClick={() => {
+                            setOpenTimes(item._id);
+                          }}
+                        />
+                        <CloseIcon
+                          id={item._id}
+                          open={openTimes}
+                          onClick={() => {
+                            if (openTimes) {
+                              setOpenTimes(null);
+                            }
+                          }}
+                        />
+                      </>
+                    )}
+                  </div>
+                  <TextListOpen
+                    id={item._id}
+                    open={openTimes}
+                    style={{
+                      display: `${item._id === openTimes ? 'flex' : 'none'}`,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    {getRentalTime(item.reservationTime).join(' ')}
+                  </TextListOpen>
+                </Time>
                 {`${time.getFullYear()}${item.reservationDate.slice(
                   0,
                   2,
@@ -107,7 +159,7 @@ const RentalManagement = () => {
                     ? `0${time.getHours()}`
                     : `${time.getHours()}`
                 }` ? (
-                  <NoButton>예약취소</NoButton>
+                  <div style={{ width: '8.640625rem', height: '2.225rem' }} />
                 ) : (
                   <div>
                     <Button>
@@ -202,7 +254,7 @@ const GroundName = styled.div`
 const Time = styled.div`
   display: flex;
   width: 8.375rem;
-  margin-left: auto;
+  margin: auto;
 `;
 
 const Button = styled.button`
@@ -219,13 +271,28 @@ const Button = styled.button`
   }
 `;
 
-const NoButton = styled.button`
-  display: flex;
-  margin-left: 3.5rem;
-  padding: 0.3125rem 0.5rem;
-  color: white;
-  font-size: 1.125rem;
-  cursor: default;
+const TextListOpen = styled.div`
+  width: 8.375rem;
+  height: auto;
+  position: absolute;
+  background-color: #fff;
+  white-space: wrap;
+  user-select: none;
+  outline: solid 0.125rem #3563e9;
+  border-radius: 0.3125rem;
+`;
+
+const OpenIcon = styled(IoIosArrowDown)`
+  display: ${(props) => (props.id === props.open ? 'none' : 'flex')};
+  font-size: 1.25rem;
+  margin-top: 0.1875rem;
+  cursor: pointer;
+`;
+const CloseIcon = styled(IoIosArrowUp)`
+  display: ${(props) => (props.id === props.open ? 'flex' : 'none')};
+  font-size: 1.25rem;
+  margin-top: 0.1875rem;
+  cursor: pointer;
 `;
 
 export default RentalManagement;

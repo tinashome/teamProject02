@@ -46,7 +46,7 @@ const UserInfoChange = () => {
               <input
                 disabled='ture'
                 placeholder={user.name}
-                style={{ backgroundColor: '#e9e9e9' }}
+                style={{ backgroundColor: '#e9e9e9', cursor: 'not-allowed' }}
               />
             </Content>
             <Content>
@@ -54,7 +54,7 @@ const UserInfoChange = () => {
               <input
                 disabled='ture'
                 placeholder={user.email}
-                style={{ backgroundColor: '#e9e9e9' }}
+                style={{ backgroundColor: '#e9e9e9', cursor: 'not-allowed' }}
               />
             </Content>
             <Content>
