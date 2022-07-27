@@ -129,6 +129,27 @@
 /**
  * @swagger
  * definitions:
+ *   boards:
+ *     type: "object"
+ *     properties:
+ *       title:
+ *         type: "string"
+ *         description: 제목
+ *         required: true
+ *       contents:
+ *         type: "string"
+ *         description: 내용
+ *         required: true
+ *       isNotified:
+ *         type: boolean
+ *         description: 공지 확인
+ *         required: false
+ *         default: false
+ */
+
+/**
+ * @swagger
+ * definitions:
  *   grounds:
  *     type: "object"
  *     properties:

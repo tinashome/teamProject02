@@ -206,6 +206,30 @@ class UserService {
     return { result: 'success' };
   }
 
+  async changeUserPassword(userId, toUpdate) {
+    // 이메일 db에 존재 여부 확인
+
+    let user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new Error('유저 정보가 존재하지 않습니다.');
+    }
+    const { password } = toUpdate;
+
+    if (password) {
+      const newPasswordHash = await bcrypt.hash(password, 10);
+      toUpdate.password = newPasswordHash;
+    }
+
+    // 업데이트 진행
+    user = await this.userModel.update({
+      userId,
+      update: toUpdate,
+    });
+    // 비밀번호 일치함. 유저 정보 반환
+    return user;
+  }
+
   // 사용자 목록을 받음.
   async getUsers() {
     const users = await this.userModel.findAll();
@@ -302,20 +326,8 @@ class UserService {
 
   async getUserMail(email) {
     const checkUserMail = await this.userModel.findByEmail(email);
-    let checkUserMailResult = [];
 
-    if (checkUserMail) {
-      checkUserMailResult = {
-        status: 200,
-        result: 'fail',
-      };
-    } else {
-      checkUserMailResult = {
-        status: 200,
-        result: 'success',
-      };
-    }
-    return checkUserMailResult;
+    return checkUserMail;
   }
 
   async getUsersByPagination({

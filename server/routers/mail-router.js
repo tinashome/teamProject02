@@ -5,6 +5,7 @@ import {
   getCodebyMail,
   sendMail,
   verifyCode,
+  userService,
 } from '../services/index.js';
 
 const mailRouter = Router();
@@ -34,7 +35,7 @@ const mailRouter = Router();
  *                 required: true
  *     responses:
  *       200:
- *         description: 반환 값으로 예약 정보를 반환합니다.
+ *         description: 반환 값으로  성공 여부를 반환합니다.
  *         content:
  *           application/json:
  *             schema:
@@ -60,6 +61,64 @@ mailRouter.post('/', async (req, res, next) => {
     //   mail: mail,
     //   code: code,
     // });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/mail/check-mail:
+ *   post:
+ *     summary: 이메일이 있는지 확인 후 이메일 인증 코드를 전송합니다.
+ *     tags: [mail]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mail:
+ *                 type: string
+ *                 description: 이메일 주소
+ *                 required: true
+ *     responses:
+ *       200:
+ *         description: 반환 값으로 성공 여부를 반환합니다.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *                   description: 성공여부
+ *                 userId:
+ *                   type: string
+ *                   description: 유저 id 값
+ */
+mailRouter.post('/check-mail', async (req, res, next) => {
+  const { mail } = req.body;
+  try {
+    // 이메일 확인 여부
+    const resultEmail = await userService.getUserMail(mail);
+    // console.log(resultEmail);
+
+    if (!resultEmail) {
+      throw new Error('이메일이 존재하지 않습니다.');
+    }
+    const code = await setMail(mail);
+    if (!code) {
+      throw new Error('code 생성이 안되었습니다.');
+    }
+    await sendMail(mail, code);
+    res.status(200).json({
+      result: 'success',
+      userId: resultEmail._id,
+    });
+
+    // // 성공
+    // res.send(resultEmail._id);
   } catch (error) {
     next(error);
   }

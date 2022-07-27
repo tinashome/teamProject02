@@ -43,7 +43,7 @@ const GroundTextList = ({ location, searchInput }) => {
           <p>영업 시간</p>
         </GrounndListHeader>
         {groundList.data?.map((ground) => (
-          <Link to={`/grounds/${ground._id}`}>
+          <Link to={`/grounds/${ground._id}`} key={ground._id}>
             <GroundInfo key={ground._id}>
               <div>{ground.groundAddress.address1}</div>
               <div>{ground.groundName}</div>
@@ -90,7 +90,8 @@ const GroundInfo = styled.div`
   border-bottom: 1px solid #e9ecef;
   border-radius: 4px;
   &:hover {
-    background: #74c0fc;
+    background: #3563e9;
+    color: white;
     transition: background 0.5s ease;
   }
 

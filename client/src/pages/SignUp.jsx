@@ -7,6 +7,7 @@ import Button from 'components/atoms/Button';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import ModalDiv from 'components/atoms/AdminModalDiv';
 import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
+import { useNavigate } from 'react-router-dom';
 import Input from '../components/atoms/Input';
 
 const SignUp = () => {
@@ -17,6 +18,7 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
+  const navigate = useNavigate();
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   const onSubmit = async (data) => {
@@ -28,6 +30,7 @@ const SignUp = () => {
       const result = await Api.post('auth/signup', data);
       if (result.status === 200) {
         alert('회원가입에 성공하였습니다!');
+        navigate('/login');
       } else {
         alert(result.data.message);
       }

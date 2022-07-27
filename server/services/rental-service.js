@@ -48,29 +48,20 @@ class RentalService {
   }
 
   async setRental(rentalId, toUpdate) {
-    const updatedRental = await this.rentalModel.update({
-      rentalId,
-      update: toUpdate,
-    });
-    if (!updatedRental) {
-      throw new Error(`${updatedRental} 정보가 없습니다.`);
+    const getRental = await this.rentalModel.findById(rentalId);
+    if (!getRental) {
+      throw new Error(`${getRental} 정보를 찾지 못했습니다.`);
     }
+    const minusPoint =
+      getRental.groundId.paymentPoint * getRental.reservationTime.length;
 
-    const userId = updatedRental.userId._id;
+    const userId = getRental.userId._id;
 
-    let resultPoint = 0;
+    const resultPoint =
+      getRental.userId.totalPoint -
+      minusPoint +
+      getRental.groundId.paymentPoint * toUpdate.reservationTime.length;
 
-    if (toUpdate.isBooked) {
-      resultPoint =
-        updatedRental.userId.totalPoint -
-        updatedRental.groundId.paymentPoint *
-          updatedRental.reservationTime.length;
-    } else {
-      resultPoint =
-        updatedRental.userId.totalPoint +
-        updatedRental.groundId.paymentPoint *
-          updatedRental.reservationTime.length;
-    }
     const toUpdateTotalPoint = {
       totalPoint: resultPoint,
     };
@@ -80,6 +71,13 @@ class RentalService {
     });
     if (!updatedUserbyTotalPoint) {
       throw new Error(`${updatedUserbyTotalPoint} 정보가 수정되지 않았습니다.`);
+    }
+    const updatedRental = await this.rentalModel.update({
+      rentalId,
+      update: toUpdate,
+    });
+    if (!updatedRental) {
+      throw new Error(`${updatedRental} 정보가 없습니다.`);
     }
     return updatedRental;
   }

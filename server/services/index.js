@@ -6,3 +6,4 @@ export * from './point-service.js';
 export * from './rental-service.js';
 export * from './redis-service.js';
 export * from './mail-service.js';
+export * from './board-service.js';
