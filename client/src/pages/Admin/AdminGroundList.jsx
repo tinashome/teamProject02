@@ -119,7 +119,7 @@ const AdminGroundList = () => {
         </ModalDiv>
       </ModalWrapper>
       <TitleRow>
-        <Text>경기장명</Text>
+        <Text width='170'>경기장명</Text>
         <Text width='250'>위치</Text>
         <Text width='80'>포인트</Text>
         <Text>수정 / 삭제</Text>
@@ -128,11 +128,12 @@ const AdminGroundList = () => {
         {grounds &&
           grounds.map((e) => (
             <Row key={e._id}>
-              <Text>
+              <Text width='170'>
                 <TextWide
                   id={e._id}
-                  style={{ textAlign: 'center' }}
+                  // style={{ textAlign: 'center' }}
                   onClick={handleClickInfo}
+                  width='160'
                 >
                   {e.groundName}
                 </TextWide>

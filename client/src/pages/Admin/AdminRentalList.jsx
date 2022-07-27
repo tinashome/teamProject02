@@ -126,7 +126,7 @@ const AdminRentalList = () => {
       <TitleRow>
         <Text>작성일</Text>
         <Text>이름</Text>
-        <Text width='150'>경기장명</Text>
+        <Text width='170'>경기장명</Text>
         <Text>날짜</Text>
         <Text width='120' style={{ justifyContent: 'flex-end' }}>
           예약시간
@@ -141,7 +141,7 @@ const AdminRentalList = () => {
             <Row key={e._id}>
               <Text>{getCurrentDate(e.createdAt)}</Text>
               <Text>{!!e.userId && e.userId.name}</Text>
-              <Text width='150'>{e.groundName}</Text>
+              <TextWide width='170'>{e.groundName}</TextWide>
               <Text>
                 {`${e.reservationDate && dateAddDash(e.reservationDate)}`}
               </Text>

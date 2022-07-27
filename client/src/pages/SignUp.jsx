@@ -1,11 +1,12 @@
 import Title from 'components/atoms/Title';
 import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import * as Api from 'api/api';
 import Button from 'components/atoms/Button';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import ModalDiv from 'components/atoms/AdminModalDiv';
+import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
 import Input from '../components/atoms/Input';
 
 const SignUp = () => {
@@ -119,9 +120,13 @@ const SignUp = () => {
       </Wrapper>
       <ErrorMessage>{errors.email?.message}</ErrorMessage>
       {isOpenModal && (
-        <ModalWrapper onClick={toggleModal}>
+        <ModalWrapper>
           <EmailModal onClick={(e) => e.stopPropagation()}>
-            <Title>인증 코드</Title>
+            <AiOutlineClose onClick={toggleModal} />
+            <Title>이메일 인증</Title>
+            <p>
+              이메일로 전송된 <span>인증코드</span>를 확인해주세요.
+            </p>
             <Wrapper>
               <Input
                 type='number'
@@ -241,14 +246,40 @@ const EmailModal = styled(ModalDiv)`
   justify-content: flex-start;
   align-items: baseline;
   width: 30%;
-  height: 25%;
+  height: auto;
   top: 45%;
   left: 45%;
   padding: 2rem;
 
+  svg {
+    position: absolute;
+    font-size: 20px;
+    right: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    opacity: 0.6;
+    &:hover {
+      background: #ced4da;
+    }
+  }
+
   span {
     font-size: 27px;
-    margin: 1rem 0;
+    margin-left: 0.3rem;
+  }
+
+  p {
+    font-size: 12px;
+    margin: 0.8rem 0.5rem 1.5rem 0.5rem;
+    opacity: 0.7;
+    letter-spacing: 1.2px;
+
+    span {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f03e3e;
+      margin-left: 0;
+    }
   }
 
   div {
