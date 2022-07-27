@@ -40,7 +40,9 @@ const GroundInfo = ({ info }) => {
       <GroundIconList>
         <GroundSubTitle>경기장 정보</GroundSubTitle>
         {/* 아이콘  */}
-        <IconCards><IconCard info={info} /></IconCards>
+        <IconCards>
+          <IconCard info={info} />
+        </IconCards>
       </GroundIconList>
       <GroundDetailInformation>
         <GroundSubTitle>경기장 특이사항</GroundSubTitle>
@@ -51,7 +53,7 @@ const GroundInfo = ({ info }) => {
               <BoxBlanckIcon />
               {list.title}
             </GroundInfoTitle>
-            {list.text == null ? (
+            {list.text === '' ? (
               <GroundText>정보없음</GroundText>
             ) : (
               <GroundText>{list.text}</GroundText>
@@ -60,21 +62,21 @@ const GroundInfo = ({ info }) => {
         ))}
 
         <GroundInfoTitle>
-          <BoxBlanckIcon />기타
+          <BoxBlanckIcon />
+          기타
         </GroundInfoTitle>
 
         {actInfo?.map((list) => (
-          <GroundText>
-            <li>{list}</li>
-          </GroundText>
+          <GroundText>{list==='' ? '정보없음' : <li>{list}</li>}</GroundText>
         ))}
       </GroundDetailInformation>
     </>
   );
 };
-const IconCards = styled.div `
-  margin-left: 7rem;
-`
+const IconCards = styled.div`
+  display:flex;
+  justify-content:center;
+`;
 
 const GroundIconList = styled.div`
   text-align: center;
