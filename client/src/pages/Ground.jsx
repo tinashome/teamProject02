@@ -10,6 +10,8 @@ import Spinner from 'components/atoms/Spinner';
 import ModalDiv from 'components/atoms/AdminModalDiv';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import moment from 'moment';
+import { useSetRecoilState } from 'recoil';
+import { userPointState } from 'stores/userStore';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -51,6 +53,7 @@ const Ground = () => {
     }
   };
 
+  const setTotalPoint = useSetRecoilState(userPointState);
   const reservationClick = async () => {
     try {
       if (reservationTime.length > 0) {
@@ -59,6 +62,7 @@ const Ground = () => {
           reservationDate,
           reservationTime,
         });
+        setTotalPoint((prev) => ({ ...prev, isChange: true }));
         alert('예약되었습니다.');
         navigate('/');
       } else {

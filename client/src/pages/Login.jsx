@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import Title from 'components/atoms/Title';
 import * as Api from 'api/api';
 import React from 'react';
@@ -6,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import userState from 'stores/userStore';
+import { userState } from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
 import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
 import { loginImgList } from 'constants/imgList';

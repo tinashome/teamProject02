@@ -5,7 +5,7 @@ import Spinner from 'components/atoms/Spinner';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
-import userState from 'stores/userStore';
+import { userState } from 'stores/userStore';
 
 const KakaoRedirectHandler = () => {
   const navigate = useNavigate();

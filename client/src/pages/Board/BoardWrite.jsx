@@ -6,7 +6,7 @@ import * as Api from 'api/api';
 import { useNavigate } from 'react-router-dom';
 import CheckBox from 'components/atoms/CheckBox';
 import { useRecoilValue } from 'recoil';
-import userState from 'stores/userStore';
+import { userState } from 'stores/userStore';
 
 const BoardWrite = () => {
   const navigate = useNavigate();

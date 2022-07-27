@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import userState from 'stores/userStore';
+import { useSetRecoilState } from 'recoil';
+import { userPointState } from 'stores/userStore';
 import styled from 'styled-components';
 import * as Api from '../api/api';
 import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const RentalManagement = () => {
   const [rental, setRental] = useState([]);
-  const [user, setUser] = useRecoilState(userState);
+  const setTotalPoint = useSetRecoilState(userPointState);
   const [page, setPage] = useState(1);
   const listPerPage = 6;
   const totalPage = Math.ceil(rental.length / listPerPage);
@@ -25,18 +25,8 @@ const RentalManagement = () => {
     }
   };
 
-  const userInformation = async () => {
-    try {
-      const result = await Api.get('users/user');
-      setUser((prev) => ({ ...prev, ...result.data }));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
     rentalInformation();
-    userInformation();
   }, []);
 
   const handleClick = async (rentalId) => {
@@ -46,7 +36,7 @@ const RentalManagement = () => {
         if (result.status === 204) {
           alert('예약이 취소 되었습니다.');
           rentalInformation();
-          userInformation();
+          setTotalPoint((prev) => ({ ...prev, isChange: true }));
         } else {
           alert('예약을 취소하지 못 했습니다.');
         }
@@ -88,11 +78,6 @@ const RentalManagement = () => {
   return (
     <Container>
       <Title>예약 조회</Title>
-      <Point>
-        {user.totalPoint
-          ? `내 포인트 : ${user.totalPoint.toLocaleString()}P`
-          : ''}
-      </Point>
       <Wrapper>
         <Contents>
           {rental.slice(offset, offset + listPerPage).map((item) => (
@@ -241,15 +226,6 @@ const NoButton = styled.button`
   color: white;
   font-size: 1.125rem;
   cursor: default;
-`;
-
-const Point = styled.div`
-  text-align: end;
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.5rem;
-  line-height: 1.8125rem;
 `;
 
 export default RentalManagement;

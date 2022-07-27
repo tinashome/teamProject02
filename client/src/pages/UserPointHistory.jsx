@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import userState from 'stores/userStore';
+import { userState } from 'stores/userStore';
 import styled from 'styled-components';
 import * as Api from '../api/api';
 import MyinfoPagination from '../components/organisms/MyinfoPagination';
