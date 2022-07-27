@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BiPhotoAlbum } from '@react-icons/all-files/bi/BiPhotoAlbum';
 import { HiOutlineViewList } from '@react-icons/all-files/hi/HiOutlineViewList';
 import styled, { keyframes } from 'styled-components';
@@ -34,16 +34,36 @@ const Home = () => {
 
   // Location Filter
   const [isOpenFilterModal, setisOpenFilterModal] = useState(false);
-  const handleToggleFilterModal = useCallback(() => {
-    setisOpenFilterModal((prev) => !prev);
-  }, [isOpenFilterModal]);
+  const wrapperRef = useRef();
+
+  const handleClickFilterModal = () => {
+    if (!isOpenFilterModal) {
+      setisOpenFilterModal(true);
+    }
+  };
 
   const getFilteredData = async (e) => {
     if (e.target.innerText === '모든 지역') setLocation('');
     else setLocation(e.target.innerText);
     setPage(1);
-    handleToggleFilterModal();
+    setisOpenFilterModal(false);
   };
+
+  const handleClickOutside = (event) => {
+    if (wrapperRef && !wrapperRef.current.contains(event.target)) {
+      setisOpenFilterModal(false);
+    } else {
+      setisOpenFilterModal(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
   return (
     <>
@@ -52,10 +72,10 @@ const Home = () => {
         <FilterWrapper>
           <LocationFilter
             filterName={location || '모든 지역'}
-            handleClick={handleToggleFilterModal}
+            handleClick={handleClickFilterModal}
           />
           {isOpenFilterModal && (
-            <FilterModal>
+            <FilterModal ref={wrapperRef} value={isOpenFilterModal}>
               {locationList.map((districtName) => (
                 <FilterButton
                   type='button'
