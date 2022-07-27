@@ -50,7 +50,7 @@ const Home = () => {
   };
 
   const handleClickOutside = (event) => {
-    if (wrapperRef && !wrapperRef.current.contains(event.target)) {
+    if (wrapperRef && !wrapperRef.current?.contains(event.target)) {
       setisOpenFilterModal(false);
     } else {
       setisOpenFilterModal(true);
@@ -71,6 +71,8 @@ const Home = () => {
       <Container>
         <FilterWrapper>
           <LocationFilter
+            ref={wrapperRef}
+            value={isOpenFilterModal}
             filterName={location || '모든 지역'}
             handleClick={handleClickFilterModal}
           />
@@ -89,14 +91,17 @@ const Home = () => {
           )}
           <SearchBar placeholder='구장 찾기' onKeyDown={handleSearch} />
           <ListTypeButton>
-            <BiPhotoAlbum
-              onClick={() => setListType('photo')}
-              disabled={listType === 'photo'}
-            />
-            <HiOutlineViewList
-              onClick={() => setListType('text')}
-              disabled={listType === 'text'}
-            />
+            {listType === 'photo' ? (
+              <HiOutlineViewList
+                onClick={() => setListType('text')}
+                disabled={listType === 'text'}
+              />
+            ) : (
+              <BiPhotoAlbum
+                onClick={() => setListType('photo')}
+                disabled={listType === 'photo'}
+              />
+            )}
           </ListTypeButton>
         </FilterWrapper>
         {listType === 'photo' ? (
@@ -150,7 +155,7 @@ const FilterButton = styled.button`
   padding: 4px 0;
   border-radius: 4px;
   color: #ffffff;
-
+  font-size: 15px;
   & + & {
     margin-top: 0.5rem;
   }
@@ -166,17 +171,15 @@ const ListTypeButton = styled.div`
   margin-left: auto;
 
   svg {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     font-size: 1.7rem;
     cursor: pointer;
     padding: 0.2rem;
     border: 1px solid #ced4da;
 
-    &[disabled] {
+    &:hover {
       color: #f06595;
-      cursor: revert;
-      pointer-events: none;
     }
   }
 `;
