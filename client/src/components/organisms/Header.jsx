@@ -27,11 +27,12 @@ const Header = () => {
   const getUserData = async () => {
     try {
       const result = await Api.get('users/user');
-      const { _id, email, name, role, isOAuth } = result.data;
+      const { _id, email, name, phoneNumber, role, isOAuth } = result.data;
       setUser({
         userId: _id,
         email,
         name,
+        phoneNumber,
         role,
         isOAuth,
       });
