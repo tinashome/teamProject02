@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { userPointState } from 'stores/userStore';
+import { userPointState, userState } from 'stores/userStore';
 import styled from 'styled-components';
 import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
 import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
@@ -11,6 +11,7 @@ import MyinfoPagination from '../components/organisms/MyinfoPagination';
 const RentalManagement = () => {
   const [rental, setRental] = useState([]);
   const setTotalPoint = useSetRecoilState(userPointState);
+  const setUser = useSetRecoilState(userState);
   const [page, setPage] = useState(1);
   const [openTimes, setOpenTimes] = useState(null);
   const listPerPage = 6;
@@ -28,8 +29,18 @@ const RentalManagement = () => {
     }
   };
 
+  const userInformation = async () => {
+    try {
+      const result = await Api.get('users/user');
+      setUser((prev) => ({ ...prev, ...result.data }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     rentalInformation();
+    userInformation();
   }, []);
 
   const handleClick = async (rentalId) => {
