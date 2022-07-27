@@ -20,6 +20,7 @@
     "react/jsx-props-no-spreading": "off", // props로 받은 것 바로 props로 넘기기 허용 -> react-hook-form
     "react/prop-types": "off", // props에 type 지정하지 않아도 되게
     "no-underscore-dangle": "off", // 변수명에 언더바 가능
-    "react/no-array-index-key": "off"
+    "react/no-array-index-key": "off", // key 값에 index 사용 가능
+    "react/no-unescaped-entities": "off" // 따옴표 사용 가능
   }
 }

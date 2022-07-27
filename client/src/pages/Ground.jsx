@@ -10,6 +10,8 @@ import Spinner from 'components/atoms/Spinner';
 import ModalDiv from 'components/atoms/AdminModalDiv';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import moment from 'moment';
+import { useSetRecoilState } from 'recoil';
+import { userPointState } from 'stores/userStore';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -54,6 +56,7 @@ const Ground = () => {
     }
   };
 
+  const setTotalPoint = useSetRecoilState(userPointState);
   const reservationClick = async () => {
     try {
       if (reservationTime.length > 0) {
@@ -62,6 +65,7 @@ const Ground = () => {
           reservationDate,
           reservationTime,
         });
+        setTotalPoint((prev) => ({ ...prev, isChange: true }));
         alert('예약되었습니다.');
         navigate('/');
       } else {
@@ -151,7 +155,8 @@ const Ground = () => {
                 </Info>
               </InfoDetail>
               <WarningText>
-                ※ 예약 완료 후 24시간이 지나고 예약 취소가 가능합니다.
+                ※ 예약시간 중 제일 빠른 예약시간 기준 24시간 전까지만 예약취소,
+                변경이 가능합니다.
               </WarningText>
               <ButtonList>
                 <CheckButton onClick={() => reservationClick()}>

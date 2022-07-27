@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import userState from '../stores/userStore';
+import { userState } from '../stores/userStore';
 import * as Api from '../api/api';
 
 const UserInfoChange = () => {
@@ -28,7 +28,7 @@ const UserInfoChange = () => {
         setUser((prev) => ({ ...prev, ...result.data }));
         alert('개인 정보 변경이 완료되었습니다.');
       } else {
-        alert('개인 정보 변경에 실패하였습니다.')
+        alert('개인 정보 변경에 실패하였습니다.');
       }
     } catch (err) {
       console.log(err);
@@ -46,7 +46,7 @@ const UserInfoChange = () => {
               <input
                 disabled='ture'
                 placeholder={user.name}
-                style={{ backgroundColor: '#e9e9e9' }}
+                style={{ backgroundColor: '#e9e9e9', cursor: 'not-allowed' }}
               />
             </Content>
             <Content>
@@ -54,7 +54,7 @@ const UserInfoChange = () => {
               <input
                 disabled='ture'
                 placeholder={user.email}
-                style={{ backgroundColor: '#e9e9e9' }}
+                style={{ backgroundColor: '#e9e9e9', cursor: 'not-allowed' }}
               />
             </Content>
             <Content>
