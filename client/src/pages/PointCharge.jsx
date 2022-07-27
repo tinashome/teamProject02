@@ -26,39 +26,46 @@ const PointCharge = () => {
   };
   return (
     <Container>
+      <button type='button' onClick={() => setModalOpen(!modalOpen)}>
+        버튼
+      </button>
       <PointChargeTitle />
       <PointChargeCard />
       <PointChargeCheck />
       {modalOpen && (
         <ModalWrapper onClick={modalClose}>
           <PointModalDiv onClick={(e) => e.stopPropagation()}>
-            <MainTitle>나의 포인트 충전 정보</MainTitle>
+            <MainTitle>포인트 충전 정보</MainTitle>
             <InfoDetail>
-              <Title>주문번호 : </Title>
+              <Title>주문번호&nbsp;: </Title>
               <Info>{orderNum}</Info>
             </InfoDetail>
             <InfoDetail>
-              <Title>결제금액 : </Title>
+              <Title>결제금액&nbsp;: </Title>
               <Info>{selectedValue.toLocaleString()}원</Info>
             </InfoDetail>
             <InfoDetail>
-              <Title>계좌주명(사업자) : </Title>
+              <Title>계좌주명 (사업자)&nbsp;: </Title>
               <Info>풋살예약닷컴(주)</Info>
             </InfoDetail>
             <InfoDetail>
-              <Title>고정 가상 계좌 : </Title>
+              <Title>고정 가상 계좌&nbsp;: </Title>
               <Info>[국민은행] 104440-00-288818</Info>
               <ClipboardCopy />
             </InfoDetail>
             <InfoDetail>
-              <Title>결제방식 : </Title>
+              <Title>결제방식&nbsp;: </Title>
               <Info>고정계좌 입금 (무통장)</Info>
             </InfoDetail>
             <InfoDetail>
-              <Title>발급일시 : </Title>
+              <Title>발급일시&nbsp;: </Title>
               <Info>{createdDate}</Info>
             </InfoDetail>
-            <Button onClick={() => setModalOpen(!modalOpen)} > 확인</Button>
+            <InfoDetail>
+              <Title>발급일시&nbsp;: </Title>
+              <Info>{createdDate}</Info>
+            </InfoDetail>
+            <CheckBtn onClick={() => setModalOpen(!modalOpen)}> 확인</CheckBtn>
           </PointModalDiv>
         </ModalWrapper>
       )}
@@ -66,6 +73,9 @@ const PointCharge = () => {
   );
 };
 
+const CheckBtn = styled(Button)`
+  margin-top: 0.3rem;
+`;
 
 const Container = styled.div`
   width: 85%;
@@ -76,7 +86,7 @@ const Container = styled.div`
 `;
 
 const MainTitle = styled.div`
-  font-size: 30px;
+  font-size: 2rem;
   font-weight: bold;
   margin: 0 1rem 1.5rem 0;
 `;
@@ -84,15 +94,16 @@ const MainTitle = styled.div`
 const InfoDetail = styled.div`
   display: flex;
   margin-right: auto;
+  margin-left: 6rem;
   margin-bottom: 0.5rem;
 `;
 const Title = styled.div`
-  font-size: 30px;
+  font-size: 1.6rem;
   font-weight: bold;
 `;
 const Info = styled.div`
-  font-size: 30px;
-  margin-left: 0.7rem;
+  font-size: 1.4rem;
+  margin: 0.1rem 0 0 0.7rem;
 `;
 
 const PointModalDiv = styled(ModalDiv)`

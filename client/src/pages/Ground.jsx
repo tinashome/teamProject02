@@ -28,6 +28,9 @@ const Ground = () => {
   const [formatDate, setFormatDate] = useState(
     moment(dateValue).format('MM월 DD일'),
   );
+
+  const [showImgModal, setShowImgModal] = useState(false);
+  const [imgModalCurser, setImgModalCurser] = useState(true);
   const params = useParams();
   const groundId = params.id;
   const navigate = useNavigate();
@@ -82,7 +85,12 @@ const Ground = () => {
     <Spinner />
   ) : (
     <>
-      <GroundSlide info={detailInfo.groundImg} />
+      <GroundSlide
+        info={detailInfo.groundImg}
+        showImgModal={showImgModal}
+        setShowImgModal={setShowImgModal}
+        imgModalCurser ={imgModalCurser}
+      />
       <InfoMainTitle>{detailInfo.groundName}</InfoMainTitle>
       <Container>
         <GroundInfoList>
