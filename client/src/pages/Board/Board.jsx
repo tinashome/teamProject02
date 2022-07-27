@@ -10,7 +10,7 @@ import {
 } from 'stores/boardStore';
 import Pagination from 'components/organisms/Pagination';
 import Button from 'components/atoms/Button';
-import { isExistToken } from 'util/useful-functions';
+import { getCurrentDate, isExistToken } from 'util/useful-functions';
 
 const Board = () => {
   const [noticeBoards, setNoticesBoards] = useRecoilState(adminBoardListState);
@@ -70,7 +70,7 @@ const Board = () => {
                 <div>{board.title}</div>
               </Link>
               <div>{board.userName}</div>
-              <div>{board.updatedAt.slice(0, 10)}</div>
+              <div>{getCurrentDate(board.createdAt)}</div>
             </BoardInfo>
           ))}
         {userBoards.data?.map((board) => (
@@ -82,7 +82,7 @@ const Board = () => {
               <div>{board.title}</div>
             </Link>
             <div>{board.userName}</div>
-            <div>{board.updatedAt.slice(0, 10)}</div>
+            <div>{getCurrentDate(board.createdAt)}</div>
           </BoardInfo>
         ))}
       </Container>
@@ -93,7 +93,7 @@ const Board = () => {
           page={page}
           setPage={setPage}
         />
-        {userBoards.data && isExistToken() && (
+        {!!userBoards.length && isExistToken() && (
           <Link to='/write'>
             <StyledButton>글 작성</StyledButton>
           </Link>

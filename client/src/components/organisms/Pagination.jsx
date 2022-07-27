@@ -73,12 +73,16 @@ const PaginationWrapper = styled.div`
   margin: 1rem 0;
 
   svg {
+    width: 40px;
+    height: 40px;
+    padding: 12px;
     margin: 0 1rem;
     cursor: pointer;
 
     &[disabled] {
       pointer-events: none;
-      cursor: revert;
+      cursor: not-allowed;
+      color: #adb5bd;
     }
   }
 `;

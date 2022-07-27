@@ -5,10 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'components/atoms/Button';
 import { useForm } from 'react-hook-form';
 import CheckBox from 'components/atoms/CheckBox';
-import jwtDecode from 'jwt-decode';
-import { getToken } from 'util/useful-functions';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'stores/userStore';
+import { getCurrentDate } from 'util/useful-functions';
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -117,7 +116,9 @@ const BoardDetail = () => {
         ) : (
           <>
             <Title>{boardDetail.title}</Title>
-            <Date>{boardDetail.createdAt?.slice(0, 10)}</Date>
+            {boardDetail.createdAt && (
+              <Date>{getCurrentDate(boardDetail.createdAt)}</Date>
+            )}
           </>
         )}
       </Wrapper>
