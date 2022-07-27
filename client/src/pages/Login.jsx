@@ -49,6 +49,32 @@ const Login = () => {
     setIsOpenModal((prev) => !prev);
   }, [isOpenModal]);
 
+  const handleTest = async () => {
+    try {
+      const result = await Api.post('auth/signin', {
+        email: 'test@gmail.com',
+        password: 'test1234',
+      });
+      const { token, isAdmin } = result.data;
+      localStorage.setItem('token', token);
+      const { userId, name, role, isOAuth } = jwtDecode(token);
+      const {
+        data: { totalPoint },
+      } = await Api.get('users/user');
+      setUserInfo({
+        userId,
+        name,
+        role,
+        isOAuth,
+        isAdmin,
+      });
+      setTotalPoint((prev) => ({ ...prev, totalPoint }));
+      navigate('/');
+    } catch (err) {
+      alert(err.response.data.reason);
+    }
+  };
+
   return (
     <Container>
       <Image src={loginImgList[0]} />
@@ -79,6 +105,7 @@ const Login = () => {
           </Link>
           <span style={{ marginLeft: 5, marginRight: 5 }}>•</span>
           <StyledButton onClick={toggleModal}>비밀번호 찾기</StyledButton>
+          <TestButton onClick={handleTest}>회원가입 없이 체험하기</TestButton>
         </Wrapper>
       </InputContainer>
       {isOpenModal && <FindPasswordModal toggleModal={toggleModal} />}
@@ -143,18 +170,26 @@ const LoginButton = styled.input`
 
 const Wrapper = styled.div`
   display: flex;
-  margin-right: auto;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  width: 100%;
+  justify-content: flex-start;
   margin-top: 0.3rem;
-  opacity: 0.5;
+
+  span {
+    opacity: 0.5;
+  }
 `;
 
 const StyledButton = styled.button`
+  color: #495057;
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const TestButton = styled.button`
+  margin-left: auto;
+  font-weight: 550;
+  color: #c92a2a;
 `;
 
 export default Login;
