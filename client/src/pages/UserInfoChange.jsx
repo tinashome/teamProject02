@@ -104,7 +104,6 @@ const Title = styled.div`
   padding: 1.875rem 3.125rem;
   margin-top: 1.875rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 2rem;
@@ -159,7 +158,6 @@ const Content = styled.div`
   justify-content: flex-end;
   line-height: 1.8125rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1.5rem;
