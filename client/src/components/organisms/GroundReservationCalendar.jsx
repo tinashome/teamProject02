@@ -53,6 +53,9 @@ const GroundReservationCalendar = ({
           minDate={new Date()}
           value={dateValue}
           locale='ko'
+          dayClassName={(date) => {
+            console.log(date)
+          }}
         />
       </CalendarUI>
     </Container>

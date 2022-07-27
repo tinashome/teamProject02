@@ -93,7 +93,7 @@ const Ground = () => {
         info={detailInfo.groundImg}
         showImgModal={showImgModal}
         setShowImgModal={setShowImgModal}
-        imgModalCurser ={imgModalCurser}
+        imgModalCurser={imgModalCurser}
       />
       <InfoMainTitle>{detailInfo.groundName}</InfoMainTitle>
       <Container>
@@ -177,7 +177,7 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   margin: 0 auto;
-  width: 80rem;
+  width: 100%;
 `;
 
 const InfoMainTitle = styled.h1`
@@ -187,14 +187,14 @@ const InfoMainTitle = styled.h1`
   margin: 1rem 1rem 2rem 1rem;
 `;
 const GroundInfoList = styled.div`
-  width: 60%;
+  width: 50%;
 `;
 
 const ReservationBtn = styled(Button)`
   font-size: 0.8rem;
   font-weight: bold;
   float: right;
-  border: solid 1px black;
+  border: solid 1px #adb5bd;
   margin: 1rem 1.5rem 2rem 0;
 `;
 const BackBtn = styled(Button)`
@@ -202,12 +202,11 @@ const BackBtn = styled(Button)`
   font-weight: bold;
   color: #3563e9;
   background-color: white;
-  border: solid 1px black;
+  border: solid 1px #adb5bd;
   float: right;
   margin: 1rem 1rem 0 0;
 `;
 
-// 달력이랑 시간 버튼 css
 const ReservationList = styled.div`
   position: sticky;
   top: 0;
@@ -215,6 +214,7 @@ const ReservationList = styled.div`
   border-radius: 0.7rem;
   width: 30%;
   height: 60%;
+  margin-bottom:1rem;
 `;
 
 const ReservationCheckModal = styled(ModalDiv)`
@@ -250,6 +250,7 @@ const Info = styled.p`
   font-size: 1.3rem;
   text-align: left;
   margin-left: 0.5rem;
+  flex-wrap: wrap;
 `;
 
 const ReservationTimeList = styled.div`

@@ -77,7 +77,7 @@ const TimeButton = styled.button`
   }
     
     };
-  border: solid #bdbdbd;
+  border: solid 1px #bdbdbd;
   border-radius: 3px;
   margin: 3px;
   :hover:enabled {

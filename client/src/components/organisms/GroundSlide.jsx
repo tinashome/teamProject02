@@ -44,7 +44,7 @@ const GroundSlide = ({
         dots
         infinite
         autoplay
-        speed={500}
+        speed={1000}
         autoplaySpeed={4000}
         slidesToShow={1}
         slidesToScroll={1}
