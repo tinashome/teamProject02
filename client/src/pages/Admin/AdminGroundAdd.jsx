@@ -5,8 +5,8 @@ import { useRecoilState } from 'recoil';
 import { adminCurrentPage, adminContentState } from 'stores/adminUserStore';
 import { useForm } from 'react-hook-form';
 import * as Api from 'api/api';
-import { AiFillCloseCircle } from '@react-icons/all-files/ai/AiFillCloseCircle';
-import imgbox from '../../assets/image/imgbox.png';
+import { RiCloseLine } from '@react-icons/all-files/ri/RiCloseLine';
+import imgbox from '../../assets/image/inputFile.png';
 import Postcode from './PostCode';
 import AdminGroundList from './AdminGroundList';
 import GroundInfoModal from './GroundInfoModal';
@@ -633,16 +633,22 @@ const CancelText = styled.div`
   cursor: pointer;
 `;
 
-const CancelIcon = styled(CancelText)`
+const CancelIcon = styled.div`
+  display: flex;
+  position: absolute;
   padding: 6px;
-  font-size: 18pt;
   color: #fff;
+  opacity: 0.5;
+  cursor: pointer;
 `;
 
-const CloseIcon = styled(AiFillCloseCircle)`
-  font-size: 30px;
-  background-color: #dc5d5d;
-  border-radius: 50%;
+// const CloseIcon = styled(AiFillCloseCircle)`
+const CloseIcon = styled(RiCloseLine)`
+  font-size: 25px;
+  padding: -10px;
+  background-color: #000;
+  background-color: #000;
+  border-radius: 10%;
 `;
 
 export default AdminGroundAdd;
