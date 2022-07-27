@@ -189,7 +189,7 @@ const StyledButton = styled.button`
 const TestButton = styled.button`
   margin-left: auto;
   font-weight: 550;
-  color: #c92a2a;
+  color: #e03131;
 `;
 
 export default Login;
