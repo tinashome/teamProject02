@@ -236,14 +236,6 @@ const SignUpButton = styled(Input)`
   }
 `;
 
-const fadein = keyframes`
-  0% {
-    opacity: 0;
-  } 100% {
-    opacity: 1;
-  }
-`;
-
 const EmailModal = styled(ModalDiv)`
   display: flex;
   justify-content: flex-start;
@@ -253,7 +245,6 @@ const EmailModal = styled(ModalDiv)`
   top: 45%;
   left: 45%;
   padding: 2rem;
-  animation: ${fadein} 0.3s ease-in;
 
   span {
     font-size: 27px;

@@ -143,7 +143,7 @@ const UserProfileButton = styled.button`
 const UserProfileButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 8rem;
+  min-width: 8.5rem;
 `;
 
 export default Header;

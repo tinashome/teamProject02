@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { userState } from 'stores/userStore';
+import { userPointState, userState } from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
 import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
 import { loginImgList } from 'constants/imgList';
@@ -17,22 +17,27 @@ const Login = () => {
   const navigate = useNavigate();
 
   const setUserInfo = useSetRecoilState(userState);
+  const setTotalPoint = useSetRecoilState(userPointState);
+
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (userData) => {
     try {
       const result = await Api.post('auth/signin', userData);
       const { token, isAdmin } = result.data;
-      const { userId, name, role, isOAuth } = jwtDecode(token);
       localStorage.setItem('token', token);
+      const { userId, name, role, isOAuth } = jwtDecode(token);
+      const {
+        data: { totalPoint },
+      } = await Api.get('users/user');
       setUserInfo({
         userId,
         name,
         role,
         isOAuth,
         isAdmin,
-        isLogin: true,
       });
+      setTotalPoint((prev) => ({ ...prev, totalPoint }));
       navigate('/');
     } catch (err) {
       alert(err.response.data.reason);
