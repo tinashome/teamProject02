@@ -152,14 +152,6 @@ const AdminGroundList = () => {
                 {e.paymentPoint && e.paymentPoint.toLocaleString()} P
               </Text>
               <Text>
-                {/* <Button
-                  id={e._id}
-                  name={e.groundName}
-                  onClick={handleClickInfo}
-                  style={{ margin: '0 5px' }}
-                >
-                  조회
-                </Button> */}
                 <Button
                   id={e._id}
                   name={e.groundName}

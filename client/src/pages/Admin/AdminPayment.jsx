@@ -95,7 +95,7 @@ const AdminPayment = () => {
         <Text width='80'>이름</Text>
         <Text width='200'>이메일</Text>
         <Text width='100'>주문일자</Text>
-        <Text width='100'>주문P</Text>
+        <Text width='80'>주문P</Text>
         <Text width='80'>예금주</Text>
         <Text width='100'>승인</Text>
       </TitleRow>
@@ -106,11 +106,8 @@ const AdminPayment = () => {
               <Text width='80'>{e.user.name}</Text>
               <Text width='200'>{e.user.email}</Text>
               <Text width='100'>{getCurrentDate(e.createdAt)}</Text>
-              <Text
-                width='100'
-                style={{ justifyContent: 'flex-end', paddingRight: '5px' }}
-              >
-                {e.paymentAmount && addCommas(e.paymentAmount)}P
+              <Text width='80' style={{ justifyContent: 'flex-end' }}>
+                {e.paymentAmount && addCommas(e.paymentAmount)} P
               </Text>
               <Text width='80'>{e.payName}</Text>
               <Text width='100'>
@@ -163,6 +160,7 @@ const Text = styled.p`
   height: 24px;
   letter-spacing: 0.5px;
   align-items: center;
+  white-space: nowrap;
   justify-content: center;
 `;
 

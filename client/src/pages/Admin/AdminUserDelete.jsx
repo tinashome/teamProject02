@@ -95,7 +95,7 @@ const AdminUserDelete = () => {
           <Text width='200'>이메일</Text>
           <Text width='80'>이름</Text>
           <Text>연락처</Text>
-          <Text width='100'>포인트</Text>
+          <Text width='80'>포인트</Text>
           <Text>삭제(탈퇴)</Text>
         </TitleRow>
         <Wrapper pageSize={pageSize}>
@@ -111,8 +111,8 @@ const AdminUserDelete = () => {
                       `$1-$2-$3`,
                     )}
                 </Text>
-                <Text width='100'>
-                  {e.totalPoint && e.totalPoint.toLocaleString()}P
+                <Text width='80' style={{ justifyContent: 'flex-end' }}>
+                  {e.totalPoint && e.totalPoint.toLocaleString()} P
                 </Text>
                 <Text>
                   <Button id={e._id} name={e.name} onClick={handleClick}>
@@ -159,6 +159,8 @@ const Text = styled.p`
   height: 24px;
   letter-spacing: 0.5px;
   align-items: center;
+  // overflow: hidden;
+  white-space: nowrap;
   justify-content: center;
 `;
 
