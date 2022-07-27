@@ -18,3 +18,4 @@ export * from './models/banner-model.js';
 export * from './models/ground-model.js';
 export * from './models/point-model.js';
 export * from './models/rental-model.js';
+export * from './models/board-model.js';

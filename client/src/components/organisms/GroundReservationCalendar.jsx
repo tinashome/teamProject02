@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment';
 import { BiCalendarCheck } from '@react-icons/all-files/bi/BiCalendarCheck';
-import 'react-calendar/dist/Calendar.css';
 import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import ko from 'date-fns/locale/ko';
+
+registerLocale('ko', ko);
 
 const GroundReservationCalendar = ({
   info,
@@ -16,7 +19,6 @@ const GroundReservationCalendar = ({
   setDateValue,
 }) => {
   const [calendarShowBtn, setCalendarShowBtn] = useState(true);
-
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
     const result = reservationinfo
@@ -46,10 +48,14 @@ const GroundReservationCalendar = ({
         style={calendarShowBtn ? { display: 'flex' } : { display: 'none' }}
       >
         <StyleCalendar
+          inline
           onChange={setDateValue}
           minDate={new Date()}
           value={dateValue}
-          calendarType="ISO 8601"
+          locale='ko'
+          dayClassName={(date) => {
+            console.log(date)
+          }}
         />
       </CalendarUI>
     </Container>
@@ -63,9 +69,9 @@ const DateSelectText = styled.div`
   margin-left: 5rem;
 `;
 
-const StyleCalendar = styled(Calendar)`
-  width: 100%;
+const StyleCalendar = styled(DatePicker)`
   border: solid 1px #dee2e6;
+  height: 100%;
 `;
 
 const Container = styled.div`

@@ -12,13 +12,13 @@ const PointChargeTitle = () => {
     <Container>
       <BackArrow onClick={() => navigate(-1)}>
         <AiOutlineArrowLeft />
-        <span>이전 페이지</span>
+        <span>이전 페이지 </span>
       </BackArrow>
 
       <Title>포인트 충전</Title>
 
       <ChargeInfoBtn>
-        <Link to='/'>
+        <Link to='/myinfo/point'>
           <AiOutlineQuestionCircle />
           <span>충전내역</span>
         </Link>

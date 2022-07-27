@@ -82,8 +82,9 @@ const TimeText = styled.h1`
 `;
 
 const Container = styled.div`
-  width: 40rem;
+  width: 100%;
   height: 25.5rem;
+  margin-bottom:1rem;
 `;
 
 const Title = styled.h1`
@@ -94,9 +95,9 @@ const Title = styled.h1`
 const TimeBtns = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  width: 21.5rem;
+  width: 90%;
   margin: 1rem 0 1rem 1rem;
-  gap: 0.5rem 0;
+  gap: 0.4rem 0;
   border: solid 1px #dee2e6;
   padding: 1rem;
 `;

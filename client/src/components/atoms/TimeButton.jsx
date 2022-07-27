@@ -65,8 +65,19 @@ const TimeButton = styled.button`
   height: 2rem;
   font-size: 0.7rem;
   font-weight: bold;
-  background-color: ${(props) => (props.isSelect ? '#ebfbee' : '#bac8ff')};
-  border: solid #bdbdbd;
+  background-color: ${(props) =>
+
+    {
+      if(props.disabled){
+      return '#ced4da'
+    }if(props.isSelect){
+      return  '#748ffc'
+    }
+      return '#b2f2bb'
+  }
+    
+    };
+  border: solid 1px #bdbdbd;
   border-radius: 3px;
   margin: 3px;
   :hover:enabled {
