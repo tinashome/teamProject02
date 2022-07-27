@@ -7,7 +7,7 @@ import { FaUserCircle } from '@react-icons/all-files/fa/FaUserCircle';
 
 import { useRecoilState } from 'recoil';
 import { userPointState, userState } from 'stores/userStore';
-import { addCommas, isExistToken } from 'util/useful-functions';
+import { addCommas, getToken, isExistToken } from 'util/useful-functions';
 import HeaderButton from '../atoms/HeaderButton';
 import Button from '../atoms/Button';
 import Logo from '../atoms/Logo';
@@ -45,7 +45,9 @@ const Header = () => {
   };
 
   useEffect(() => {
-    getUserData();
+    if (getToken()) {
+      getUserData();
+    }
   }, [totalPoint.isChange]);
 
   useEffect(() => {
