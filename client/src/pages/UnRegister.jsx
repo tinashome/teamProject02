@@ -3,7 +3,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
-import userState from '../stores/userStore';
+import { userState } from '../stores/userStore';
 import * as Api from '../api/api';
 
 const UnRegister = () => {
@@ -20,10 +20,12 @@ const UnRegister = () => {
       const result = await Api.delete('users');
       if (result.status === 200) {
         alert('회원 탈퇴가 완료되었습니다.');
+        localStorage.removeItem('token');
+        setUserInfo({});
+        navigate('/');
+      } else {
+        alert('회원 탈퇴에 실패하였습니다.');
       }
-      localStorage.removeItem('token');
-      setUserInfo({});
-      navigate('/');
     } catch (err) {
       console.log(err);
     }
@@ -94,7 +96,6 @@ const Title = styled.div`
   padding: 1.875rem 3.125rem;
   margin-top: 1.875rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 2rem;
@@ -150,7 +151,6 @@ const Content = styled.div`
   line-height: 1.8125rem;
   margin-bottom: 1rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1.5rem;

@@ -4,12 +4,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
-import { adminContentState } from 'stores/adminUserStore';
+import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
+import { adminGround } from 'stores/adminGroundStore';
 import * as Api from 'api/api';
+import { RiCloseLine } from '@react-icons/all-files/ri/RiCloseLine';
 import Postcode from './PostCode';
-import imgbox from '../../assets/image/imgbox.png';
+import imgbox from '../../assets/image/inputFile.png';
 // eslint-disable-next-line import/no-cycle
 import AdminGroundList from './AdminGroundList';
+// eslint-disable-next-line import/no-cycle
+import GroundInfoModal from './GroundInfoModal';
 
 const AdminGroundEdit = ({ groundId }) => {
   const {
@@ -19,11 +23,13 @@ const AdminGroundEdit = ({ groundId }) => {
     formState: { errors },
   } = useForm({ reValidateMode: 'onChange' });
   const fileInput = useRef(null);
-  const [ground, setGround] = useState(null);
+  // const [ground, setGround] = useState(null);
+  const [ground, setGround] = useRecoilState(adminGround);
   // eslint-disable-next-line no-unused-vars
   const [content, setContent] = useRecoilState(adminContentState);
-  const [postCode, setPostCode] = useState(null);
+  const [postCode, setPostCode] = useState([]);
   const [inputPointValue, setInputPointValue] = useState(null);
+  const [inputPointRequired, setInputPointRequired] = useState(false);
   const [findAddressRequired, setFindAddressRequired] = useState(false);
   // 업로드 된 이미지 주소를 배열로 저장하여 화면에보여주고 경기장 생성시 주소를 전송
   const [uplodedImgsSrc, setUplodedImgsSrc] = useState(null);
@@ -32,11 +38,15 @@ const AdminGroundEdit = ({ groundId }) => {
   const [times, setTimes] = useState({ startTime: '07:00', endTime: '22:00' });
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState('');
+  const [modalImage, setModalImage] = useState('');
+  const [currentPage, setCurentPage] = useRecoilState(adminCurrentPage);
 
   const getGround = async () => {
     try {
       const result = await Api.get(`grounds/${groundId}`);
       const resultData = result.data;
+      // setUplodedImgsSrcArray(resultData.groundImg);
+      // setGroundImages(resultData.groundImg);
       setGround({
         ...resultData,
         paymentPoint: resultData.paymentPoint.toLocaleString(),
@@ -99,6 +109,10 @@ const AdminGroundEdit = ({ groundId }) => {
     filesArray.map((el) => postImg(el));
   };
 
+  const handleClickImage = (event) => {
+    setModalImage({ image: true, url: event.target.src });
+  };
+
   // 이미지업로드시 결과값 주소를 하나씩 uplodedImgsSrcArray 상태배열에 추가
   useEffect(() => {
     if (uplodedImgsSrc)
@@ -106,7 +120,7 @@ const AdminGroundEdit = ({ groundId }) => {
     setUplodedImgsSrc(null);
   }, [uplodedImgsSrc]);
 
-  // 기타정보 세로길이 지정용 함수
+  // 기타입력란 세로길이 지정용 함수
   const handleActInfo = (e) => {
     const rows = e.target.value.split('\n').length;
     setActInfoRows(rows + 2);
@@ -118,7 +132,9 @@ const AdminGroundEdit = ({ groundId }) => {
     setTimes({ ...times, [name]: value });
   };
 
-  // 저장하기 클릭시 checkPostCode 으로 postCode의 값이 있는지(우편번호찾기를 했는지)
+  // 경기장 등록하기클릭시 checkPostCodeAndPoint 으로
+  // postCode의 값이 있는지(우편번호찾기를 했는지)
+  // inputPointValu의 값이 있는지(포인트를 입력했는지)
   // 확인후 onSubmit 실행
   const onSubmit = async (data) => {
     const actInfoArray = data.actInfo.trim().split('\n');
@@ -126,7 +142,7 @@ const AdminGroundEdit = ({ groundId }) => {
       ...ground,
       ...data,
       paymentPoint:
-        inputPointValue.length > 3
+        inputPointValue && inputPointValue.length > 3
           ? inputPointValue.replaceAll(',', '')
           : inputPointValue,
       groundAddress: {
@@ -153,50 +169,39 @@ const AdminGroundEdit = ({ groundId }) => {
     }
   };
 
-  const checkPostCode = (data) => {
-    if (postCode[0]) {
-      onSubmit(data);
+  const checkPostCodeAndPoint = (data) => {
+    if (inputPointValue) {
+      setInputPointRequired(false);
+      if (postCode[0]) {
+        setFindAddressRequired(false);
+        onSubmit(data);
+      } else {
+        setFindAddressRequired(true);
+      }
     } else {
-      setFindAddressRequired(true);
+      setInputPointRequired(true);
     }
   };
 
   const goGroundList = () => {
     setModal(null);
+    setCurentPage(0);
     setContent(['경기장 목록 조회', <AdminGroundList />]);
   };
 
   return (
     ground && (
       <>
-        <ModalWrapper modal={modal} onClick={goGroundList}>
-          <ModalDiv modal={modal}>
-            {modal &&
-              `
-            등록결과	:  ${modal.success ? '성공' : '실패'}
-            경기장명	:  ${modal.groundName}
-            포 인 트	:  ${modal.paymentPoint.toLocaleString()}
-            우편번호	:  ${modal.groundAddress.postalCode}
-            주   소1	:  ${modal.groundAddress.address1}
-            주   소2	:  ${modal.groundAddress.address2}
-            구장크기	:  ${modal.groundSize}
-            이 미 지	:  ${modal.groundImg && modal.groundImg.length}개 업로드
-            샤 워 장	:  ${modal.showerPlace}
-            주 차 장	:  ${modal.parking}
-            옷 대 여	:  ${modal.shoesRental}
-            신발대여	:  ${modal.sportswearRental}
-            가 는 길	:  ${modal.wayTo}
-            주차여부	:  ${modal.parkingInfo}
-            흡연여부	:  ${modal.smoking}
-            화 장 실	:  ${modal.toilet}
-            신발정보	:  ${modal.shoesRentallInfo}
-            기타정보	:  ${modal.actInfo && modal.actInfo[0]}
-            시작시간	:  ${modal.startTime}
-            종료시간	:  ${modal.endTime}`}
-            <ModalButton onClick={goGroundList}>닫기</ModalButton>
-          </ModalDiv>
-        </ModalWrapper>
-        <form onSubmit={handleSubmit(checkPostCode)}>
+        {(modal || modalImage) && (
+          <GroundInfoModal
+            modal={modal}
+            goGroundList={goGroundList}
+            modalImage={modalImage}
+            setModalImage={setModalImage}
+          />
+        )}
+
+        <form onSubmit={handleSubmit(checkPostCodeAndPoint)}>
           <Wrapper>
             <TitleRow>필수 입력 정보</TitleRow>
 
@@ -284,25 +289,95 @@ const AdminGroundEdit = ({ groundId }) => {
               </InputContainers>
             </Row>
           </Wrapper>
-          <Wrapper>
-            <TitleRow>선택 입력 정보</TitleRow>
-            <Row>
-              <TextContainers>
-                <Text>경기장 크기</Text>
-              </TextContainers>
-              <InputContainers>
-                <Input
-                  {...register('groundSize', {
-                    value: ground.groundSize,
-                  })}
-                />
-              </InputContainers>
-            </Row>
 
+          <Wrapper>
+            <TitleRow>경기장 이미지</TitleRow>
+
+            <AddButtonWrap style={{ height: '30px' }}>
+              기존업로드된 이미지
+            </AddButtonWrap>
             <Row>
-              <TextContainers>
-                <Text>구장 이미지</Text>
-              </TextContainers>
+              <ImgBoxContainers>
+                <ImgBox>
+                  {ground.groundImg !== 0 &&
+                    ground.groundImg.map((e, i) => (
+                      <ImgBox>
+                        <CancelIcon
+                          onClick={() => {
+                            const arr = [...ground.groundImg];
+                            arr.splice(i, 1);
+                            setGround({ ...ground, groundImg: [...arr] });
+                          }}
+                        >
+                          <CloseIcon />
+                        </CancelIcon>
+                        <Img
+                          key={i}
+                          src={e}
+                          alt={`img${i}`}
+                          onClick={handleClickImage}
+                        />
+                      </ImgBox>
+                    ))}
+                </ImgBox>
+              </ImgBoxContainers>
+            </Row>
+          </Wrapper>
+
+          <Wrapper>
+            <AddButtonWrap>
+              <CancelText
+                onClick={() => {
+                  setUplodedImgsSrcArray([]);
+                }}
+                style={{
+                  position: 'relative',
+                  marginTop: '10px',
+                  color: '#000',
+                }}
+              >
+                모든파일 취소
+              </CancelText>
+              <AddButton onClick={handleAddClick} type='button'>
+                +
+              </AddButton>
+            </AddButtonWrap>
+            <Input
+              type='file'
+              style={{ display: 'none' }}
+              accept='image/*'
+              {...register('groundImg')}
+              ref={fileInput}
+              onChange={getImgSrcArray}
+            />
+            <Row>
+              <ImgBoxContainers imgbox={imgbox}>
+                {uplodedImgsSrcArray.map((e, i) => (
+                  <ImgBox>
+                    <CancelIcon
+                      onClick={() => {
+                        const arr = [...uplodedImgsSrcArray];
+                        arr.splice(i, 1);
+                        setUplodedImgsSrcArray([...arr]);
+                      }}
+                    >
+                      <CloseIcon />
+                    </CancelIcon>
+                    <Img
+                      key={i}
+                      src={e}
+                      alt={`img${i}`}
+                      onClick={handleClickImage}
+                    />
+                  </ImgBox>
+                ))}
+              </ImgBoxContainers>
+            </Row>
+          </Wrapper>
+
+          {/* <Wrapper>
+            <TitleRow>경기장 이미지</TitleRow>
+            <Row>
               <InputFileContainers>
                 <Input
                   type='file'
@@ -324,7 +399,12 @@ const AdminGroundEdit = ({ groundId }) => {
                         )
                       : ground.groundImg.map((e, i) => (
                           // eslint-disable-next-line react/no-array-index-key
-                          <Img key={i} src={e} alt={`img${i}`} />
+                          <Img
+                            key={i}
+                            src={e}
+                            alt={`img${i}`}
+                            onClick={handleClickImage}
+                          />
                         ))}
                   </ImgBox>
                   <ImgBoxBack>
@@ -349,9 +429,74 @@ const AdminGroundEdit = ({ groundId }) => {
                 </AddButtonWrap>
               </InputFileContainers>
             </Row>
-          </Wrapper>
+          </Wrapper> */}
+
           <Wrapper>
-            <TitleRow>기타사항</TitleRow>
+            <TitleRow>경기장 정보</TitleRow>
+            <Row>
+              <TextContainers>
+                <Text>경기장 크기</Text>
+              </TextContainers>
+              <InputContainers>
+                <Input
+                  {...register('groundSize', {
+                    value: ground.groundSize,
+                  })}
+                />
+              </InputContainers>
+            </Row>
+            <Row>
+              <TextContainers>
+                <Text>기타정보</Text>
+              </TextContainers>
+              <InputContainers>
+                <Div>
+                  <Label>
+                    <Checkbox
+                      type='checkbox'
+                      {...register('showerPlace', {
+                        value: ground.showerPlace,
+                      })}
+                    />
+                    샤워실
+                  </Label>
+                  <Label>
+                    <Checkbox
+                      type='checkbox'
+                      {...register('parking', {
+                        value: ground.parking,
+                      })}
+                    />
+                    무료주차
+                  </Label>
+                </Div>
+              </InputContainers>
+            </Row>
+            <Row>
+              <InputContainers>
+                <Div>
+                  <Label>
+                    <Checkbox
+                      type='checkbox'
+                      {...register('sportswearRental', {
+                        value: ground.sportswearRental,
+                      })}
+                    />
+                    운동복대여
+                  </Label>
+                  <Label>
+                    <Checkbox
+                      type='checkbox'
+                      {...register('shoesRental', {
+                        value: ground.shoesRental,
+                      })}
+                    />
+                    풋살화대여
+                  </Label>
+                </Div>
+              </InputContainers>
+            </Row>
+            {/* 
             <Row>
               <Label>
                 <Checkbox
@@ -389,7 +534,7 @@ const AdminGroundEdit = ({ groundId }) => {
                 />
                 풋살화대여
               </Label>
-            </Row>
+            </Row> */}
           </Wrapper>
           <Wrapper>
             <TitleRow>구장 특이사항</TitleRow>
@@ -408,7 +553,7 @@ const AdminGroundEdit = ({ groundId }) => {
 
             <Row>
               <TextContainers>
-                <Text>주차장 위치 안내</Text>
+                <Text>주차</Text>
               </TextContainers>
               <InputContainers>
                 <Input
@@ -434,20 +579,7 @@ const AdminGroundEdit = ({ groundId }) => {
 
             <Row>
               <TextContainers>
-                <Text>화장실</Text>
-              </TextContainers>
-              <InputContainers>
-                <Input
-                  {...register('toilet', {
-                    value: ground.toilet,
-                  })}
-                />
-              </InputContainers>
-            </Row>
-
-            <Row>
-              <TextContainers>
-                <Text>신발대여정보</Text>
+                <Text>풋살화대여</Text>
               </TextContainers>
               <InputContainers>
                 <Input
@@ -460,7 +592,20 @@ const AdminGroundEdit = ({ groundId }) => {
 
             <Row>
               <TextContainers>
-                <Text style={{ paddingTop: '10px' }}>기타정보</Text>
+                <Text>화장실</Text>
+              </TextContainers>
+              <InputContainers>
+                <Input
+                  {...register('toilet', {
+                    value: ground.toilet,
+                  })}
+                />
+              </InputContainers>
+            </Row>
+
+            <Row style={{ alignItems: 'flex-start' }}>
+              <TextContainers>
+                <Text style={{ paddingTop: '10px' }}>기타</Text>
               </TextContainers>
               <InputContainers>
                 <Textarea
@@ -474,6 +619,56 @@ const AdminGroundEdit = ({ groundId }) => {
             </Row>
 
             <Row>
+              <TextContainers>
+                <Text>시작/종료시간</Text>
+              </TextContainers>
+              <InputContainers style={{ justifyContent: 'flex-start' }}>
+                <Select
+                  {...register('startTime')}
+                  style={{ marginRight: '10px' }}
+                  defaultValue={ground.startTime}
+                >
+                  <option value='07:00'>7:00</option>
+                  <option value='08:00'>8:00</option>
+                  <option value='09:00'>9:00</option>
+                  <option value='10:00'>10:00</option>
+                  <option value='11:00'>11:00</option>
+                  <option value='12:00'>12:00</option>
+                  <option value='13:00'>13:00</option>
+                  <option value='14:00'>14:00</option>
+                  <option value='15:00'>15:00</option>
+                  <option value='16:00'>16:00</option>
+                  <option value='17:00'>17:00</option>
+                  <option value='18:00'>18:00</option>
+                  <option value='19:00'>19:00</option>
+                  <option value='20:00'>20:00</option>
+                  <option value='21:00'>21:00</option>
+                  <option value='22:00'>22:00</option>
+                </Select>
+                <Select {...register('endTime')} defaultValue={ground.endTime}>
+                  <option value='07:00'>7:00</option>
+                  <option value='08:00'>8:00</option>
+                  <option value='09:00'>9:00</option>
+                  <option value='10:00'>10:00</option>
+                  <option value='11:00'>11:00</option>
+                  <option value='12:00'>12:00</option>
+                  <option value='13:00'>13:00</option>
+                  <option value='14:00'>14:00</option>
+                  <option value='15:00'>15:00</option>
+                  <option value='16:00'>16:00</option>
+                  <option value='17:00'>17:00</option>
+                  <option value='18:00'>18:00</option>
+                  <option value='19:00'>19:00</option>
+                  <option value='20:00'>20:00</option>
+                  <option value='21:00'>21:00</option>
+                  <option value='22:00' selected>
+                    22:00
+                  </option>
+                </Select>
+              </InputContainers>
+            </Row>
+
+            {/* <Row>
               <TextContainers>
                 <Text>시작/종료시간</Text>
               </TextContainers>
@@ -500,7 +695,7 @@ const AdminGroundEdit = ({ groundId }) => {
                   onChange={hadleTimes}
                 />
               </InputContainers>
-            </Row>
+            </Row> */}
 
             <Row style={{ justifyContent: 'center' }}>
               <Button
@@ -552,6 +747,12 @@ const Text = styled.p`
   align-self: center;
 `;
 
+const Div = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 450px;
+`;
+
 const TextRed = styled.p`
   display: flex;
   width: 7px;
@@ -577,10 +778,19 @@ const Input = styled.input`
   font-weight: 600;
 `;
 
+// const Input = styled.input`
+//   display: flex;
+//   width: ${(props) => props.width || '100%'};
+//   height: 45px;
+//   padding: 10px;
+//   border: 1px solid #919191;
+//   border-radius: 4px;
+//   font-size: 20px;
+// `;
 const Textarea = styled.textarea`
   display: flex;
   width: 100%;
-  height: ${(props) => Math.max(props.lines, 3) * 24}px;
+  height: ${(props) => Math.max(props.lines, 3) * 26}px;
   padding: 20px 5px;
   border: 1px solid #919191;
   border-radius: 4px;
@@ -589,6 +799,16 @@ const Textarea = styled.textarea`
   overflow: visible;
   white-space: pre;
   resize: none;
+`;
+
+const Select = styled.select`
+  display: flex;
+  width: ${(props) => props.width || '100px'};
+  height: 45px;
+  border: 1px solid #919191;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 600;
 `;
 
 const InputError = styled.div`
@@ -603,11 +823,10 @@ const InputError = styled.div`
 
 const AddButtonWrap = styled.div`
   display: flex;
-  flex-direction: column;
   font-size: 16px;
   font-weight: 700;
-  letter-spacing: -1px;
-  align-items: center;
+  justify-content: flex-end;
+  justify-self: flex-end;
 `;
 
 const AddButton = styled.button`
@@ -622,6 +841,7 @@ const AddButton = styled.button`
   font-size: 40px;
   align-items: center;
   justify-content: center;
+  justify-self: flex-end;
 `;
 
 const Button = styled.button`
@@ -654,82 +874,55 @@ const Label = styled.label`
   user-select: none;
 `;
 
-const InputFileContainers = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 350px;
-  margin: 0 10px;
-  justify-content: space-between;
-`;
-
 const ImgBoxContainers = styled.div`
   display: flex;
-  width: 270px;
+  position: relative;
+  width: 100%;
+  height: 220px;
+  margin: 0 10px;
+  overflow-x: scroll;
+  background-image: url(${(props) => props.imgbox});
+  background-size: 200px;
 `;
 
 const ImgBox = styled.div`
   display: flex;
-  width: 270px;
-  flex-wrap: wrap;
-`;
-
-const ImgBoxBack = styled(ImgBox)`
-  position: absolute;
-  z-index: -999;
+  justify-content: flex-end;
 `;
 
 const Img = styled.img`
   display: flex;
-  width: 89px;
-  height: 89px;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  object-fit: cover;
 `;
 
-const ModalWrapper = styled.div`
-display: ${(props) => (props.modal ? 'flex' : 'none')}};
-  position: fixed;
-  z-index: 1000;
-  top:0;
-  left:0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  font-size: 24px;
+const CancelText = styled.div`
+  display: flex;
+  position: absolute;
+  padding: 6px 0;
+  font-size: 18pt;
   font-weight: 400;
-  letter-spacing: -2px;
-  align-content: center;
-  `;
-
-const ModalDiv = styled.div`
-display: ${(props) => (props.modal ? 'flex' : 'none')}};
-  flex-direction: column;
-  position:absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  height: 600px;
-  margin-left: -250px;
-  margin-top: -400px;
-  padding: 20px 10px;
-  border: solid 10px #3563e9;
-  border-radius: 5px;
-  background-color:#fff;
-  font-size:20px;
-  line-height: 1.2;
-  justify-content: center;
-  align-items: center;
-  white-space: pre-wrap;
+  cursor: pointer;
 `;
 
-const ModalButton = styled.button`
-  width: 80px;
-  height: 50px;
-  padding: 5px 10px;
-  margin-top: 20px;
-  border-radius: 4px;
-  background: #3563e9;
-  color: white;
-  text-align: center;
+const CancelIcon = styled.div`
+  display: flex;
+  position: absolute;
+  padding: 6px;
+  color: #fff;
+  opacity: 0.5;
+  cursor: pointer;
+`;
+
+// const CloseIcon = styled(AiFillCloseCircle)`
+const CloseIcon = styled(RiCloseLine)`
   font-size: 25px;
+  padding: -10px;
+  background-color: #000;
+  background-color: #000;
+  border-radius: 10%;
 `;
 
 export default AdminGroundEdit;

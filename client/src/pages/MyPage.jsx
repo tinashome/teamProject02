@@ -1,31 +1,16 @@
-import React, { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import SideMenu from '../components/organisms/SideMenu';
 
-const MyPage = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    try {
-      const token = localStorage.getItem('token');
-      const userRole = jwtDecode(token).role;
-      if (userRole !== 'basic-user') navigate('/');
-    } catch {
-      navigate('/login');
-    }
-  }, []);
-
-  return (
-    <Container>
-      <SideMenu />
-      <Other>
-        <Outlet />
-      </Other>
-    </Container>
-  );
-};
+const MyPage = () => (
+  <Container>
+    <SideMenu />
+    <Other>
+      <Outlet />
+    </Other>
+  </Container>
+);
 
 export default MyPage;
 

@@ -7,6 +7,8 @@ import {
   pointRouter,
   groundRouter,
   rentalRouter,
+  mailRouter,
+  boardRouter,
 } from './routers/index.js';
 
 import cors from 'cors';
@@ -80,6 +82,14 @@ app.use('/api/auth', authRouter);
 app.use('/api/grounds', groundRouter);
 app.use('/api/points', pointRouter);
 app.use('/api/rentals', rentalRouter);
+app.use('/api/mail', mailRouter);
+app.use('/api/boards', boardRouter);
 app.use(errorHandler);
 
+app.get('/', async function (req, res, next) {
+  const http = `<h1>안녕하세요 여기를 누르세요</h1>
+  <h2><a href="https://futsal-api-elice.herokuapp.com/api-docs/">풋닷컴 api주소</a></h2>
+  `;
+  res.send(http);
+});
 export { app };

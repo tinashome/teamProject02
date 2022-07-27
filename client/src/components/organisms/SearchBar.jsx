@@ -22,6 +22,10 @@ const Container = styled.div`
   border-radius: 24px;
   padding: 12px 16px;
   margin-right: 8rem;
+  transition: border ease 0.5s;
+  &:focus-within {
+    border: 1px solid #3563e9;
+  }
   svg {
     opacity: 0.5;
   }

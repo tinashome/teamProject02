@@ -34,9 +34,10 @@ const rentalRouter = Router();
  *                 description: 날짜
  *                 required: true
  *               reservationTime:
- *                 type: string
+ *                 type: array
  *                 description: 시간
  *                 required: true
+ *                 default: []
  *     responses:
  *       200:
  *         description: 반환 값으로 예약 정보를 반환합니다.
@@ -76,11 +77,10 @@ rentalRouter.post('/', loginRequired, async (req, res, next) => {
  * @swagger
  * /api/rentals/{rentalId}:
  *   patch:
- *     summary: 예약 정보를 업데이트합니다.(승인할시 true로)-관리자 취소할시 다시 false로(포인트값 증가 및 감소)
+ *     summary: 예약 정보를 업데이트합니다.
  *     tags: [rentals]
  *     security:
  *       - JWT: []
- *       - IsAdmin: []
  *     parameters:
  *       - in: path
  *         name: rentalId
@@ -95,9 +95,13 @@ rentalRouter.post('/', loginRequired, async (req, res, next) => {
  *           schema:
  *             type: object
  *             properties:
- *               isBooked:
- *                 type: boolean
- *                 description: 승인여부 기존에는 false
+ *               reservationDate:
+ *                 type: string
+ *                 description: 날짜
+ *               reservationTime:
+ *                 type: array
+ *                 description: 배열
+ *                 default: []
  *     responses:
  *       200:
  *         description: 예약 정보가 업데이트 되었습니다.-유저의 totalPoint 값감소
@@ -106,33 +110,37 @@ rentalRouter.post('/', loginRequired, async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/rentals'
  */
-rentalRouter.patch('/:rentalId', adminOnly, async function (req, res, next) {
-  try {
-    // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
-    if (is.emptyObject(req.body)) {
-      throw new Error(
-        'headers의 Content-Type을 application/json으로 설정해주세요',
-      );
+rentalRouter.patch(
+  '/:rentalId',
+  loginRequired,
+  async function (req, res, next) {
+    try {
+      // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
+      if (is.emptyObject(req.body)) {
+        throw new Error(
+          'headers의 Content-Type을 application/json으로 설정해주세요',
+        );
+      }
+
+      const { rentalId } = req.params;
+      const { reservationDate, reservationTime } = req.body;
+
+      const toUpdate = {
+        ...(reservationDate && { reservationDate }),
+        ...(reservationTime && { reservationTime }),
+      };
+
+      const updatedRental = await rentalService.setRental(rentalId, toUpdate);
+      if (!updatedRental) {
+        throw new Error(`${rentalId} 정보가 수정되지 않았습니다.`);
+      }
+
+      res.status(200).json(updatedRental);
+    } catch (error) {
+      next(error);
     }
-
-    const { rentalId } = req.params;
-    const { isBooked } = req.body;
-
-    const toUpdate = {
-      ...(isBooked && { isBooked }),
-    };
-    // 제품 정보를 업데이트함.
-
-    const updatedRental = await rentalService.setRental(rentalId, toUpdate);
-    if (!updatedRental) {
-      throw new Error(`${rentalId} 정보가 수정되지 않았습니다.`);
-    }
-
-    res.status(200).json(updatedRental);
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 /**
  * @swagger

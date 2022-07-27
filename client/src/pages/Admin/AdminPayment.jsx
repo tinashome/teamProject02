@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-// eslint-disable-next-line no-unused-vars
-import { adminUsers, adminCurrentPage } from 'stores/adminUserStore';
+import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas, getCurrentDate } from 'util/useful-functions';
 import Pagenation from './AdminPagenation';
@@ -43,24 +42,24 @@ const AdminPayment = () => {
   }, [totalCount]);
 
   // 충전승인 클릭시
-  const handleClick = async (event) => {
+  const handleClick = async (event, payName) => {
     const { id } = event.target;
     const { name } = event.target;
     const { value } = event.target;
     const bodyData = { isCharged: true };
     // eslint-disable-next-line no-alert
     const chargeConfirm = window.confirm(
-      `예금주: ${name} \n 충전금액: ${value} \n 승인하겠습니까?`,
+      `예금주: ${payName} \n 충전금액: ${addCommas(value)} \n 승인하겠습니까?`,
     );
     if (chargeConfirm) {
       try {
         await Api.patch(`points/${id}`, bodyData);
-        setModal({ success: true, userName: name, time: 3 });
+        setModal({ success: true, name, payName, time: 3 });
         setTimeout(() => {
           setModal(null);
         }, 3000);
       } catch (err) {
-        setModal({ success: false, userName: name });
+        setModal({ success: false, name, payName });
       }
     }
   };
@@ -76,9 +75,9 @@ const AdminPayment = () => {
       >
         <ModalDiv modal={modal}>
           {modal &&
-            `사용자 이름: ${modal.userName}\n\n삭제에 ${
-              modal.success ? '성공' : '실패'
-            } 하였습니다.\n\n`}
+            `${modal.success ? '승인성공' : '승인실패'}\n\n이름 : ${
+              modal.name
+            }(예금주: ${modal.payName || modal.name})\n\n`}
           {modal &&
             modal.success &&
             `이 메세지는 ${modal.time}초후에 사라집니다.`}
@@ -111,16 +110,15 @@ const AdminPayment = () => {
                 width='100'
                 style={{ justifyContent: 'flex-end', paddingRight: '5px' }}
               >
-                {/* {e.paymentAmount && e.paymentAmount.toLocaleString()}P */}
                 {e.paymentAmount && addCommas(e.paymentAmount)}P
               </Text>
-              <Text width='80'>{e.user.name}</Text>
+              <Text width='80'>{e.payName}</Text>
               <Text width='100'>
                 <Button
                   id={e._id}
                   name={e.user.name}
                   value={e.paymentAmount}
-                  onClick={handleClick}
+                  onClick={(event) => handleClick(event, e.payName)}
                   disabled={e.isCharged}
                 >
                   {e.isCharged ? '충전완료' : '충전승인'}
@@ -178,22 +176,21 @@ const Button = styled.button`
 `;
 
 const ModalWrapper = styled.div`
-  display: ${(props) => (props.modal ? 'flex' : 'none')}};
+  display: ${(props) => (props.modal ? 'flex' : 'none')};
   position: fixed;
   z-index: 1000;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   font-size: 24px;
   font-weight: 400;
   letter-spacing: -2px;
   align-content: center;
-  `;
+`;
 
 const ModalDiv = styled.div`
-  // display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: absolute;
   top: 50%;
   left: 50%;
@@ -208,6 +205,8 @@ const ModalDiv = styled.div`
   font-size: 24px;
   text-align: center;
   white-space: pre-wrap;
+  flex-direction: column;
+  align-content: center;
 `;
 
 const ModalButton = styled.button`

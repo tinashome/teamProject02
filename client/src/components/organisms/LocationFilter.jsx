@@ -23,6 +23,7 @@ const Container = styled.button`
 
 const FilterName = styled.p`
   margin-right: 0.5rem;
+  font-size: 16px;
 `;
 
 export default LocationFilter;

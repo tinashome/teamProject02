@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { addCommas } from 'util/useful-functions';
+import { bannerList } from 'constants/imgList';
 
 const GroundCard = ({ ground }) => {
   const {
@@ -15,7 +16,9 @@ const GroundCard = ({ ground }) => {
   return (
     <Container>
       <Link to={`grounds/${_id}`}>
-        <GroundImage src={groundImg[0]} alt={_id} />
+        <ImageContainer>
+          <GroundImage src={groundImg[0] || bannerList[0]} alt={_id} />
+        </ImageContainer>
         <GroundAddress>{address1}</GroundAddress>
         <GroundName>{groundName}</GroundName>
         <Wrapper>
@@ -29,22 +32,29 @@ const GroundCard = ({ ground }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  /* min-width: fit-content; */
   margin: 1rem;
   border: 1px solid #adb5bd;
   border-radius: 4px;
   text-align: center;
-  transition: background 0.5s ease;
+  transition: background 0.2s ease;
+  overflow: hidden;
 
   &:hover {
     background: #3563e9;
-    opacity: 0.7;
+    opacity: 0.9;
   }
 `;
 
-const GroundImage = styled.img`
-  width: 100%;
+const ImageContainer = styled.div`
   height: 200px;
+`;
+
+const GroundImage = styled.img`
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px 4px 0 0;
   border: none;
 `;
 
@@ -61,6 +71,7 @@ const GroundName = styled.div`
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 1.5rem;
+  padding: 0 1.5rem;
 
   text-align: center;
   white-space: nowrap;

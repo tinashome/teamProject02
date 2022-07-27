@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Api from '../api/api';
-import Pagination from '../components/organisms/Pagination';
+import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const UserPointHistory = () => {
   const [pointHistory, setPointHistory] = useState([]);
@@ -69,7 +69,7 @@ const UserPointHistory = () => {
           ))}
         </Contents>
       </Wrapper>
-      <Pagination
+      <MyinfoPagination
         totalPage={totalPage}
         limit={5}
         page={page}
@@ -91,10 +91,9 @@ const Title = styled.div`
   justify-content: center;
   align-items: flex-start;
   line-height: 3rem;
-  padding: 1.875rem 3.125rem;
+  padding: 1.875rem 3.125rem 0 3.125rem;
   margin-top: 1.875rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 2rem;
@@ -114,7 +113,6 @@ const PointHeader = styled.div`
   margin-bottom: 1.125rem;
   padding-bottom: 0.75rem;
   border-bottom: 0.0625rem solid #9e9e9e;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 1.5rem;
@@ -140,7 +138,6 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   line-height: 1.8125rem;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1.5rem;
@@ -160,7 +157,6 @@ const Approval = styled.div`
   border: 1px solid #3563e9;
   border-radius: 0.25rem;
   color: #3563e9;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1rem;

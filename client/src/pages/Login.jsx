@@ -1,15 +1,15 @@
-/* eslint-disable react/no-unescaped-entities */
 import Title from 'components/atoms/Title';
 import * as Api from 'api/api';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import userState from 'stores/userStore';
+import { userPointState, userState } from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
 import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
 import { loginImgList } from 'constants/imgList';
+import FindPasswordModal from 'components/organisms/FindPasswordModal';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
@@ -17,27 +17,37 @@ const Login = () => {
   const navigate = useNavigate();
 
   const setUserInfo = useSetRecoilState(userState);
+  const setTotalPoint = useSetRecoilState(userPointState);
+
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (userData) => {
     try {
       const result = await Api.post('auth/signin', userData);
       const { token, isAdmin } = result.data;
-      const { userId, name, role, isOAuth } = jwtDecode(token);
       localStorage.setItem('token', token);
+      const { userId, name, role, isOAuth } = jwtDecode(token);
+      const {
+        data: { totalPoint },
+      } = await Api.get('users/user');
       setUserInfo({
         userId,
         name,
         role,
         isOAuth,
         isAdmin,
-        isLogin: true,
       });
+      setTotalPoint((prev) => ({ ...prev, totalPoint }));
       navigate('/');
     } catch (err) {
       alert(err.response.data.reason);
     }
   };
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const toggleModal = useCallback(() => {
+    setIsOpenModal((prev) => !prev);
+  }, [isOpenModal]);
 
   return (
     <Container>
@@ -51,26 +61,27 @@ const Login = () => {
         <KakaoLogin href={KAKAO_AUTH_URL}>
           <img src={kakaoLoginImg} alt={kakaoLoginImg} />
         </KakaoLogin>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Input
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <StyledInput
             placeholder='이메일을 입력해주세요 :)'
             {...register('email', { required: '이메일을 입력해주세요.' })}
           />
-          <Input
+          <StyledInput
             type='password'
             placeholder='비밀번호를 입력해주세요'
             {...register('password', { required: '비밀번호를 입력해주세요.' })}
           />
           <LoginButton type='submit' value='로그인' />
-        </Form>
+        </form>
         <Wrapper>
           <Link to='/signup'>
-            <SignUpButton>회원가입</SignUpButton>
+            <StyledButton>회원가입</StyledButton>
           </Link>
           <span style={{ marginLeft: 5, marginRight: 5 }}>•</span>
-          <FindPasswordButton>비밀번호 찾기</FindPasswordButton>
+          <StyledButton onClick={toggleModal}>비밀번호 찾기</StyledButton>
         </Wrapper>
       </InputContainer>
+      {isOpenModal && <FindPasswordModal toggleModal={toggleModal} />}
     </Container>
   );
 };
@@ -100,6 +111,10 @@ const StyledTitle = styled(Title)`
   }
 `;
 
+const StyledInput = styled(Input)`
+  margin-bottom: 1rem;
+`;
+
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -107,8 +122,6 @@ const InputContainer = styled.div`
   align-items: center;
   padding: 0 3rem;
 `;
-
-const Form = styled.form``;
 
 const KakaoLogin = styled.a`
   margin: 2rem 0;
@@ -138,12 +151,10 @@ const Wrapper = styled.div`
   opacity: 0.5;
 `;
 
-const SignUpButton = styled.button`
+const StyledButton = styled.button`
   &:hover {
     text-decoration: underline;
   }
 `;
-
-const FindPasswordButton = styled(SignUpButton)``;
 
 export default Login;

@@ -13,12 +13,17 @@ class RentalService {
     if (!userInfo || !groundInfo) {
       throw new Error('구장정보 또는 유저 정보가 없습니다. 다시 확인해주세요.');
     }
-    if (groundInfo.paymentPoint > userInfo.totalPoint) {
+
+    if (
+      groundInfo.paymentPoint * reservationTime.length >
+      userInfo.totalPoint
+    ) {
       throw new Error(
         '유저의 포인트가 해당 구장의 포인트 값보다 작아서 예약을 할 수 없습니다. 다시 확인해 주세요.',
       );
     }
-    const changeTotalPoint = userInfo.totalPoint - groundInfo.paymentPoint;
+    const changeTotalPoint =
+      userInfo.totalPoint - groundInfo.paymentPoint * reservationTime.length;
 
     const toUpdateTotalPoint = {
       totalPoint: changeTotalPoint,
@@ -43,25 +48,20 @@ class RentalService {
   }
 
   async setRental(rentalId, toUpdate) {
-    const updatedRental = await this.rentalModel.update({
-      rentalId,
-      update: toUpdate,
-    });
-    if (!updatedRental) {
-      throw new Error(`${updatedRental} 정보가 없습니다.`);
+    const getRental = await this.rentalModel.findById(rentalId);
+    if (!getRental) {
+      throw new Error(`${getRental} 정보를 찾지 못했습니다.`);
     }
+    const minusPoint =
+      getRental.groundId.paymentPoint * getRental.reservationTime.length;
 
-    const userId = updatedRental.userId._id;
+    const userId = getRental.userId._id;
 
-    let resultPoint = 0;
+    const resultPoint =
+      getRental.userId.totalPoint -
+      minusPoint +
+      getRental.groundId.paymentPoint * toUpdate.reservationTime.length;
 
-    if (toUpdate.isBooked) {
-      resultPoint =
-        updatedRental.userId.totalPoint - updatedRental.groundId.paymentPoint;
-    } else {
-      resultPoint =
-        updatedRental.userId.totalPoint + updatedRental.groundId.paymentPoint;
-    }
     const toUpdateTotalPoint = {
       totalPoint: resultPoint,
     };
@@ -71,6 +71,13 @@ class RentalService {
     });
     if (!updatedUserbyTotalPoint) {
       throw new Error(`${updatedUserbyTotalPoint} 정보가 수정되지 않았습니다.`);
+    }
+    const updatedRental = await this.rentalModel.update({
+      rentalId,
+      update: toUpdate,
+    });
+    if (!updatedRental) {
+      throw new Error(`${updatedRental} 정보가 없습니다.`);
     }
     return updatedRental;
   }
@@ -86,7 +93,9 @@ class RentalService {
       if (!user) {
         throw new Error(`${user} 정보가 없습니다.`);
       }
-      const resultPoint = user.totalPoint + rental.groundId.paymentPoint;
+      const resultPoint =
+        user.totalPoint +
+        rental.groundId.paymentPoint * rental.reservationTime.length;
       const toUpdateTotalPoint = {
         totalPoint: resultPoint,
       };

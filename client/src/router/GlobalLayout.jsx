@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   height: auto;
-  min-height: calc(100vh - 320px);
+  min-height: calc(100vh - 230px);
 `;
 
 export default GlobalLayout;

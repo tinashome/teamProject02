@@ -4,9 +4,6 @@ import { CgClose } from '@react-icons/all-files/cg/CgClose';
 import IconDataList from 'constants/IconDataList';
 
 const IconCard = ({ info }) => {
-  // GroundInfo 에서 groundSize(경기장 크기값 => iconName에 넣기) ,showerPlace, parking, shoesRental, sportsWearRental 넘겨 받기
-  // 아이콘 상태 값 저장 (idx => 0은 map때문에 무조건 true 값으로 지정)
-  // 배열로 저장하영 상태값을 관리
   const { showerPlace, parking, sportswearRental, shoesRental, groundSize } =
     info;
 
@@ -38,6 +35,7 @@ const IconCard = ({ info }) => {
 
 const IconContainer = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 const Icon = styled.div`
@@ -53,19 +51,19 @@ const IconText = styled.div`
 `;
 
 const GroundIcons = styled.div`
-  display: flex;
-  width: 6rem;
+  display:flex;
+  justify-content:center;
+  width: 100%;
   height: 6rem;
-  margin: 0 0.3rem 0.3rem 2rem;
+  margin: 0 1.5rem 0.3rem 2rem;
 `;
 
 const GroundIcon = styled.div`
-  display: flex;
   flex-direction: column;
   padding: 0.2rem;
   margin: 0.2rem;
   width: 6rem;
-  height: 6rem;
+  height: 6.5rem;
   border: solid #bdbdbd;
   border-radius: 5px;
   font-size: 70px;

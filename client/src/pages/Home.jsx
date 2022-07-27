@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BiPhotoAlbum } from '@react-icons/all-files/bi/BiPhotoAlbum';
 import { HiOutlineViewList } from '@react-icons/all-files/hi/HiOutlineViewList';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import locationList from 'constants/locationList';
 import { bannerList } from 'constants/imgList';
 import SearchBar from 'components/organisms/SearchBar';
@@ -24,7 +24,6 @@ const Home = () => {
 
   // Toggle List Type
   const [listType, setListType] = useRecoilState(groundListTypeState);
-
   // Search
   const handleSearch = async (e) => {
     if (e.key === 'Enter') {
@@ -35,16 +34,36 @@ const Home = () => {
 
   // Location Filter
   const [isOpenFilterModal, setisOpenFilterModal] = useState(false);
-  const handleToggleFilterModal = useCallback(() => {
-    setisOpenFilterModal((prev) => !prev);
-  }, [isOpenFilterModal]);
+  const wrapperRef = useRef();
+
+  const handleClickFilterModal = () => {
+    if (!isOpenFilterModal) {
+      setisOpenFilterModal(true);
+    }
+  };
 
   const getFilteredData = async (e) => {
     if (e.target.innerText === '모든 지역') setLocation('');
     else setLocation(e.target.innerText);
     setPage(1);
-    handleToggleFilterModal();
+    setisOpenFilterModal(false);
   };
+
+  const handleClickOutside = (event) => {
+    if (wrapperRef && !wrapperRef.current?.contains(event.target)) {
+      setisOpenFilterModal(false);
+    } else {
+      setisOpenFilterModal(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
   return (
     <>
@@ -52,11 +71,13 @@ const Home = () => {
       <Container>
         <FilterWrapper>
           <LocationFilter
+            ref={wrapperRef}
+            value={isOpenFilterModal}
             filterName={location || '모든 지역'}
-            handleClick={handleToggleFilterModal}
+            handleClick={handleClickFilterModal}
           />
           {isOpenFilterModal && (
-            <FilterModal>
+            <FilterModal ref={wrapperRef} value={isOpenFilterModal}>
               {locationList.map((districtName) => (
                 <FilterButton
                   type='button'
@@ -70,14 +91,17 @@ const Home = () => {
           )}
           <SearchBar placeholder='구장 찾기' onKeyDown={handleSearch} />
           <ListTypeButton>
-            <BiPhotoAlbum
-              onClick={() => setListType('photo')}
-              disabled={listType === 'photo'}
-            />
-            <HiOutlineViewList
-              onClick={() => setListType('text')}
-              disabled={listType === 'text'}
-            />
+            {listType === 'photo' ? (
+              <HiOutlineViewList
+                onClick={() => setListType('text')}
+                disabled={listType === 'text'}
+              />
+            ) : (
+              <BiPhotoAlbum
+                onClick={() => setListType('photo')}
+                disabled={listType === 'photo'}
+              />
+            )}
           </ListTypeButton>
         </FilterWrapper>
         {listType === 'photo' ? (
@@ -100,6 +124,15 @@ const FilterWrapper = styled.div`
   margin: 0 1rem 0.5rem 1rem;
 `;
 
+const fadein = keyframes`
+  from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
 const FilterModal = styled.div`
   position: absolute;
   display: flex;
@@ -111,7 +144,7 @@ const FilterModal = styled.div`
   background-color: #495057;
   border-radius: 4px;
   z-index: 9;
-
+  animation: ${fadein} 0.5s;
   p {
     margin-bottom: 1rem;
   }
@@ -122,7 +155,7 @@ const FilterButton = styled.button`
   padding: 4px 0;
   border-radius: 4px;
   color: #ffffff;
-
+  font-size: 15px;
   & + & {
     margin-top: 0.5rem;
   }
@@ -138,17 +171,15 @@ const ListTypeButton = styled.div`
   margin-left: auto;
 
   svg {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     font-size: 1.7rem;
     cursor: pointer;
     padding: 0.2rem;
     border: 1px solid #ced4da;
 
-    &[disabled] {
+    &:hover {
       color: #f06595;
-      cursor: revert;
-      pointer-events: none;
     }
   }
 `;

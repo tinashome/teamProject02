@@ -43,16 +43,16 @@ const GroundTextList = ({ location, searchInput }) => {
           <p>영업 시간</p>
         </GrounndListHeader>
         {groundList.data?.map((ground) => (
-          <GroundInfo key={ground._id}>
-            <div>{ground.groundAddress.address1}</div>
-            <Link to={`/grounds/${ground._id}`}>
+          <Link to={`/grounds/${ground._id}`} key={ground._id}>
+            <GroundInfo key={ground._id}>
+              <div>{ground.groundAddress.address1}</div>
               <div>{ground.groundName}</div>
-            </Link>
-            <div>{addCommas(ground.paymentPoint)}P</div>
-            <div>
-              {ground.startTime}~{ground.endTime}
-            </div>
-          </GroundInfo>
+              <div>{addCommas(ground.paymentPoint)}P</div>
+              <div>
+                {ground.startTime}~{ground.endTime}
+              </div>
+            </GroundInfo>
+          </Link>
         ))}
       </Container>
       <Pagination
@@ -87,25 +87,25 @@ const GroundInfo = styled.div`
   display: grid;
   grid-template-columns: 20% 40% 20% 20%;
   padding: 1rem;
-  &:not(:last-child) {
-    border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 4px;
+  &:hover {
+    background: #3563e9;
+    color: white;
+    transition: background 0.5s ease;
   }
 
-  a,
   div {
     width: 100%;
     text-align: center;
-  }
-
-  div {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
+    line-height: normal;
 
-  a {
-    &:hover {
-      text-decoration: underline;
+    &:nth-child(2) {
+      margin-left: 2rem;
+      text-align: left;
     }
   }
 `;

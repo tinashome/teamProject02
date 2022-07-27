@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import * as Api from 'api/api';
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaFutbol } from '@react-icons/all-files/fa/FaFutbol';
 import { FaUserCircle } from '@react-icons/all-files/fa/FaUserCircle';
 
 import { useRecoilState } from 'recoil';
-import userState from 'stores/userStore';
-import { getToken, isExistToken } from 'util/useful-functions';
-import jwtDecode from 'jwt-decode';
+import { userPointState, userState } from 'stores/userStore';
+import { addCommas, getToken, isExistToken } from 'util/useful-functions';
 import HeaderButton from '../atoms/HeaderButton';
 import Button from '../atoms/Button';
 import Logo from '../atoms/Logo';
@@ -17,23 +17,43 @@ const Header = () => {
   const params = useParams();
 
   const [user, setUser] = useRecoilState(userState);
+  const [totalPoint, setTotalPoint] = useRecoilState(userPointState);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  useEffect(() => {
-    if (isExistToken()) {
-      const { userId, name, role, isOAuth } = jwtDecode(getToken());
+  const getUserData = async () => {
+    try {
+      const result = await Api.get('users/user');
+      const { _id, email, name, phoneNumber, role, isOAuth } = result.data;
       setUser({
-        userId,
+        userId: _id,
+        email,
         name,
+        phoneNumber,
         role,
         isOAuth,
       });
+      setTotalPoint((prev) => ({
+        ...prev,
+        totalPoint: result.data.totalPoint,
+      }));
+    } catch (err) {
+      alert(err.response.data.reason);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (getToken()) {
+      getUserData();
+    }
+  }, [totalPoint.isChange]);
+
+  useEffect(() => {
+    setTotalPoint((prev) => ({ ...prev, isChange: false }));
+  }, [totalPoint.totalPoint]);
 
   useEffect(() => {
     window.scroll({ top: 0 });
@@ -48,20 +68,19 @@ const Header = () => {
         </Logo>
       </NavLink>
       <ButtonContainer>
-        <HeaderButton>구장 리스트</HeaderButton>
-        <HeaderButton>문의 게시판</HeaderButton>
-        <HeaderButton>공지사항</HeaderButton>
+        <Link to='/pointcharge'>
+          <HeaderButton>포인트 충전</HeaderButton>
+        </Link>
+        <Link to='/board'>
+          <HeaderButton>자유 게시판</HeaderButton>
+        </Link>
 
         {isExistToken() ? (
-          <>
-            {/* <UserImage /> */}
-            {/* 임시로 넣은 유저 아이콘 */}
+          <UserProfile>
             <FaUserCircle style={{ width: 40, height: 40, marginRight: 10 }} />
-            <UserProfile>
-              <UserName>
-                <span style={{ fontWeight: 700 }}>{user?.name}</span>님!
-                환영합니다.
-              </UserName>
+            <div>
+              <span style={{ fontWeight: 700 }}>보유 포인트 </span>
+              {addCommas(totalPoint?.totalPoint)}P
               <UserProfileButtonWrapper>
                 <UserProfileButton>
                   {user?.role === 'admin' ? (
@@ -74,11 +93,11 @@ const Header = () => {
                   로그아웃
                 </UserProfileButton>
               </UserProfileButtonWrapper>
-            </UserProfile>
-          </>
+            </div>
+          </UserProfile>
         ) : (
           <NavLink to='/login'>
-            <LoginButton>로그인</LoginButton>
+            <Button>로그인</Button>
           </NavLink>
         )}
       </ButtonContainer>
@@ -87,7 +106,6 @@ const Header = () => {
 };
 
 const Container = styled.div`
-  /* position: fixed; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -99,48 +117,34 @@ const Container = styled.div`
 `;
 
 const LogoTitle = styled.p`
-  align-content: center;
+  align-self: center;
   padding: 0 0.5rem;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 40%;
 `;
 
 const UserProfile = styled.div`
   display: flex;
-  flex-direction: column;
-
   p {
     font-size: 1.1rem;
   }
-`;
-
-const UserName = styled.div``;
-
-const UserImage = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-right: 0.5rem;
-  border: 1px solid red;
-  border-radius: 50%;
 `;
 
 const UserProfileButton = styled.button`
   font-size: 0.85rem;
   font-weight: 600;
   color: #3563e9;
-  margin-right: 0.3rem;
 `;
 
 const UserProfileButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const LoginButton = styled(Button)`
-  margin-left: 2rem;
+  min-width: 8.5rem;
 `;
 
 export default Header;

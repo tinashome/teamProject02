@@ -12,14 +12,15 @@ const PointChargeTitle = () => {
     <Container>
       <BackArrow onClick={() => navigate(-1)}>
         <AiOutlineArrowLeft />
-        이전 페이지
+        <span>이전 페이지 </span>
       </BackArrow>
 
       <Title>포인트 충전</Title>
 
       <ChargeInfoBtn>
-        <Link to='/'>
-          <AiOutlineQuestionCircle /> 충전내역
+        <Link to='/myinfo/point'>
+          <AiOutlineQuestionCircle />
+          <span>충전내역</span>
         </Link>
       </ChargeInfoBtn>
     </Container>
@@ -28,31 +29,41 @@ const PointChargeTitle = () => {
 
 const Container = styled.div`
   display: flex;
-  flex-direction: raw;
-  width: 100%;
-  height: 4rem;
-  margin: 4rem 5rem 4rem 9rem;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  boder-bottom-color: #0000004d;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #0000004d;
 `;
 
 const Title = styled.h1`
-  text-align: center;
   font-size: 30px;
   font-weight: bold;
-  width: 100%;
 `;
 
 const BackArrow = styled.button`
-  text-align: left;
-  width: 100%;
+  display: flex;
+  align-items: center;
   font-size: 20px;
+  opacity: 0.7;
+  span {
+    margin: 0 0.3rem;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-const ChargeInfoBtn = styled.button`
-  text-align: right;
-  width: 100%;
-  font-size: 20px;
+const ChargeInfoBtn = styled.div`
+  opacity: 0.7;
+  a {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+  span {
+    margin: 0 0.3rem;
+  }
 `;
 export default PointChargeTitle;

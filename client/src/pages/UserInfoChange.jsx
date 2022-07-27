@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import userState from '../stores/userStore';
+import { userState } from '../stores/userStore';
 import * as Api from '../api/api';
 
 const UserInfoChange = () => {
@@ -27,6 +27,8 @@ const UserInfoChange = () => {
       if (result.status === 200) {
         setUser((prev) => ({ ...prev, ...result.data }));
         alert('개인 정보 변경이 완료되었습니다.');
+      } else {
+        alert('개인 정보 변경에 실패하였습니다.');
       }
     } catch (err) {
       console.log(err);
@@ -44,7 +46,7 @@ const UserInfoChange = () => {
               <input
                 disabled='ture'
                 placeholder={user.name}
-                style={{ backgroundColor: '#e9e9e9' }}
+                style={{ backgroundColor: '#e9e9e9', cursor: 'not-allowed' }}
               />
             </Content>
             <Content>
@@ -52,7 +54,7 @@ const UserInfoChange = () => {
               <input
                 disabled='ture'
                 placeholder={user.email}
-                style={{ backgroundColor: '#e9e9e9' }}
+                style={{ backgroundColor: '#e9e9e9', cursor: 'not-allowed' }}
               />
             </Content>
             <Content>
@@ -102,7 +104,6 @@ const Title = styled.div`
   padding: 1.875rem 3.125rem;
   margin-top: 1.875rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 2rem;
@@ -157,7 +158,6 @@ const Content = styled.div`
   justify-content: flex-end;
   line-height: 1.8125rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1.5rem;
