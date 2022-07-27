@@ -3,7 +3,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
-import userState from '../stores/userStore';
+import { userState } from '../stores/userStore';
 import * as Api from '../api/api';
 
 const UnRegister = () => {
@@ -24,9 +24,8 @@ const UnRegister = () => {
         setUserInfo({});
         navigate('/');
       } else {
-        alert('회원 탈퇴에 실패하였습니다.')
+        alert('회원 탈퇴에 실패하였습니다.');
       }
-      
     } catch (err) {
       console.log(err);
     }

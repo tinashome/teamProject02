@@ -7,6 +7,8 @@ import Button from 'components/atoms/Button';
 import { Link, useParams } from 'react-router-dom';
 import * as Api from 'api/api';
 import Spinner from 'components/atoms/Spinner';
+import { useSetRecoilState } from 'recoil';
+import { userPointState } from 'stores/userStore';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -42,6 +44,7 @@ const Ground = () => {
     }
   };
 
+  const setTotalPoint = useSetRecoilState(userPointState);
   const reservationClick = async () => {
     try {
       if (reservationTime.length > 0) {
@@ -50,6 +53,7 @@ const Ground = () => {
           reservationDate,
           reservationTime,
         });
+        setTotalPoint((prev) => ({ ...prev, isChange: true }));
         alert('예약되었습니다.');
       } else {
         alert('예약시간을 선택 해주세요.');
@@ -94,7 +98,6 @@ const Ground = () => {
           <Link to='/'>돌아가기</Link>{' '}
         </BackBtn>
         <ReservationBtn onClick={reservationClick}>예약하기</ReservationBtn>
-
       </Container>
     </>
   );
