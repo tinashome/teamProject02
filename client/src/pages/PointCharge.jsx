@@ -26,9 +26,6 @@ const PointCharge = () => {
   };
   return (
     <Container>
-      <button type='button' onClick={() => setModalOpen(!modalOpen)}>
-        버튼
-      </button>
       <PointChargeTitle />
       <PointChargeCard />
       <PointChargeCheck />
