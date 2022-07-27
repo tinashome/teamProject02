@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userState } from 'stores/userStore';
 import styled from 'styled-components';
 import * as Api from '../api/api';
 import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const UserPointHistory = () => {
-  const [user, setUser] = useRecoilState(userState);
   const [pointHistory, setPointHistory] = useState([]);
   const [page, setPage] = useState(1);
   const listPerPage = 10;
@@ -17,15 +14,6 @@ const UserPointHistory = () => {
     try {
       const result = await Api.get(`points/user?count=Infinity`);
       setPointHistory(result.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const userInformation = async () => {
-    try {
-      const result = await Api.get('users/user');
-      setUser((prev) => ({ ...prev, ...result.data }));
     } catch (err) {
       console.log(err);
     }
@@ -45,17 +33,11 @@ const UserPointHistory = () => {
 
   useEffect(() => {
     getPoint();
-    userInformation();
   }, []);
 
   return (
     <Container>
       <Title>포인트 충전 내역</Title>
-      <Point>
-        {user.totalPoint
-          ? `내 포인트 : ${user.totalPoint.toLocaleString()}P`
-          : ''}
-      </Point>
       <Wrapper>
         <PointHeader>
           <p>충전 날짜</p>
@@ -185,16 +167,6 @@ const Approval = styled.div`
   line-height: 1.1875rem;
   text-align: center;
   letter-spacing: -0.03125rem;
-`;
-
-const Point = styled.div`
-  text-align: end;
-  margin-bottom: 1rem;
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.5rem;
-  line-height: 1.8125rem;
 `;
 
 export default UserPointHistory;

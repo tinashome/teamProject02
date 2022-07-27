@@ -147,7 +147,8 @@ const Ground = () => {
                 </Info>
               </InfoDetail>
               <WarningText>
-                ※ 예약 완료 후 24시간이 지나고 예약 취소가 가능합니다.
+                ※ 예약시간 중 제일 빠른 예약시간 기준 24시간 전까지만 예약취소,
+                변경이 가능합니다.
               </WarningText>
               <ButtonList>
                 <CheckButton onClick={() => reservationClick()}>
