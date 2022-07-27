@@ -32,7 +32,7 @@ const Ground = () => {
   );
 
   const [showImgModal, setShowImgModal] = useState(false);
-  const [imgModalCurser, setImgModalCurser] = useState(true);
+  const imgModalCurser = true;
   const params = useParams();
   const groundId = params.id;
   const navigate = useNavigate();
