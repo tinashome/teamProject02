@@ -1,5 +1,5 @@
 import Title from 'components/atoms/Title';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled, { keyframes } from 'styled-components';
 import * as Api from 'api/api';
@@ -36,9 +36,10 @@ const SignUp = () => {
   };
 
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const toggleModal = () => {
+  const toggleModal = useCallback(() => {
     setIsOpenModal((prev) => !prev);
-  };
+  }, [isOpenModal]);
+
   const validateEmail = async () => {
     const { email } = getValues();
     if (email) {
@@ -81,7 +82,7 @@ const SignUp = () => {
       <StyledTitle>회원 가입</StyledTitle>
 
       <InputTitle>이름</InputTitle>
-      <StyledInput
+      <Input
         type='text'
         {...register('name', {
           required: '이름을 입력해주세요.',
@@ -96,7 +97,7 @@ const SignUp = () => {
 
       <InputTitle>이메일</InputTitle>
       <Wrapper>
-        <StyledInput
+        <Input
           type='email'
           {...register('email', {
             required: '이메일을 입력해주세요.',
@@ -118,11 +119,11 @@ const SignUp = () => {
       </Wrapper>
       <ErrorMessage>{errors.email?.message}</ErrorMessage>
       {isOpenModal && (
-        <StyledModalWrapper onClick={toggleModal}>
+        <ModalWrapper onClick={toggleModal}>
           <EmailModal onClick={(e) => e.stopPropagation()}>
             <Title>인증 코드</Title>
             <Wrapper>
-              <StyledInput
+              <Input
                 type='number'
                 placeholder='인증 코드를 입력해주세요..'
                 value={emailCode}
@@ -133,11 +134,11 @@ const SignUp = () => {
               </StyledButton>
             </Wrapper>
           </EmailModal>
-        </StyledModalWrapper>
+        </ModalWrapper>
       )}
 
       <InputTitle>휴대전화 번호</InputTitle>
-      <StyledInput
+      <Input
         type='number'
         {...register('phoneNumber', {
           required: '휴대전화 번호를 입력해주세요.',
@@ -151,7 +152,7 @@ const SignUp = () => {
       <ErrorMessage>{errors.phoneNumber?.message}</ErrorMessage>
 
       <InputTitle>비밀번호</InputTitle>
-      <StyledInput
+      <Input
         type='password'
         {...register('password', {
           required: '비밀번호를 입력해주세요.',
@@ -165,7 +166,7 @@ const SignUp = () => {
       <ErrorMessage>{errors.password?.message}</ErrorMessage>
 
       <InputTitle>비밀번호 확인</InputTitle>
-      <StyledInput
+      <Input
         type='password'
         {...register('passwordConfirmation', {
           required: '비밀번호를 확인해주세요.',
@@ -198,15 +199,6 @@ const StyledTitle = styled(Title)`
 const InputTitle = styled.p`
   font-size: 1.2rem;
   margin: 1rem 0 0.5rem 0.3rem;
-`;
-
-const StyledInput = styled(Input)`
-  &[type='number']::-webkit-inner-spin-button,
-  &[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
 `;
 
 const Wrapper = styled.div`
@@ -243,8 +235,6 @@ const SignUpButton = styled(Input)`
     opacity: 0.7;
   }
 `;
-
-const StyledModalWrapper = styled(ModalWrapper)``;
 
 const fadein = keyframes`
   0% {

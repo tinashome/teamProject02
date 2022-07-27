@@ -1,6 +1,6 @@
 import Title from 'components/atoms/Title';
 import * as Api from 'api/api';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import { userState } from 'stores/userStore';
 import jwtDecode from 'jwt-decode';
 import kakaoLoginImg from 'assets/image/kakao_login_medium_narrow.png';
 import { loginImgList } from 'constants/imgList';
+import FindPasswordModal from 'components/organisms/FindPasswordModal';
 import Input from '../components/atoms/Input';
 
 const Login = () => {
@@ -38,6 +39,11 @@ const Login = () => {
     }
   };
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const toggleModal = useCallback(() => {
+    setIsOpenModal((prev) => !prev);
+  }, [isOpenModal]);
+
   return (
     <Container>
       <Image src={loginImgList[0]} />
@@ -50,7 +56,7 @@ const Login = () => {
         <KakaoLogin href={KAKAO_AUTH_URL}>
           <img src={kakaoLoginImg} alt={kakaoLoginImg} />
         </KakaoLogin>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <StyledInput
             placeholder='이메일을 입력해주세요 :)'
             {...register('email', { required: '이메일을 입력해주세요.' })}
@@ -61,15 +67,16 @@ const Login = () => {
             {...register('password', { required: '비밀번호를 입력해주세요.' })}
           />
           <LoginButton type='submit' value='로그인' />
-        </Form>
+        </form>
         <Wrapper>
           <Link to='/signup'>
-            <SignUpButton>회원가입</SignUpButton>
+            <StyledButton>회원가입</StyledButton>
           </Link>
           <span style={{ marginLeft: 5, marginRight: 5 }}>•</span>
-          <FindPasswordButton>비밀번호 찾기</FindPasswordButton>
+          <StyledButton onClick={toggleModal}>비밀번호 찾기</StyledButton>
         </Wrapper>
       </InputContainer>
+      {isOpenModal && <FindPasswordModal toggleModal={toggleModal} />}
     </Container>
   );
 };
@@ -111,8 +118,6 @@ const InputContainer = styled.div`
   padding: 0 3rem;
 `;
 
-const Form = styled.form``;
-
 const KakaoLogin = styled.a`
   margin: 2rem 0;
 `;
@@ -141,12 +146,10 @@ const Wrapper = styled.div`
   opacity: 0.5;
 `;
 
-const SignUpButton = styled.button`
+const StyledButton = styled.button`
   &:hover {
     text-decoration: underline;
   }
 `;
-
-const FindPasswordButton = styled(SignUpButton)``;
 
 export default Login;

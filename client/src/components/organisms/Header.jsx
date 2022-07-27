@@ -96,7 +96,7 @@ const Header = () => {
           </UserProfile>
         ) : (
           <NavLink to='/login'>
-            <LoginButton>로그인</LoginButton>
+            <Button>로그인</Button>
           </NavLink>
         )}
       </ButtonContainer>
@@ -144,10 +144,6 @@ const UserProfileButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   min-width: 8rem;
-`;
-
-const LoginButton = styled(Button)`
-  /* margin-left: 2rem; */
 `;
 
 export default Header;
