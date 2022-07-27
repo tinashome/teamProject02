@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import CheckBox from 'components/atoms/CheckBox';
 import jwtDecode from 'jwt-decode';
 import { getToken } from 'util/useful-functions';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'stores/userStore';
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -17,6 +19,8 @@ const BoardDetail = () => {
     edit: false,
     delete: false,
   });
+
+  const user = useRecoilValue(userState);
 
   const { register, reset, getValues } = useForm({
     defaultValues: {
@@ -34,20 +38,21 @@ const BoardDetail = () => {
     setIsNotified(!isNotified);
   }, [isNotified]);
 
-  const { userId, role } = jwtDecode(getToken());
   useEffect(() => {
     (async () => {
       try {
         const result = await Api.get(`boards/${boardId}`);
         setBoardDetail(result.data);
         setIsNotified(result.data.isNotified);
-        if (result.data.userId._id === userId) {
-          setIsAuth({
-            edit: true,
-            delete: true,
-          });
-        } else if (role === 'admin') {
-          setIsAuth((prev) => ({ ...prev, delete: true }));
+        if (user) {
+          if (result.data.userId._id === user.userId) {
+            setIsAuth({
+              edit: true,
+              delete: true,
+            });
+          } else if (user.role === 'admin') {
+            setIsAuth((prev) => ({ ...prev, delete: true }));
+          }
         }
       } catch (err) {
         alert(err.response.data.reason);
@@ -98,7 +103,7 @@ const BoardDetail = () => {
                 required: true,
               })}
             />
-            {role === 'admin' && (
+            {user?.role === 'admin' && (
               <div>
                 <p>공지사항</p>
                 <CheckBox

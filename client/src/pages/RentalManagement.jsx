@@ -103,7 +103,11 @@ const RentalManagement = () => {
                 )}-${item.reservationDate.slice(2, 4)}`}
               </RentalDate>
               <RentalInfo>
-                <GroundName>{item.groundName}</GroundName>
+                <GroundName>
+                  <NavLink to={`/grounds/${item.groundId._id}`}>
+                    {item.groundName}
+                  </NavLink>
+                </GroundName>
                 <Time>
                   <div
                     id={item._id}
@@ -202,7 +206,6 @@ const Title = styled.div`
   padding: 1.875rem 3.125rem 0;
   margin-top: 1.875rem;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 2rem;
@@ -223,7 +226,6 @@ const Contents = styled.div`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1.5rem;

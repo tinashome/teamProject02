@@ -46,6 +46,7 @@ const GroundImage = styled.img`
   width: 100%;
   height: 200px;
   border: none;
+  object-fit: cover;
 `;
 
 const GroundAddress = styled.div`
