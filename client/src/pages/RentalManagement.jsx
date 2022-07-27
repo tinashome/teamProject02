@@ -103,7 +103,11 @@ const RentalManagement = () => {
                 )}-${item.reservationDate.slice(2, 4)}`}
               </RentalDate>
               <RentalInfo>
-                <GroundName>{item.groundName}</GroundName>
+                <GroundName>
+                  <NavLink to={`/grounds/${item.groundId._id}`}>
+                    {item.groundName}
+                  </NavLink>
+                </GroundName>
                 <Time>
                   <div
                     id={item._id}
