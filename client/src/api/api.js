@@ -4,7 +4,7 @@ import axios from 'axios';
 // const backendPort = process.env.REACT_APP_BACKEND_PORT || 5000;
 // const baseUrl = `http://${window.location.hostname}:${backendPort}`;
 // const baseUrl = `https://futsal-api-elice.herokuapp.com/api/`;
-const baseUrl = `http://kdt-sw2-busan-team04.elicecoding.com:5000/api`;
+const baseUrl = `http://kdt-sw2-busan-team04.elicecoding.com:5000/api/`;
 
 async function get(endpoint) {
   return axios.get(baseUrl + endpoint, {
