@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { addCommas } from 'util/useful-functions';
-import { bannerList } from 'constants/imgList';
+import { defaultImg } from 'constants/imgList';
 
 const GroundCard = ({ ground }) => {
   const {
@@ -17,7 +17,7 @@ const GroundCard = ({ ground }) => {
     <Container>
       <Link to={`grounds/${_id}`}>
         <ImageContainer>
-          <GroundImage src={groundImg[0] || bannerList[0]} alt={_id} />
+          <GroundImage src={groundImg[0] || defaultImg} alt={_id} />
         </ImageContainer>
         <GroundAddress>{address1}</GroundAddress>
         <GroundName>{groundName}</GroundName>
