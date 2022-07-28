@@ -50,7 +50,9 @@ const GroundReservationCalendar = ({
           minDate={new Date()}
           value={dateValue}
           formatDay={(locale, date) => moment(date).format('DD')}
-          tileClassName={(activeStartDate, date, view) =>  view=== 'month' && date.getDay() === 3 ? 'Wednesday': ''}
+          tileClassName={(activeStartDate, date, view) =>
+            view === 'month' && date.getDay() === 3 ? 'Wednesday' : ''
+          }
         />
       </CalendarUI>
     </Container>
@@ -67,8 +69,15 @@ const DateSelectText = styled.div`
 const StyleCalendar = styled(Calendar)`
   width: 100%;
   border: solid 1px #dee2e6;
-  & div div:nth-chilid(2) {
-    background-color:blue;
+  .react-calendar__month-view {
+    & div div :nth-child(2) {
+      & :nth-child(7n) {
+        color: red;
+      }
+      & :nth-child(7n - 1) {
+        color: blue;
+      }
+    }
   }
 `;
 
