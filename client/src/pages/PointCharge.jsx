@@ -30,7 +30,7 @@ const PointCharge = () => {
   const navigate = useNavigate();
   const modalClose = () => {
     setModalOpen(!modalOpen);
-    navigate('/myinfo/point')
+    navigate('/');
   };
 
   return (

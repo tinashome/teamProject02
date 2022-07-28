@@ -15,6 +15,7 @@ import { userPointState } from 'stores/userStore';
 import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
 import GroundInfo from '../components/organisms/GroundInfo';
 
+
 const Ground = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [detailInfo, setDetailInfo] = useState([]);
