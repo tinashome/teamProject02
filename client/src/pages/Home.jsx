@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BiPhotoAlbum } from '@react-icons/all-files/bi/BiPhotoAlbum';
 import { HiOutlineViewList } from '@react-icons/all-files/hi/HiOutlineViewList';
 import styled, { keyframes } from 'styled-components';
@@ -24,6 +24,14 @@ const Home = () => {
 
   // Toggle List Type
   const [listType, setListType] = useRecoilState(groundListTypeState);
+  const handleListType = () => {
+    if (listType === 'photo') {
+      setListType('text');
+    } else {
+      setListType('photo');
+    }
+    setPage(1);
+  };
   // Search
   const handleSearch = async (e) => {
     if (e.key === 'Enter') {
@@ -93,12 +101,12 @@ const Home = () => {
           <ListTypeButton>
             {listType === 'photo' ? (
               <HiOutlineViewList
-                onClick={() => setListType('text')}
+                onClick={handleListType}
                 disabled={listType === 'text'}
               />
             ) : (
               <BiPhotoAlbum
-                onClick={() => setListType('photo')}
+                onClick={handleListType}
                 disabled={listType === 'photo'}
               />
             )}

@@ -7,3 +7,11 @@ export const bannerList = [
 export const loginImgList = [
   'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658639431861_%242b%2410%24LxH6Ljc9ZaWH.CKEc1gfROU8P8NMaVzymtkDAWdS/txwpzCV5bWy6.jpeg',
 ];
+
+export const defaultImg =
+  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658996302599_%242b%2410%24rIhiVSGRVkoJaSGvrCZvyObIknd7JcjKtSD/YtUXd3BjxZ/vR6l9u.png';
+
+export const titleLogo = [
+  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1659018023554_%242b%2410%24P7kUZZ8jjurP/rCqSUghE.3s27NszeeLuz5tvTIiySqhvpaGXH0hi.png',
+  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1659018355512_%242b%2410%24MzoJnyZPh/kRxl.8b3SHMuJBJ3Tl/FNKYfLYgb4SqDeC6ycXhM5aS.png',
+];

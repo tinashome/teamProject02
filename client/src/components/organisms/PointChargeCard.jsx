@@ -6,9 +6,8 @@ import { useRecoilState } from 'recoil';
 import { pointSelected } from 'stores/pointChargeStore';
 
 const PointChargeCard = () => {
-  const [selectBtn, setSelectBtn] = useState(false);
   const [selectPoint, setSelectPoint] = useRecoilState(pointSelected);
-
+  const [selectBtn, setSelectBtn] = useState(false);
   const handleClick = (idx) => {
     const newPointBtn = Array(8).fill(false);
     newPointBtn[idx] = true;

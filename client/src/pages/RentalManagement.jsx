@@ -5,8 +5,8 @@ import { userPointState, userState } from 'stores/userStore';
 import styled from 'styled-components';
 import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
 import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
+import Pagination from 'components/organisms/Pagination';
 import * as Api from '../api/api';
-import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const RentalManagement = () => {
   const [rental, setRental] = useState([]);
@@ -181,7 +181,7 @@ const RentalManagement = () => {
           ))}
         </Contents>
       </Wrapper>
-      <MyinfoPagination
+      <Pagination
         totalPage={totalPage}
         limit={5}
         page={page}
