@@ -61,7 +61,7 @@ const TimeBtn = ({
 };
 
 const TimeButton = styled.button`
-  width: 6rem;
+  width: auto;
   height: 2rem;
   font-size: 0.7rem;
   font-weight: bold;
@@ -80,6 +80,7 @@ const TimeButton = styled.button`
   border: solid 1px #bdbdbd;
   border-radius: 3px;
   margin: 3px;
+
   :hover:enabled {
     opacity: 0.7;
   }
