@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
@@ -18,12 +18,11 @@ const AdminGroundList = () => {
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(null);
   const [lastPage, setLastPage] = useState(null);
-  // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
+  const setContent = useSetRecoilState(adminContentState);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
   // eslint-disable-next-line no-unused-vars
-  const [content, setContent] = useRecoilState(adminContentState);
 
   const getGrounds = async () => {
     // 경기장목록조회 api요청
@@ -119,67 +118,54 @@ const AdminGroundList = () => {
         </ModalDiv>
       </ModalWrapper>
       <TitleRow>
-        <Text width='170'>경기장명</Text>
-        <Text width='250'>위치</Text>
-        <Text width='80'>포인트</Text>
-        <Text>수정 / 삭제</Text>
+        <InColumn>
+          <InRow>
+            <Text>경기장명</Text>
+            <Text />
+          </InRow>
+          <InRow>
+            <Text>포인트</Text>
+            <Text>수정 / 삭제</Text>
+          </InRow>
+        </InColumn>
       </TitleRow>
       <Wrapper pageSize={pageSize}>
         {grounds &&
           grounds.map((e) => (
             <Row key={e._id}>
-              <Text width='170'>
-                <TextWide
-                  id={e._id}
-                  // style={{ textAlign: 'center' }}
-                  onClick={handleClickInfo}
-                  width='160'
-                >
-                  {e.groundName}
-                </TextWide>
-              </Text>
-              <Text width='250'>
-                <TextWide id={e._id} width='250' onClick={handleClickInfo}>
-                  {e.groundAddress.address1}
-                </TextWide>
-              </Text>
-              <Text
-                id={e._id}
-                width='80'
-                style={{ justifyContent: 'flex-end' }}
-                onClick={handleClickInfo}
-              >
-                {e.paymentPoint && e.paymentPoint.toLocaleString()} P
-              </Text>
-              <Text>
-                {/* <Button
-                  id={e._id}
-                  name={e.groundName}
-                  onClick={handleClickInfo}
-                  style={{ margin: '0 5px' }}
-                >
-                  조회
-                </Button> */}
-                <Button
-                  id={e._id}
-                  name={e.groundName}
-                  onClick={handleEdit}
-                  style={{ margin: '0 5px' }}
-                >
-                  수정
-                </Button>
-                <Button
-                  id={e._id}
-                  name={e.groundName}
-                  onClick={handleDelete}
-                  style={{ margin: '0 5px' }}
-                >
-                  삭제
-                </Button>
-              </Text>
+              <InColumn>
+                <InRow>
+                  <Text onClick={handleClickInfo}>{e.groundName}</Text>
+                  <Text />
+                </InRow>
+                <InRow>
+                  <TextRight id={e._id} onClick={handleClickInfo}>
+                    {e.paymentPoint && e.paymentPoint.toLocaleString()} P
+                  </TextRight>
+
+                  <Text>
+                    <Button
+                      id={e._id}
+                      name={e.groundName}
+                      onClick={handleEdit}
+                      style={{ margin: '0 5px' }}
+                    >
+                      수정
+                    </Button>
+                    <Button
+                      id={e._id}
+                      name={e.groundName}
+                      onClick={handleDelete}
+                      style={{ margin: '0 5px' }}
+                    >
+                      삭제
+                    </Button>
+                  </Text>
+                </InRow>
+              </InColumn>
             </Row>
           ))}
-        <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
+        <Row style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }} />
       </Wrapper>
       {grounds.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
@@ -188,45 +174,56 @@ const AdminGroundList = () => {
 
 const TitleRow = styled.div`
   display: flex;
-  padding: 10px;
-  border-bottom: 2px solid black;
   font-weight: 600;
-  font-size: 20px;
-  justify-content: space-between;
+  font-size: 16px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #adb5bd;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${(props) => `${45 * props.pageSize}px`};
-  align-self: end;
+  font-size: 14px;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  padding: 10px 0;
   border-bottom: 1px solid #bdbdbd;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+const InRow = styled.div`
+  display: flex;
+  width: 250px;
+  justify-content: space-around;
   justify-content: space-between;
+`;
+const InColumn = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 `;
 
 const Text = styled.div`
   display: flex;
-  width: ${(props) => props.width ?? '150'}px;
-  height: 24px;
+  width: 90px;
   letter-spacing: 0.5px;
   align-items: center;
+  white-space: nowrap;
   justify-content: center;
-  cursor: pointer;
+  letter-spacing: 0.5px;
+  align-items: center;
 `;
 
-const TextWide = styled(Text)`
-  display: block;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  line-height: 24px;
-  cursor: pointer;
+const TextRight = styled(Text)`
+  justify-content: flex-end;
+  width: ${(props) => props.width ?? '80'}px;
+  margin-rignt: 10px;
 `;
 
 const Button = styled.button`
@@ -235,7 +232,7 @@ const Button = styled.button`
   border-radius: 4px;
   background: #3563e9;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const ModalWrapper = styled.div`
