@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import jwtDecode from 'jwt-decode';
-import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from 'components/atoms/Input';
@@ -14,10 +13,14 @@ import {
 } from 'stores/pointChargeStore';
 import * as Api from 'api/api';
 
-const PointChargeCheck = () => {
-  const [payName, setPayName] = useState('');
-  const [paymentOption, setPaymentOption] = useState(false);
-  const [checkValid, setCheckValid] = useState(false);
+const PointChargeCheck = ({
+  payName,
+  setPayName,
+  paymentOption,
+  setPaymentOption,
+  checkValid,
+  setCheckValid,
+}) => {
   const [paymentAmount, setPaymentAmount] = useRecoilState(pointSelected);
   const [modalShow, setModalShow] = useRecoilState(modalState);
   const [orderNum, setOrderNum] = useRecoilState(orderNumber);

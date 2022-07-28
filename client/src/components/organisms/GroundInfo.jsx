@@ -39,7 +39,6 @@ const GroundInfo = ({ info }) => {
     <>
       <GroundIconList>
         <GroundSubTitle>경기장 정보</GroundSubTitle>
-        {/* 아이콘  */}
         <IconCards>
           <IconCard info={info} />
         </IconCards>
@@ -49,14 +48,14 @@ const GroundInfo = ({ info }) => {
 
         {infoContents?.map((list) => (
           <>
-            <GroundInfoTitle key={list.id}>
-              <BoxBlanckIcon />
+            <GroundInfoTitle key={list}>
+              <BoxBlanckIcon key={list.title} />
               {list.title}
             </GroundInfoTitle>
             {list.text === '' ? (
-              <GroundText>정보없음</GroundText>
+              <GroundText key={list.id}>정보없음</GroundText>
             ) : (
-              <GroundText>{list.text}</GroundText>
+              <GroundText key={list.text}>{list.text}</GroundText>
             )}
           </>
         ))}
@@ -66,16 +65,18 @@ const GroundInfo = ({ info }) => {
           기타
         </GroundInfoTitle>
 
-        {actInfo?.map((list) => (
-          <GroundText>{list==='' ? '정보없음' : <li>{list}</li>}</GroundText>
+        {actInfo?.map((list, idx) => (
+          <GroundText key={idx}>
+            {list === '' ? '정보없음' : <li key={idx}>{list}</li>}
+          </GroundText>
         ))}
       </GroundDetailInformation>
     </>
   );
 };
 const IconCards = styled.div`
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
 `;
 
 const GroundIconList = styled.div`
@@ -83,14 +84,15 @@ const GroundIconList = styled.div`
   border: solid 1px #ced4da;
   border-radius: 0.7rem;
   margin: 0 1rem 0 1rem;
-  height: 14rem;
+  height: 11rem;
 `;
 
 const GroundSubTitle = styled.h2`
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
-  margin: 2rem 0.3rem 1.5rem 1rem;
+  margin: 0.5rem 0.3rem 1rem 1rem;
+  height: auto;
 `;
 
 const GroundDetailInformation = styled.div`
@@ -108,7 +110,7 @@ const GroundInfoTitle = styled.h3`
 
 const GroundText = styled.p`
   font-size: 1.2rem;
-  margin: 1rem 0 2rem 4rem;
+  margin: 1rem 2rem 2rem 3rem;
 `;
 
 const BoxBlanckIcon = styled(RiCheckboxBlankFill)`
