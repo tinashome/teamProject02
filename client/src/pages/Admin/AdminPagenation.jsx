@@ -15,9 +15,12 @@ const Pagenation = ({ lastPage }) => {
       setPageList(lastPage - 8);
     } else if (e.target.value === 'prev') {
       if (currentPage * 1 > 0) {
-        setCurentPage(currentPage * 1 - 1);
-      } else if (currentPage * 1 === pageList * 1 && currentPage * 1 !== 0)
-        setPageList(pageList - 1);
+        if (pageList === currentPage) {
+          setPageList(pageList - 1);
+        }
+        setCurentPage(currentPage - 1);
+      } else if (currentPage * 1 <= pageList * 1 && currentPage * 1 !== 0)
+        setPageList((el) => el - 1);
     } else if (e.target.value === 'next') {
       if (currentPage * 1 < lastPage) {
         if (
@@ -34,6 +37,7 @@ const Pagenation = ({ lastPage }) => {
   };
   useEffect(() => {
     setCurentPage(0);
+    setPageList(0);
   }, []);
 
   return (
@@ -44,6 +48,7 @@ const Pagenation = ({ lastPage }) => {
           currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
+          disabled={currentPage * 1 === 0 && 'disabled'}
         >
           &lt;&lt;
         </Page>
@@ -52,6 +57,7 @@ const Pagenation = ({ lastPage }) => {
           currentPage={currentPage}
           onClick={handleClick}
           lastPage={lastPage}
+          disabled={currentPage * 1 === 0 && 'disabled'}
         >
           &lt;
         </Page>
@@ -127,10 +133,20 @@ const Pagenation = ({ lastPage }) => {
         >
           {pageList * 1 + 9}
         </Page>
-        <Page value='next' currentPage={currentPage} onClick={handleClick}>
+        <Page
+          value='next'
+          currentPage={currentPage}
+          onClick={handleClick}
+          disabled={currentPage * 1 === lastPage && 'trdisabledue'}
+        >
           &gt;
         </Page>
-        <Page value='last' currentPage={currentPage} onClick={handleClick}>
+        <Page
+          value='last'
+          currentPage={currentPage}
+          onClick={handleClick}
+          disabled={pageList + 8 === lastPage && 'disabled'}
+        >
           &gt;&gt;
         </Page>
       </PageRow>
@@ -143,33 +159,30 @@ const Page = styled.button`
     (props.value * 1 < 0 && props.value) || props.value * 1 > props.lastPage * 1
       ? 'none'
       : 'flex'};
-  color: ${(props) => props.value * 1 < 0 && 'red'};
-  width: 35px;
-  height: 35px;
-  margin: 0 5px;
-  font-size: 25px;
-  font-weight: 400;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 600;
   justify-content: center;
   align-items: center;
   color: ${(props) =>
     props.value * 1 === props.currentPage * 1 ? '#fff' : '#000'};
   background-color: ${(props) =>
     props.value * 1 === props.currentPage * 1 && '#3563e9'};
+  color: ${(props) => props.disabled && '#919191'};
   border-radius: 50%;
   cursor: pointer;
   user-select: none;
 `;
 const Wrapper = styled.div`
   display: flex;
-  margin: 50px;
-  align-self: end;
+  margin: 10px;
   justify-content: center;
 `;
 const PageRow = styled.div`
   display: flex;
-  padding: 10px;
-  font-size: 25px;
-  font-weight: 400;
+  width: 100%;
+  justify-content: center;
 `;
 
 export default Pagenation;

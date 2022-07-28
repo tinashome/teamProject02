@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 // eslint-disable-next-line import/no-cycle
@@ -12,7 +12,7 @@ import AdminGroundEdit from './AdminGroundEdit';
 
 const AdminGroundInfo = ({ groundId }) => {
   // eslint-disable-next-line no-unused-vars
-  const [content, setContent] = useRecoilState(adminContentState);
+  const setContent = useSetRecoilState(adminContentState);
   const [ground, setGround] = useState([]);
   const [postCode, setPostCode] = useState([]);
   const [actInfo, setActInfo] = useState([]);
@@ -148,7 +148,10 @@ const AdminGroundInfo = ({ groundId }) => {
           <Text />
 
           <Div>
-            <StyledP> {ground.groundAddress&&ground.groundAddress.address2} </StyledP>
+            <StyledP>
+              {' '}
+              {ground.groundAddress && ground.groundAddress.address2}{' '}
+            </StyledP>
           </Div>
         </Row>
 
