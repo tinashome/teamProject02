@@ -69,6 +69,11 @@ const DateSelectText = styled.div`
 const StyleCalendar = styled(Calendar)`
   width: 100%;
   border: solid 1px #dee2e6;
+
+  button:disabled {
+    color: #1010104d !important;
+  }
+
   .react-calendar__month-view {
     & div div :nth-child(2) {
       & :nth-child(7n) {
