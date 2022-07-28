@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
-import { useRecoilState } from 'recoil';
-
+import adminMenuStore from 'stores/adminMenuStore';
 import AdminUserDelete from './AdminUserDelete';
 import AdminGroundAdd from './AdminGroundAdd';
 import AdminGroundList from './AdminGroundList';
@@ -10,10 +10,31 @@ import AdminPayment from './AdminPayment';
 import AdminRentalList from './AdminRentalList';
 
 const AdminSidemenu = () => {
-  const [content, setContent] = useRecoilState(adminContentState);
-  const [currentPage, setCurentPage] = useRecoilState(adminCurrentPage);
+  const setContent = useSetRecoilState(adminContentState);
+  const setCurentPage = useSetRecoilState(adminCurrentPage);
+  const [isMobile, setIsMobile] = useRecoilState(adminMenuStore);
+
+  const resizingHandler = () => {
+    if (window.innerWidth <= 870) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  useEffect(() => {
+    if (window.innerWidth <= 870) {
+      setIsMobile(true);
+    }
+
+    window.addEventListener('resize', resizingHandler);
+    return () => {
+      window.removeEventListener('resize', resizingHandler);
+    };
+  }, []);
+
   return (
-    <SideMenuWrapper>
+    <SideMenuWrapper isMobile={isMobile}>
       <SideMenuContainer>
         <SideMenuTitle>사용자 관리</SideMenuTitle>
         <SideMenuLink
@@ -59,15 +80,6 @@ const AdminSidemenu = () => {
         >
           예약조회/취소
         </SideMenuLink>
-
-        {/* <SideMenuLink
-          onClick={() => {
-            setCurentPage(0);
-            setContent(['예약상태 취소', <AdminDeleteReservations />]);
-          }}
-        >
-          예약상태 취소
-        </SideMenuLink> */}
       </SideMenuContainer>
 
       <SideMenuContainer>
@@ -86,34 +98,34 @@ const AdminSidemenu = () => {
 };
 
 const SideMenuWrapper = styled.div`
+  display: ${(props) => (props.isMobile ? 'none' : 'flex')};
+  flex-direction: column;
+  width: 100px;
   padding-top: 100px;
-  text-align: right;
+  padding-right: 50px;
+  align-items: flex-end;
 `;
 
 const SideMenuContainer = styled.div`
-  width: 220px;
-  padding: 0 20px 10px 0px;
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  padding: 10px 0px;
   border-bottom: 1px solid #bdbdbd;
-  text-align: right;
   align-items: flex-end;
 `;
 
 const SideMenuTitle = styled.div`
-  width: 200px;
-  height: 50px;
-  padding-top: 10px;
-  font-size: 24px;
-  font-weight: 700;
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 10px;
 `;
 
 const SideMenuLink = styled.button`
   display: flex;
-  height: 32px;
-  right: 0;
-  margin: 0 0 0 auto;
-  font-size: 20px;
-  font-weight: 400;
-  pointer: cursor;
+  letter-spacing: -1px;
+  color: #000;
 `;
 
 export default AdminSidemenu;
