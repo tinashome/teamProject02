@@ -9,15 +9,10 @@ export default function ClipboardCopy() {
     textarea.style.left = 0;
     textarea.style.position = 'fixed';
 
-    // 흐름 3.
     document.body.appendChild(textarea);
-    // focus() -> 사파리 브라우저 서포팅
     textarea.focus();
-    // select() -> 사용자가 입력한 내용을 영역을 설정할 때 필요
     textarea.select();
-    // 흐름 4.
     document.execCommand('copy');
-    // 흐름 5.
     document.body.removeChild(textarea);
     alert('클립보드에 복사되었습니다.');
   };
@@ -32,11 +27,12 @@ export default function ClipboardCopy() {
 const CopyBtn = styled.button`
   padding: 0.3rem 0.5rem;
   border: solid #f1f3f5;
-  border-radius: 7px;
+  border-radius: 5px;
   background: #adb5bd;
   color: black;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   margin-left:0.5rem;
+  margin-bottom:0.3rem;
   &:hover {
     opacity: 0.7;
   }

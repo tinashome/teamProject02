@@ -36,12 +36,14 @@ const IconCard = ({ info }) => {
 const IconContainer = styled.div`
   position: relative;
   width: 100%;
+  height:auto;
 `;
 
 const Icon = styled.div`
   position: absolute;
   color: red;
   opacity: 0.3;
+  margin-left:0.5rem;
 `;
 
 const IconText = styled.div`
@@ -54,8 +56,8 @@ const GroundIcons = styled.div`
   display:flex;
   justify-content:center;
   width: 100%;
-  height: 6rem;
-  margin: 0 1.5rem 0.3rem 2rem;
+  height: 5rem;
+  margin-bottom: 2rem;
 `;
 
 const GroundIcon = styled.div`
@@ -63,7 +65,7 @@ const GroundIcon = styled.div`
   padding: 0.2rem;
   margin: 0.2rem;
   width: 6rem;
-  height: 6.5rem;
+  height: 6rem;
   border: solid #bdbdbd;
   border-radius: 5px;
   font-size: 70px;
