@@ -53,7 +53,6 @@ const SidemenuName = styled.div`
   margin: 1.25rem 0 1.25rem;
   align-items: center;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 800;
   font-size: 2rem;
@@ -73,7 +72,6 @@ const SideTitle = styled.div`
   border-top: 0.0625rem solid black;
   align-items: center;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 800;
   font-size: 1.5rem;
@@ -92,7 +90,6 @@ const SideListItem = styled.div`
   margin: 0 0 0.625rem auto;
   align-items: center;
   color: #000000;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 1.25rem;
