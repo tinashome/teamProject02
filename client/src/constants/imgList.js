@@ -1,7 +1,7 @@
 export const bannerList = [
-  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658639023686_%242b%2410%24K3Sa18TeXvzEEwn8mDxVx.9tKjV9EHsbQyEXh.FMQejnJgurWWsom.jpeg',
-  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658639059057_%242b%2410%24z0K6EuMJpwNs6an7FbtCZeENf0PY2GpQB49EQsZpZBz1RLwceW8ca.jpeg',
-  ' https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658639075710_%242b%2410%24YxyUR3sn7612Ncxs7AUZOOvQNy0.QNOWj0BtESqjF/Z83p55MjWqe.jpeg',
+  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658994367611_%242b%2410%24s5ZekvBZQBBHGgxvBUIV..yufsK49dv3ErLU4YhTI2ROaCMlCF6b6.png',
+  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658994785483_%242b%2410%24U/K5ANOu4L2mbKl4Xxhns.OFiglpNtspkk1gwVrEby7uf0f443tkq.png',
+  'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658994410819_%242b%2410%24NImSkKZdMMJvCsD0kMNYvOQJlFIDzzCtqXOvjHcRFhT0sd3f36X4q.png',
 ];
 
 export const loginImgList = [
