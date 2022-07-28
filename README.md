@@ -45,21 +45,41 @@
 
 <br>
 
-## 📌 [기술 및 스크럼 - Notion](https://www.notion.so/b6d9bea8f4534057b45e9d4df673de82)
-
-<br>
-
 ## 프로젝트 기간
 
 </br>
 
 ### 2022.07.11 ~ 2022.07.29 ( 3주 )
 
-</br>
+<br>
+
+# 📌 [프로젝트 구성도 - Notion](https://www.notion.so/b6d9bea8f4534057b45e9d4df673de82)
+
+## 🔗 화면 흐름도
+
+<p align="center">
+  <img src="/image/flow.png" alt="text" width="number" />
+</p>
+
+</br></br>
+
+## 🔗 [기능정의서](https://docs.google.com/spreadsheets/d/1yxnbhTdu6lL7A0aK_BEIDmrwFvcMAnj21aXOMwsH6tU/edit?usp=sharing)
+
+</br></br>
+
+## 🔗 [와이어프레임](https://www.figma.com/file/ZuJWF6GLUNvijzzkQmNvNT/%ED%92%8B%EC%82%B4%EC%9E%A5-%EC%98%88%EC%95%BD-%EC%84%9C%EB%B9%84%EC%8A%A4)
+
+</br></br>
+
+## 🔗 [API](https://glowing-angelfish-c5a.notion.site/API-94e393ca70d84c1a86c382da194558bf)
+
+</br></br>
+
+<br>
 
 # 🚗 [주요 기능]
 
-<br>
+</br>
 
 ## 로그인
 
