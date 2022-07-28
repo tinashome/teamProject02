@@ -1,7 +1,7 @@
+import Pagination from 'components/organisms/Pagination';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Api from '../api/api';
-import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const UserPointHistory = () => {
   const [pointHistory, setPointHistory] = useState([]);
@@ -69,7 +69,7 @@ const UserPointHistory = () => {
           ))}
         </Contents>
       </Wrapper>
-      <MyinfoPagination
+      <Pagination
         totalPage={totalPage}
         limit={5}
         page={page}
