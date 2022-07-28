@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import * as Api from 'api/api';
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaFutbol } from '@react-icons/all-files/fa/FaFutbol';
 import { FaUserCircle } from '@react-icons/all-files/fa/FaUserCircle';
-
+import { titleLogo } from 'constants/imgList';
 import { useRecoilState } from 'recoil';
 import { userPointState, userState } from 'stores/userStore';
 import { addCommas, getToken, isExistToken } from 'util/useful-functions';
@@ -63,8 +62,7 @@ const Header = () => {
     <Container>
       <NavLink to='/'>
         <Logo>
-          <FaFutbol />
-          <LogoTitle>풋살예약닷컴</LogoTitle>
+          <img src={titleLogo[1]} alt={titleLogo[1]} />
         </Logo>
       </NavLink>
       <ButtonContainer>
@@ -110,15 +108,15 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 20px 120px;
+  padding: 10px 120px;
   background: #ffffff;
   z-index: 99;
   border-bottom: 1px solid #e9ecef;
-`;
 
-const LogoTitle = styled.p`
-  align-self: center;
-  padding: 0 0.5rem;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const ButtonContainer = styled.div`

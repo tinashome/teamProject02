@@ -11,7 +11,7 @@ import { userState } from 'stores/userStore';
 const BoardWrite = () => {
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
-  const [isNotified, setIsNotified] = useState(true);
+  const [isNotified, setIsNotified] = useState(false);
   const toggleChecked = useCallback(() => {
     setIsNotified(!isNotified);
   }, [isNotified]);
