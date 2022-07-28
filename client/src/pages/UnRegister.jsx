@@ -2,12 +2,13 @@ import React from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { userState } from '../stores/userStore';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { userState, userPointState } from '../stores/userStore';
 import * as Api from '../api/api';
 
 const UnRegister = () => {
   const setUserInfo = useSetRecoilState(userState);
+  const [userPoint, setUserPoint] = useRecoilState(userPointState);
   const navigate = useNavigate();
   const {
     register,
@@ -16,18 +17,44 @@ const UnRegister = () => {
   } = useForm();
 
   const onSubmit = async () => {
-    try {
-      const result = await Api.delete('users');
-      if (result.status === 200) {
-        alert('회원 탈퇴가 완료되었습니다.');
-        localStorage.removeItem('token');
-        setUserInfo({});
-        navigate('/');
-      } else {
-        alert('회원 탈퇴에 실패하였습니다.');
+    if (userPoint.totalPoint !== 0) {
+      if (
+        window.confirm(`
+      ${userPoint.totalPoint.toLocaleString()}P가 남아있습니다.
+      탈퇴하시면 남은 포인트는 사라지며 환불받을 수 없습니다.
+      정말 탈퇴하시겠습니까?
+      `)
+      ) {
+        try {
+          const result = await Api.delete('users');
+          if (result.status === 200) {
+            alert('회원 탈퇴가 완료되었습니다.');
+            localStorage.removeItem('token');
+            setUserInfo({});
+            setUserPoint(0);
+            navigate('/');
+          } else {
+            alert('회원 탈퇴에 실패하였습니다.');
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      try {
+        const result = await Api.delete('users');
+        if (result.status === 200) {
+          alert('회원 탈퇴가 완료되었습니다.');
+          localStorage.removeItem('token');
+          setUserInfo({});
+          setUserPoint(0);
+          navigate('/');
+        } else {
+          alert('회원 탈퇴에 실패하였습니다.');
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
