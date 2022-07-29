@@ -32,6 +32,7 @@
 <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,aws,redis" />
+    <img src="/image/eslint.png" />
   </a>
 </p>
 
@@ -40,6 +41,7 @@
 <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=figma,vscode,gitlab" />
+    <img src="swagger.png" />
   </a>
 </p>
 
