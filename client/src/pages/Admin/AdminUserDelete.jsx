@@ -1,7 +1,7 @@
 // 관리자페이지본문 메뉴1 회원탈퇴 AdminUserDelete
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { useForm } from 'react-hook-form';
@@ -17,18 +17,23 @@ const AdminUserDelete = () => {
   const [totalCount, setTotalCount] = useState(null);
   const [lastPage, setLastPage] = useState(9);
   // eslint-disable-next-line no-unused-vars
-  const currentPage = useRecoilValue(adminCurrentPage);
+  const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
-  // const [search, setSearch] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const getUsers = async () => {
     // 사용자목록조회 api요청
     // users?name=이름&email=이메일&phoneNumber=연락처&offset=시작번호&count=조회할갯수
+    const url = `users?${userName ? `&name=${userName}` : ''}${
+      email ? `&email=${email}` : ''
+    }${phoneNumber ? `&phoneNumber=${phoneNumber}` : ''}&offset=${
+      currentPage * pageSize
+    }&count=${pageSize}`;
     try {
-      const result = await Api.get(
-        `users?offset=${currentPage * pageSize}&count=${pageSize}`,
-      );
+      const result = await Api.get(url);
       const resultData = await result.data;
       setUsers(resultData.users);
       setTotalCount(resultData.length);
@@ -70,31 +75,18 @@ const AdminUserDelete = () => {
   // 찾기 클릭시
   const handleSearch = async (data) => {
     reset();
-    console.log(data);
+    setcurrentPage(0);
     const { searchFor, search } = data;
     if (!searchFor) return;
-    const params = {
-      name: search === 'name' && `name=${searchFor}`,
-      email: search === 'email' && `email=${searchFor}`,
-      phoneNumber:
-        search === 'phoneNumber' &&
-        `phoneNumber=${searchFor.trim().replace('-', '')}`,
-    };
-    // 사용자목록조회 api요청
-    // users?name=이름&email=이메일&phoneNumber=연락처&offset=시작번호&count=조회할갯수
-    const url = `users?${params.name || ''}${params.email || ''}${
-      params.phoneNumber || ''
-    }&count=${totalCount}`;
-    try {
-      const result = await Api.get(url);
-      const resultData = await result.data;
-      setUsers(resultData.users);
-      setTotalCount(resultData.length);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
+    if (search === 'name') setUserName(searchFor);
+    if (search === 'email') setEmail(searchFor);
+    if (search === 'phoneNumber')
+      setPhoneNumber(searchFor.trim().replace('-', ''));
   };
+
+  useEffect(() => {
+    getUsers();
+  }, [userName, email, phoneNumber]);
 
   return (
     users && (
@@ -208,7 +200,14 @@ const AdminUserDelete = () => {
               <RadioBox>
                 <Input {...register('searchFor')} />
                 <Button type='submit'>찾기</Button>
-                <Button type='button' onClick={getUsers}>
+                <Button
+                  type='button'
+                  onClick={() => {
+                    setUserName(null);
+                    setEmail(null);
+                    setPhoneNumber(null);
+                  }}
+                >
                   전체보기
                 </Button>
               </RadioBox>
@@ -227,7 +226,6 @@ const Wrapper = styled.div`
   font-size: 14px;
   letter-spacing: -1px;
   justify-content: space-between;
-  // width: 800px;
 `;
 
 const Container = styled.div`
@@ -240,27 +238,20 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   padding: 10px 0;
-  // line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
   justify-content: space-between;
   align-items: center;
 `;
 
 const TitleRow = styled(Row)`
-  // display: flex;
   font-weight: 600;
   font-size: 16px;
   margin-top: 20px;
-  // padding-bottom: 10px;
   border-bottom: 2px solid #000;
-  // justify-content: space-evenly;
-  // align-items: center;
 `;
 
 const InRow = styled.div`
   display: flex;
-  // width: 250px;
-  // justify-content: space-around;
   justify-content: space-between;
 `;
 const InColumn = styled.div`
@@ -277,20 +268,12 @@ const Text = styled.div`
   white-space: nowrap;
   letter-spacing: 0.5px;
   justify-content: center;
-  // background-color: #ffadad; //빨
 `;
 
 const TextLeft = styled(Text)`
-  // display: block;
   justify-content: flex-start;
-  // white-space: normal;
-  // text-overflow: ellipsis;
-  // overflow: hidden;
-  // background-color: #ffadad; //빨
 `;
-const TextRight = styled(TextLeft)`
-  justify-content: flex-end;
-`;
+
 const Button = styled.button`
   display: flex;
   padding: 5px 10px;
@@ -345,7 +328,6 @@ const ModalButton = styled.button`
 
 const Input = styled.input`
   display: flex;
-  // width: ${(props) => props.width || '100%'};
   width: 180px;
   height: 30px;
   padding: 10px;
@@ -357,10 +339,8 @@ const Input = styled.input`
 
 const SearchRow = styled.div`
   display: flex;
-  // width: 100px;
   flex-direction: column;
   line-height: 20px;
-  // justify-content: space-between;
   align-items: center;
   justify-content: center;
   border: none;
@@ -376,7 +356,6 @@ const Label = styled.label`
   flex-direction: row;
   font-size: 14px;
   white-space: nowrap;
-  // align-content: center;
 `;
 
 const RadioBox = styled.div`

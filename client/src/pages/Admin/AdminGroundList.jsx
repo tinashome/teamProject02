@@ -24,15 +24,20 @@ const AdminGroundList = () => {
   const setContent = useSetRecoilState(adminContentState);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
-  // eslint-disable-next-line no-unused-vars
+
+  const [location, setLocation] = useState(null);
+  const [search, setSearch] = useState(null);
 
   const getGrounds = async () => {
     // 경기장목록조회 api요청
     // grounds?location=지역&search=검색어&offset=시작번호&count=조회할갯수
+
+    const url = `grounds?${location && `location=${location}`}${
+      search ? `&search=${search}` : ''
+    }&offset=${currentPage * pageSize}&count=${pageSize}`;
+
     try {
-      const result = await Api.get(
-        `grounds?offset=${currentPage * pageSize}&count=${pageSize}`,
-      );
+      const result = await Api.get(url);
       const resultData = await result.data;
       setGrounds(resultData.grounds);
       setTotalCount(resultData.length);
@@ -45,30 +50,15 @@ const AdminGroundList = () => {
   // 찾기 클릭시
   const handleSearch = async (data) => {
     reset();
-    const { location, search } = data;
-    if (!location && !search) return;
-    // const params = {
-    //   name: search === 'name' && `name=${searchFor}`,
-    //   email: search === 'email' && `email=${searchFor}`,
-    //   phoneNumber:
-    //     search === 'phoneNumber' &&
-    //     `phoneNumber=${searchFor.trim().replace('-', '')}`,
-    // };
-    // 경기장목록조회 api요청
-    // grounds?location=지역&search=검색어&offset=시작번호&count=조회할갯수
-    try {
-      const result = await Api.get(
-        `grounds?location=${location}&search=${search}&offset=0
-        &count=${totalCount}`,
-      );
-      const resultData = await result.data;
-      setGrounds(resultData.grounds);
-      setTotalCount(resultData.length);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
+    setcurrentPage(0);
+    const { locationValue, searchValue } = data;
+    if (locationValue !== 'all') setLocation(locationValue);
+    if (searchValue) setSearch(searchValue);
   };
+
+  useEffect(() => {
+    getGrounds();
+  }, [location, search]);
 
   // 경기장정보조회클릭시 groundId만보내서 새컴포넌트 호출
   const handleClickInfo = async (event) => {
@@ -220,17 +210,29 @@ const AdminGroundList = () => {
         <SearchRow>
           <InColumn>
             <RadioBox>
-              <Select {...register('location')} style={{ marginRight: '10px' }}>
-                <option value=''>모든지역</option>
+              <Select
+                {...register('locationValue')}
+                style={{ marginRight: '10px' }}
+              >
+                <option value='all'>모든지역</option>
                 <option value='서울'>서울</option>
                 <option value='경기'>경기</option>
                 <option value='부산'>부산</option>
               </Select>
             </RadioBox>
             <RadioBox>
-              <Input {...register('search')} />
+              <Input
+                {...register('searchValue')}
+                placeholder='경기장명으로 찾기'
+              />
               <Button type='submit'>찾기</Button>
-              <Button type='button' onClick={getGrounds}>
+              <Button
+                type='button'
+                onClick={() => {
+                  setLocation(null);
+                  setSearch(null);
+                }}
+              >
                 전체보기
               </Button>
             </RadioBox>
@@ -240,12 +242,6 @@ const AdminGroundList = () => {
     </Wrapper>
   );
 };
-
-// const Wrapper = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   font-size: 14px;
-// `;
 
 const Container = styled.div`
   display: flex;
@@ -260,34 +256,12 @@ const Wrapper = styled.div`
   font-size: 14px;
   letter-spacing: -1px;
   justify-content: space-between;
-  // width: 800px;
 `;
-
-// const Row = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   padding: 10px 0;
-//   border-bottom: 1px solid #bdbdbd;
-//   justify-content: space-evenly;
-//   align-items: center;
-// `;
-// const InRow = styled.div`
-//   display: flex;
-//   width: 250px;
-//   justify-content: space-around;
-//   justify-content: space-between;
-// `;
-// const InColumn = styled.div`
-//   display: flex;
-//   justify-content: space-around;
-//   flex-wrap: wrap;
-// `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   padding: 10px 0;
-  // line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
   justify-content: space-between;
   align-items: center;
@@ -295,31 +269,14 @@ const Row = styled.div`
 `;
 
 const TitleRow = styled(Row)`
-  // display: flex;
   font-weight: 600;
   font-size: 16px;
   margin-top: 20px;
-  // padding-bottom: 10px;
   border-bottom: 2px solid #000;
-  // justify-content: space-evenly;
-  // align-items: center;
 `;
-
-// const TitleRow = styled.div`
-//   display: flex;
-//   font-weight: 600;
-//   font-size: 16px;
-//   margin-top: 20px;
-//   padding-bottom: 10px;
-//   border-bottom: 1px solid #adb5bd;
-//   justify-content: space-evenly;
-//   align-items: center;
-// `;
 
 const InRow = styled.div`
   display: flex;
-  // width: 250px;
-  // justify-content: space-around;
   justify-content: space-between;
 `;
 const InColumn = styled.div`
@@ -336,16 +293,13 @@ const Text = styled.div`
   white-space: nowrap;
   letter-spacing: 0.5px;
   justify-content: center;
-  // background-color: #ffadad; //빨
 `;
 
 const TextLeft = styled(Text)`
-  // display: block;
   justify-content: flex-start;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  // background-color: #ffadad; //빨
 `;
 const TextRight = styled(TextLeft)`
   justify-content: flex-end;
@@ -405,7 +359,6 @@ const ModalButton = styled.button`
 
 const Input = styled.input`
   display: flex;
-  // width: ${(props) => props.width || '100%'};
   width: 180px;
   height: 30px;
   padding: 10px;
@@ -417,26 +370,12 @@ const Input = styled.input`
 
 const SearchRow = styled.div`
   display: flex;
-  // width: 100px;
   flex-direction: column;
   line-height: 20px;
-  // justify-content: space-between;
   align-items: center;
   justify-content: center;
   border: none;
   flex-wrap: wrap;
-`;
-
-const RadioBtn = styled.input`
-  display: flex;
-  margin: 3px 5px;
-`;
-const Label = styled.label`
-  display: flex;
-  flex-direction: row;
-  font-size: 14px;
-  white-space: nowrap;
-  // align-content: center;
 `;
 
 const RadioBox = styled.div`

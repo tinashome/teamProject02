@@ -25,14 +25,19 @@ const AdminRentalList = () => {
   const [modal, setModal] = useState(null);
   // 예약시간상세확인용 상태 id값이면 리스트를 open
   const [openTimes, setOpenTimes] = useState(null);
+  const [userNameSearch, setUserNameSearch] = useState(null);
+  const [groundName, setGroundName] = useState(null);
 
   const getRentals = async () => {
     // 예약목록조회 api요청
     // rentals?isBooked=결제TF&userName=이름&groundName=경기장명&offset=시작번호&count=조회할갯수
+    const url = `rentals?${
+      userNameSearch ? `&userName=${userNameSearch}` : ''
+    }${groundName ? `&groundName=${groundName}` : ''}&offset=${
+      currentPage * pageSize
+    }&count=${pageSize}`;
     try {
-      const result = await Api.get(
-        `rentals?offset=${currentPage * pageSize}&count=${pageSize}`,
-      );
+      const result = await Api.get(url);
       const resultData = await result.data;
       setRentals(resultData.rentals);
       setTotalCount(resultData.length);
@@ -45,28 +50,16 @@ const AdminRentalList = () => {
   // 찾기 클릭시
   const handleSearch = async (data) => {
     reset();
+    setcurrentPage(0);
     const { searchFor, search } = data;
     if (!searchFor) return;
-    const params = {
-      userName: search === 'userName' && `userName=${searchFor}`,
-      groundName: search === 'groundName' && `groundName=${searchFor}`,
-    };
-    // 예약목록조회 api요청
-    // rentals?isBooked=결제TF&userName=이름&groundName=경기장명&offset=시작번호&count=조회할갯수
-    const url = `rentals?${params.userName || ''}${
-      params.groundName || ''
-    }&count=${totalCount}`;
-    try {
-      const result = await Api.get(url);
-      const resultData = await result.data;
-      console.log(resultData);
-      setRentals(resultData.rentals);
-      setTotalCount(resultData.length);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
+    if (search === 'userNameValue') setUserNameSearch(searchFor);
+    if (search === 'groundNameValue') setGroundName(searchFor);
   };
+
+  useEffect(() => {
+    getRentals();
+  }, [userNameSearch, groundName]);
 
   // 주문생성시간 타임존을 보정하고 mm-dd형식으로 반환하는 함수
   const getCurrentDate = (data) => {
@@ -205,7 +198,6 @@ const AdminRentalList = () => {
                       )}
                     </TextList>
                     <TextListOpen id={e._id} open={openTimes}>
-                      {/* {e.reservationTime && e.reservationTime.join('\n')} */}
                       {e.reservationTime.slice(1).join('\n')}
                     </TextListOpen>
                   </TextList>
@@ -240,7 +232,7 @@ const AdminRentalList = () => {
                 <RadioBtn
                   type='radio'
                   name='search'
-                  value='userName'
+                  value='userNameValue'
                   id='userName'
                   {...register('search', { required: true })}
                 />
@@ -250,7 +242,7 @@ const AdminRentalList = () => {
                 <RadioBtn
                   type='radio'
                   name='search'
-                  value='groundName'
+                  value='groundNameValue'
                   id='groundName'
                   {...register('search', { required: true })}
                 />
@@ -260,7 +252,13 @@ const AdminRentalList = () => {
             <RadioBox>
               <Input {...register('searchFor')} />
               <Button type='submit'>찾기</Button>
-              <Button type='button' onClick={getRentals}>
+              <Button
+                type='button'
+                onClick={() => {
+                  setUserNameSearch(null);
+                  setGroundName(null);
+                }}
+              >
                 전체보기
               </Button>
             </RadioBox>
@@ -278,7 +276,6 @@ const Wrapper = styled.div`
   font-size: 14px;
   letter-spacing: -1px;
   justify-content: space-between;
-  // width: 800px;
 `;
 
 const Container = styled.div`
@@ -291,27 +288,20 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   padding: 10px 0;
-  // line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
   justify-content: space-between;
   align-items: center;
 `;
 
 const TitleRow = styled(Row)`
-  // display: flex;
   font-weight: 600;
   font-size: 16px;
   margin-top: 20px;
-  // padding-bottom: 10px;
   border-bottom: 2px solid #000;
-  // justify-content: space-evenly;
-  // align-items: center;
 `;
 
 const InRow = styled.div`
   display: flex;
-  // width: 250px;
-  // justify-content: space-around;
   justify-content: space-between;
 `;
 const InColumn = styled.div`
@@ -328,20 +318,12 @@ const Text = styled.div`
   white-space: nowrap;
   letter-spacing: 0.5px;
   justify-content: center;
-  // background-color: #ffadad; //빨
 `;
 
 const TextLeft = styled(Text)`
-  // display: block;
   justify-content: flex-start;
-  // white-space: normal;
-  // text-overflow: ellipsis;
-  // overflow: hidden;
-  // background-color: #ffadad; //빨
 `;
-const TextRight = styled(TextLeft)`
-  justify-content: flex-end;
-`;
+
 const TextWide = styled(Text)`
   display: block;
   text-overflow: ellipsis;
@@ -438,7 +420,6 @@ const CloseIcon = styled(IoIosArrowUp)`
 
 const Input = styled.input`
   display: flex;
-  // width: ${(props) => props.width || '100%'};
   width: 180px;
   height: 30px;
   padding: 10px;
@@ -450,10 +431,8 @@ const Input = styled.input`
 
 const SearchRow = styled.div`
   display: flex;
-  // width: 100px;
   flex-direction: column;
   line-height: 20px;
-  // justify-content: space-between;
   align-items: center;
   justify-content: center;
   border: none;
@@ -469,7 +448,6 @@ const Label = styled.label`
   flex-direction: row;
   font-size: 14px;
   white-space: nowrap;
-  // align-content: center;
 `;
 
 const RadioBox = styled.div`
