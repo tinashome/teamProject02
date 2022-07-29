@@ -35,7 +35,7 @@
   </a>
 </p>
 
-# Common
+# Tools
 
 <p align="center">
   <a href="https://skillicons.dev">
