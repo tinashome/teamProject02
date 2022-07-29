@@ -200,7 +200,7 @@ const Ground = () => {
 const OperatedTime = styled.div`
   font-size: 1.3rem;
   text-align: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 2rem;
   color: #adb5bd;
 `;
 
@@ -243,11 +243,11 @@ const BackBtn = styled(Button)`
 const ReservationList = styled.div`
   position: sticky;
   top: 0;
-  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   width: 30%;
   height: 60%;
   margin-bottom: 4rem;
+  background-color: #f8f9fa;
 `;
 
 const ReservationCheckModal = styled(ModalDiv)`
