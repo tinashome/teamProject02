@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RiCheckboxBlankFill } from '@react-icons/all-files/ri/RiCheckboxBlankFill';
-
+import KakaoMap from 'pages/KakaoMap';
 import IconCard from './IconCard';
 
 const GroundInfo = ({ info }) => {
@@ -34,7 +34,6 @@ const GroundInfo = ({ info }) => {
       text: toilet,
     },
   ];
-
   return (
     <>
       <GroundIconList>
@@ -70,6 +69,14 @@ const GroundInfo = ({ info }) => {
             {list === '' ? '정보없음' : <li key={idx}>{list}</li>}
           </GroundText>
         ))}
+
+        <GroundInfoTitle>
+          <BoxBlanckIcon />
+          경기장 위치 Map
+        </GroundInfoTitle>
+        <GroundText>
+          <KakaoMap address ={info.groundAddress.address1} name={info.groundName} />
+        </GroundText>
       </GroundDetailInformation>
     </>
   );

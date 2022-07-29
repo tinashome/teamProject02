@@ -84,6 +84,9 @@ const StyleCalendar = styled(Calendar)`
       }
     }
   }
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: #757575 !important;
+  }
 `;
 
 const Container = styled.div`
