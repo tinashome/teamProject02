@@ -146,7 +146,7 @@
 ## 구장 예약하기
 
 <p align="center">
-  <img src="/image/rental.gif" alt="text" width="number" />
+  <img src="/image/rentals.gif" alt="text" width="number" />
 </p>
 
 <br>
