@@ -120,6 +120,9 @@ const Ground = () => {
         imgModalCurser={imgModalCurser}
       />
       <InfoMainTitle>{detailInfo.groundName}</InfoMainTitle>
+      <OperatedTime>
+        운영 시간 {detailInfo.startTime} ~ {detailInfo.endTime}
+      </OperatedTime>
       <Container>
         <GroundInfoList>
           <GroundInfo info={detailInfo} />
@@ -194,6 +197,13 @@ const Ground = () => {
   );
 };
 
+const OperatedTime = styled.div`
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  color: #adb5bd;
+`;
+
 const Container = styled.div`
   display: flex;
   position: relative;
@@ -206,7 +216,7 @@ const InfoMainTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   text-align: center;
-  margin: 3rem 1rem;
+  margin-bottom: 1.2rem;
 `;
 const GroundInfoList = styled.div`
   width: 50%;

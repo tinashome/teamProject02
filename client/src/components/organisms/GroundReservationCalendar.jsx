@@ -116,6 +116,7 @@ const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
   margin-right: 0.8rem;
+  margin-bottom:0.8rem;
 `;
 
 export default GroundReservationCalendar;

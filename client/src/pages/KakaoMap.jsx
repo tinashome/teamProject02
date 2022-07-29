@@ -25,7 +25,7 @@ const KakaoMap = ({ address, name }) => {
         });
 
         const infowindow = new kakao.maps.InfoWindow({
-          content: `<div style="width:150px;text-align:center;padding:3px 0;">${name}</div>`,
+          content: `<div style="width:150px;text-align:center;padding:3px 3px;">${name}</div>`,
         });
 
         infowindow.open(map, marker);
