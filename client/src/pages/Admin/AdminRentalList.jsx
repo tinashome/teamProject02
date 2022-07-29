@@ -7,9 +7,11 @@ import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
 import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
+import { useForm } from 'react-hook-form';
 import Pagenation from './AdminPagenation';
 
 const AdminRentalList = () => {
+  const { register, handleSubmit, reset } = useForm();
   // 조회한예약목록을 저장하는 상태
   const [rentals, setRentals] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -32,6 +34,32 @@ const AdminRentalList = () => {
         `rentals?offset=${currentPage * pageSize}&count=${pageSize}`,
       );
       const resultData = await result.data;
+      setRentals(resultData.rentals);
+      setTotalCount(resultData.length);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
+
+  // 찾기 클릭시
+  const handleSearch = async (data) => {
+    reset();
+    const { searchFor, search } = data;
+    if (!searchFor) return;
+    const params = {
+      userName: search === 'userName' && `userName=${searchFor}`,
+      groundName: search === 'groundName' && `groundName=${searchFor}`,
+    };
+    // 예약목록조회 api요청
+    // rentals?isBooked=결제TF&userName=이름&groundName=경기장명&offset=시작번호&count=조회할갯수
+    const url = `rentals?${params.userName || ''}${
+      params.groundName || ''
+    }&count=${totalCount}`;
+    try {
+      const result = await Api.get(url);
+      const resultData = await result.data;
+      console.log(resultData);
       setRentals(resultData.rentals);
       setTotalCount(resultData.length);
     } catch (err) {
@@ -94,7 +122,7 @@ const AdminRentalList = () => {
   }, [totalCount]);
 
   return (
-    <>
+    <Wrapper>
       <ModalWrapper
         modal={modal}
         onClick={() => {
@@ -125,91 +153,67 @@ const AdminRentalList = () => {
       <TitleRow>
         <InColumn>
           <InRow>
-            <Text width='100' style={{ justifyContent: 'center' }}>
-              작성일
-            </Text>
-            <Text width='150' style={{ justifyContent: 'center' }}>
-              이름
-            </Text>
+            <Text>작성일</Text>
+            <Text width='110'>이름</Text>
+            <Text width='150'>경기장명</Text>
           </InRow>
           <InRow>
-            <Text width='100' style={{ justifyContent: 'center' }}>
-              경기장명
-            </Text>
-            <Text width='150' style={{ justifyContent: 'center' }}>
-              날짜
-            </Text>
+            <Text>날짜</Text>
+            <Text>예약시간</Text>
           </InRow>
         </InColumn>
-        <Text width='120' style={{ justifyContent: 'flex-end' }}>
-          예약시간
-        </Text>
-
-        <Text width='40' />
         <Text>취소</Text>
       </TitleRow>
 
-      <Wrapper pageSize={pageSize}>
+      <Container>
         {rentals &&
           rentals.map((e) => (
             <Row key={e._id}>
               <InColumn>
                 <InRow>
-                  <Text width='100' style={{ justifyContent: 'center' }}>
-                    {getCurrentDate(e.createdAt)}
-                  </Text>
-                  <Text width='150' style={{ justifyContent: 'center' }}>
-                    {!!e.userId && e.userId.name}
-                  </Text>
+                  <Text>{getCurrentDate(e.createdAt)}</Text>
+                  <Text width='110'>{!!e.userId && e.userId.name}</Text>
+                  <TextLeft width='150'>{e.groundName}</TextLeft>
                 </InRow>
                 <InRow>
-                  <TextWide width='100' style={{ justifyContent: 'center' }}>
-                    {e.groundName}
-                  </TextWide>
-                  <Text width='150' style={{ justifyContent: 'center' }}>
+                  <Text>
                     {`${e.reservationDate && dateAddDash(e.reservationDate)}`}
                   </Text>
+
+                  <TextList width='120'>
+                    <TextList id={e._id} open={openTimes} width='120'>
+                      {e.reservationTime && e.reservationTime.sort()[0]}
+                      {e.reservationTime[1] && (
+                        <>
+                          <OpenIcon
+                            id={e._id}
+                            open={openTimes}
+                            onClick={() => {
+                              setOpenTimes(e._id);
+                            }}
+                          />
+                          <CloseIcon
+                            id={e._id}
+                            open={openTimes}
+                            onClick={() => {
+                              if (openTimes) {
+                                setOpenTimes(null);
+                              }
+                            }}
+                          />
+                        </>
+                      )}
+                    </TextList>
+                    <TextListOpen id={e._id} open={openTimes}>
+                      {/* {e.reservationTime && e.reservationTime.join('\n')} */}
+                      {e.reservationTime.slice(1).join('\n')}
+                    </TextListOpen>
+                  </TextList>
+
+                  <Text>{e.reservationTime && e.reservationTime.length}h</Text>
                 </InRow>
               </InColumn>
-
-              <TextList width='120'>
-                <TextList id={e._id} open={openTimes} width='120'>
-                  {e.reservationTime && e.reservationTime.sort()[0]}
-                  {e.reservationTime[1] && (
-                    <>
-                      <OpenIcon
-                        id={e._id}
-                        open={openTimes}
-                        onClick={() => {
-                          setOpenTimes(e._id);
-                        }}
-                      />
-                      <CloseIcon
-                        id={e._id}
-                        open={openTimes}
-                        onClick={() => {
-                          if (openTimes) {
-                            setOpenTimes(null);
-                          }
-                        }}
-                      />
-                    </>
-                  )}
-                </TextList>
-                <TextListOpen id={e._id} open={openTimes}>
-                  {e.reservationTime && e.reservationTime.join('\n')}
-                  {/* {e.reservationTime.slice(1).join('\n')} */}
-                </TextListOpen>
-              </TextList>
-
-              <Text
-                width='40'
-                style={{ justifyContent: 'flex-end', paddingRight: '20px' }}
-              >
-                {e.reservationTime && e.reservationTime.length}h
-              </Text>
-
-              <Text width='100'>
+              <Text>
                 <Button
                   id={e._id}
                   name={!!e.userId && e.userId.name}
@@ -223,23 +227,49 @@ const AdminRentalList = () => {
               </Text>
             </Row>
           ))}
-        <Row style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }} />
-      </Wrapper>
+
+        <Row style={{ borderTop: '2px solid #000', borderBottom: 'none' }} />
+      </Container>
       {rentals.length !== 0 && <Pagenation lastPage={lastPage} />}
-    </>
+
+      <Form onSubmit={handleSubmit(handleSearch)}>
+        <SearchRow>
+          <InColumn>
+            <RadioBox>
+              <Label>
+                <RadioBtn
+                  type='radio'
+                  name='search'
+                  value='userName'
+                  id='userName'
+                  {...register('search', { required: true })}
+                />
+                이름
+              </Label>
+              <Label>
+                <RadioBtn
+                  type='radio'
+                  name='search'
+                  value='groundName'
+                  id='groundName'
+                  {...register('search', { required: true })}
+                />
+                경기장명
+              </Label>
+            </RadioBox>
+            <RadioBox>
+              <Input {...register('searchFor')} />
+              <Button type='submit'>찾기</Button>
+              <Button type='button' onClick={getRentals}>
+                전체보기
+              </Button>
+            </RadioBox>
+          </InColumn>
+        </SearchRow>
+      </Form>
+    </Wrapper>
   );
 };
-
-const TitleRow = styled.div`
-  display: flex;
-  font-weight: 600;
-  font-size: 16px;
-  margin-top: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #adb5bd;
-  justify-content: space-evenly;
-  align-items: center;
-`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -247,42 +277,71 @@ const Wrapper = styled.div`
   margin-bottom: 50px;
   font-size: 14px;
   letter-spacing: -1px;
-  width: 100%;
+  justify-content: space-between;
+  // width: 800px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   padding: 10px 0;
-  line-height: 20px;
+  // line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  font-size: 14px;
 `;
 
-const Text = styled.div`
-  display: flex;
-  width: ${(props) => props.width ?? '80'}px;
-  height: 24px;
-  letter-spacing: 0.5px;
-  align-items: center;
-  justify-content: flex-end;
+const TitleRow = styled(Row)`
+  // display: flex;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  // padding-bottom: 10px;
+  border-bottom: 2px solid #000;
+  // justify-content: space-evenly;
+  // align-items: center;
 `;
 
 const InRow = styled.div`
   display: flex;
-  width: 250px;
-  justify-content: space-around;
+  // width: 250px;
+  // justify-content: space-around;
   justify-content: space-between;
 `;
-
 const InColumn = styled.div`
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 `;
 
+const Text = styled.div`
+  display: flex;
+  width: ${(props) => props.width ?? '80'}px;
+  letter-spacing: 0.5px;
+  align-items: center;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  justify-content: center;
+  // background-color: #ffadad; //빨
+`;
+
+const TextLeft = styled(Text)`
+  // display: block;
+  justify-content: flex-start;
+  // white-space: normal;
+  // text-overflow: ellipsis;
+  // overflow: hidden;
+  // background-color: #ffadad; //빨
+`;
+const TextRight = styled(TextLeft)`
+  justify-content: flex-end;
+`;
 const TextWide = styled(Text)`
   display: block;
   text-overflow: ellipsis;
@@ -376,5 +435,48 @@ const CloseIcon = styled(IoIosArrowUp)`
   margin-top: 3px;
   cursor: pointer;
 `;
+
+const Input = styled.input`
+  display: flex;
+  // width: ${(props) => props.width || '100%'};
+  width: 180px;
+  height: 30px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #919191;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const SearchRow = styled.div`
+  display: flex;
+  // width: 100px;
+  flex-direction: column;
+  line-height: 20px;
+  // justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-wrap: wrap;
+`;
+
+const RadioBtn = styled.input`
+  display: flex;
+  margin: 3px 5px;
+`;
+const Label = styled.label`
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  white-space: nowrap;
+  // align-content: center;
+`;
+
+const RadioBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+const Form = styled.form``;
 
 export default AdminRentalList;

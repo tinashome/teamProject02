@@ -4,9 +4,12 @@ import { useRecoilState } from 'recoil';
 import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas, getCurrentDate } from 'util/useful-functions';
+import { useForm } from 'react-hook-form';
+import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
 import Pagenation from './AdminPagenation';
 
 const AdminPayment = () => {
+  const { register, handleSubmit, reset } = useForm();
   const [charge, setCharge] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [pageSize, setPageSize] = useState(10);
@@ -24,6 +27,31 @@ const AdminPayment = () => {
       const result = await Api.get(
         `points?offset=${currentPage * pageSize}&count=${pageSize}`,
       );
+      const resultData = await result.data;
+      setCharge(resultData.points);
+      setTotalCount(resultData.length);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
+
+  // 찾기 클릭시
+  const handleSearch = async (data) => {
+    reset();
+    const { searchFor, search } = data;
+    if (!searchFor) return;
+    const params = {
+      name: search === 'name' && `name=${searchFor}`,
+      email: search === 'email' && `email=${searchFor}`,
+    };
+    // 충전신청목록조회 api요청
+    // points?isCharged=승인여부&name=이름email=이메일&offset=시작위치&count=검색할갯수
+    const url = `points?${params.name || ''}${
+      params.email || ''
+    }&count=${totalCount}`;
+    try {
+      const result = await Api.get(url);
       const resultData = await result.data;
       setCharge(resultData.points);
       setTotalCount(resultData.length);
@@ -65,7 +93,7 @@ const AdminPayment = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       <ModalWrapper
         modal={modal}
         onClick={() => {
@@ -91,37 +119,41 @@ const AdminPayment = () => {
           </ModalButton>
         </ModalDiv>
       </ModalWrapper>
+
       <TitleRow>
         <InColumn>
           <InRow>
-            <Text width='80'>이름</Text>
+            <Text width='100'>이름</Text>
             <Text width='200'>이메일</Text>
           </InRow>
           <InRow>
-            <Text width='80'>예금주</Text>
+            <Text width='100'>예금주</Text>
             <Text width='100'>주문일자</Text>
-            <Text width='80'>주문P</Text>
+            <Text width='100'>주문P</Text>
           </InRow>
         </InColumn>
         <Text width='100'>승인</Text>
       </TitleRow>
-      <Wrapper pageSize={pageSize}>
+
+      <Container>
         {charge &&
           charge.map((e) => (
             <Row key={e._id}>
               <InColumn>
                 <InRow>
-                  <Text width='80'>{e.user.name}</Text>
+                  <Text width='100'>{e.user.name}</Text>
                   <Text width='200'>{e.user.email}</Text>
                 </InRow>
+
                 <InRow>
-                  <Text width='80'>{e.payName}</Text>
+                  <Text width='100'>{e.payName}</Text>
                   <Text width='100'>{getCurrentDate(e.createdAt)}</Text>
-                  <Text width='80' style={{ justifyContent: 'flex-end' }}>
+                  <Text width='100' style={{ justifyContent: 'flex-end' }}>
                     {e.paymentAmount && addCommas(e.paymentAmount)} P
                   </Text>
                 </InRow>
               </InColumn>
+
               <Text width='100'>
                 <Button
                   id={e._id}
@@ -135,23 +167,48 @@ const AdminPayment = () => {
               </Text>
             </Row>
           ))}
-        <Row style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }} />
-        {charge.length !== 0 && <Pagenation lastPage={lastPage} />}
-      </Wrapper>
-    </>
+        <Row style={{ borderTop: '2px solid #000', borderBottom: 'none' }} />
+      </Container>
+      {charge.length !== 0 && <Pagenation lastPage={lastPage} />}
+
+      <Form onSubmit={handleSubmit(handleSearch)}>
+        <SearchRow>
+          <InColumn>
+            <RadioBox>
+              <Label>
+                <RadioBtn
+                  type='radio'
+                  name='search'
+                  value='name'
+                  id='name'
+                  {...register('search', { required: true })}
+                />
+                이름
+              </Label>
+              <Label>
+                <RadioBtn
+                  type='radio'
+                  name='search'
+                  value='email'
+                  id='email'
+                  {...register('search', { required: true })}
+                />
+                이메일
+              </Label>
+            </RadioBox>
+            <RadioBox>
+              <Input {...register('searchFor')} />
+              <Button type='submit'>찾기</Button>
+              <Button type='button' onClick={getCharge}>
+                전체보기
+              </Button>
+            </RadioBox>
+          </InColumn>
+        </SearchRow>
+      </Form>
+    </Wrapper>
   );
 };
-
-const TitleRow = styled.div`
-  display: flex;
-  font-weight: 600;
-  font-size: 16px;
-  margin-top: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #adb5bd;
-  justify-content: space-evenly;
-  align-items: center;
-`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -160,7 +217,13 @@ const Wrapper = styled.div`
   font-size: 14px;
   letter-spacing: -1px;
   justify-content: space-between;
-  width: 100%;
+  // width: 800px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
 `;
 
 const Row = styled.div`
@@ -173,19 +236,21 @@ const Row = styled.div`
   align-items: center;
 `;
 
-const Text = styled.p`
-  display: flex;
-  width: ${(props) => props.width ?? '150'}px;
-  height: 24px;
-  letter-spacing: 0.5px;
-  align-items: center;
-  white-space: nowrap;
-  justify-content: center;
+const TitleRow = styled(Row)`
+  // display: flex;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  // padding-bottom: 10px;
+  border-bottom: 2px solid #000;
+  // justify-content: space-evenly;
+  // align-items: center;
 `;
+
 const InRow = styled.div`
   display: flex;
-  width: 250px;
-  justify-content: space-around;
+  // width: 250px;
+  // justify-content: space-around;
   justify-content: space-between;
 `;
 const InColumn = styled.div`
@@ -193,7 +258,28 @@ const InColumn = styled.div`
   justify-content: space-around;
   flex-wrap: wrap;
 `;
+const Text = styled.div`
+  display: flex;
+  width: ${(props) => props.width ?? '80'}px;
+  letter-spacing: 0.5px;
+  align-items: center;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  justify-content: center;
+  // background-color: #ffadad; //빨
+`;
 
+const TextLeft = styled(Text)`
+  // display: block;
+  justify-content: flex-start;
+  // white-space: normal;
+  // text-overflow: ellipsis;
+  // overflow: hidden;
+  // background-color: #ffadad; //빨
+`;
+const TextRight = styled(TextLeft)`
+  justify-content: flex-end;
+`;
 const Button = styled.button`
   display: flex;
   padding: 5px 10px;
@@ -201,6 +287,7 @@ const Button = styled.button`
   background: ${(props) => (props.disabled ? '#D9D9D9' : '#3563e9')};
   color: ${(props) => (props.disabled ? '#919191' : '#fff')};
   font-size: 14px;
+  white-space: nowrap;
 `;
 
 const ModalWrapper = styled.div`
@@ -248,4 +335,55 @@ const ModalButton = styled.button`
   text-align: center;
   font-size: 25px;
 `;
+
+const Input = styled.input`
+  display: flex;
+  // width: ${(props) => props.width || '100%'};
+  width: 180px;
+  height: 30px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #919191;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const SearchRow = styled.div`
+  display: flex;
+  // width: 100px;
+  flex-direction: column;
+  line-height: 20px;
+  // justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-wrap: wrap;
+`;
+
+const RadioBtn = styled.input`
+  display: flex;
+  margin: 3px 5px;
+`;
+const Label = styled.label`
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  white-space: nowrap;
+  // align-content: center;
+`;
+
+const RadioBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+const Form = styled.form``;
+
+const OpenIcon = styled(IoIosArrowDown)`
+  display: ${(props) => (props.id === props.open ? 'none' : 'flex')};
+  font-size: 16px;
+  margin-top: 3px;
+  cursor: pointer;
+`;
+
 export default AdminPayment;
