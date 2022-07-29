@@ -132,7 +132,7 @@ const Title = styled.div`
   position: relative;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   line-height: 3rem;
   padding: 1.875rem 3.125rem 0 3.125rem;
   margin-top: 1.875rem;
@@ -147,13 +147,15 @@ const ChargeInfoBtn = styled.div`
   position: absolute;
   right: 3.125rem;
   opacity: 0.7;
-  div {
+  button {
     display: flex;
     align-items: center;
-    font-size: 20px;
+    padding-top: 1.25rem;
+    font-size: 1.25rem;
   }
   span {
     margin: 0 0.3rem;
+    padding-bottom: 0.1875rem;
   }
 `;
 
