@@ -1,12 +1,15 @@
 // 관리자페이지본문 메뉴1 회원탈퇴 AdminUserDelete
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
+import { useForm } from 'react-hook-form';
 import Pagenation from './AdminPagenation';
 
 const AdminUserDelete = () => {
+  const { register, handleSubmit, reset } = useForm();
+
   // 조회한유저목록을 저장하는 상태
   const [users, setUsers] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -14,17 +17,23 @@ const AdminUserDelete = () => {
   const [totalCount, setTotalCount] = useState(null);
   const [lastPage, setLastPage] = useState(9);
   // eslint-disable-next-line no-unused-vars
-  const currentPage = useRecoilValue(adminCurrentPage);
+  const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const getUsers = async () => {
     // 사용자목록조회 api요청
     // users?name=이름&email=이메일&phoneNumber=연락처&offset=시작번호&count=조회할갯수
+    const url = `users?${userName ? `&name=${userName}` : ''}${
+      email ? `&email=${email}` : ''
+    }${phoneNumber ? `&phoneNumber=${phoneNumber}` : ''}&offset=${
+      currentPage * pageSize
+    }&count=${pageSize}`;
     try {
-      const result = await Api.get(
-        `users?offset=${currentPage * pageSize}&count=${pageSize}`,
-      );
+      const result = await Api.get(url);
       const resultData = await result.data;
       setUsers(resultData.users);
       setTotalCount(resultData.length);
@@ -63,6 +72,22 @@ const AdminUserDelete = () => {
     }
   };
 
+  // 찾기 클릭시
+  const handleSearch = async (data) => {
+    reset();
+    setcurrentPage(0);
+    const { searchFor, search } = data;
+    if (!searchFor) return;
+    if (search === 'name') setUserName(searchFor);
+    if (search === 'email') setEmail(searchFor);
+    if (search === 'phoneNumber')
+      setPhoneNumber(searchFor.trim().replace('-', ''));
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, [userName, email, phoneNumber]);
+
   return (
     users && (
       <Wrapper>
@@ -94,11 +119,11 @@ const AdminUserDelete = () => {
         <TitleRow>
           <InColumn>
             <InRow>
-              <Text>이메일</Text>
+              <Text width='200'>이메일</Text>
               <Text>이름</Text>
             </InRow>
             <InRow>
-              <Text>연락처</Text>
+              <Text width='200'>연락처</Text>
               <Text>포인트</Text>
             </InRow>
           </InColumn>
@@ -110,34 +135,85 @@ const AdminUserDelete = () => {
               <Row key={e._id}>
                 <InColumn>
                   <InRow>
-                    <TextLeft>{e.email}</TextLeft>
+                    <TextLeft width='200'>{e.email}</TextLeft>
                     <Text>{e.name}</Text>
                   </InRow>
                   <InRow>
-                    <Text>
+                    <Text width='200'>
                       {e.phoneNumber &&
                         e.phoneNumber.replace(
                           /^(\d{2,3})(\d{3,4})(\d{4})$/,
                           `$1-$2-$3`,
                         )}
                     </Text>
-                    <TextRight width={30}>
+                    <Text>
                       {e.totalPoint && e.totalPoint.toLocaleString()} P
-                    </TextRight>
+                    </Text>
                   </InRow>
                 </InColumn>
-                <TextRight>
+                <Text>
                   <Button id={e._id} name={e.name} onClick={handleClick}>
                     계정삭제
                   </Button>
-                </TextRight>
+                </Text>
               </Row>
             ))}
-          <Row
-            style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }}
-          />
+          <Row style={{ borderTop: '2px solid #000', borderBottom: 'none' }} />
         </Container>
         {users.length !== 0 && <Pagenation lastPage={lastPage} />}
+
+        <Form onSubmit={handleSubmit(handleSearch)}>
+          <SearchRow>
+            <InColumn>
+              <RadioBox>
+                <Label>
+                  <RadioBtn
+                    type='radio'
+                    name='search'
+                    value='email'
+                    id='email'
+                    {...register('search', { required: true })}
+                  />
+                  email
+                </Label>
+                <Label>
+                  <RadioBtn
+                    type='radio'
+                    name='search'
+                    value='name'
+                    id='name'
+                    {...register('search', { required: true })}
+                  />
+                  이름
+                </Label>
+                <Label>
+                  <RadioBtn
+                    type='radio'
+                    name='search'
+                    value='phoneNumber'
+                    id='phoneNumber'
+                    {...register('search', { required: true })}
+                  />
+                  연락처
+                </Label>
+              </RadioBox>
+              <RadioBox>
+                <Input {...register('searchFor')} />
+                <Button type='submit'>찾기</Button>
+                <Button
+                  type='button'
+                  onClick={() => {
+                    setUserName(null);
+                    setEmail(null);
+                    setPhoneNumber(null);
+                  }}
+                >
+                  전체보기
+                </Button>
+              </RadioBox>
+            </InColumn>
+          </SearchRow>
+        </Form>
       </Wrapper>
     )
   );
@@ -150,7 +226,6 @@ const Wrapper = styled.div`
   font-size: 14px;
   letter-spacing: -1px;
   justify-content: space-between;
-  width: 100%;
 `;
 
 const Container = styled.div`
@@ -159,30 +234,24 @@ const Container = styled.div`
   font-size: 14px;
 `;
 
-const TitleRow = styled.div`
-  display: flex;
-  font-weight: 600;
-  font-size: 16px;
-  margin-top: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #adb5bd;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   padding: 10px 0;
-  line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 `;
+
+const TitleRow = styled(Row)`
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  border-bottom: 2px solid #000;
+`;
+
 const InRow = styled.div`
   display: flex;
-  width: 250px;
-  justify-content: space-around;
   justify-content: space-between;
 `;
 const InColumn = styled.div`
@@ -193,29 +262,18 @@ const InColumn = styled.div`
 
 const Text = styled.div`
   display: flex;
-  width: 90px;
+  width: ${(props) => props.width ?? '100'}px;
   letter-spacing: 0.5px;
   align-items: center;
   white-space: nowrap;
-  justify-content: center;
   letter-spacing: 0.5px;
-  align-items: center;
+  justify-content: center;
 `;
 
 const TextLeft = styled(Text)`
-  display: block;
   justify-content: flex-start;
-  width: 160px;
-  white-space: normal;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  line-height: 24px;
 `;
-const TextRight = styled(Text)`
-  justify-content: flex-end;
-  width: ${(props) => props.width ?? '80'}px;
-  margin-rignt: 10px;
-`;
+
 const Button = styled.button`
   display: flex;
   padding: 5px 10px;
@@ -223,6 +281,7 @@ const Button = styled.button`
   background: #3563e9;
   color: white;
   font-size: 14px;
+  white-space: nowrap;
 `;
 
 const ModalWrapper = styled.div`
@@ -266,5 +325,44 @@ const ModalButton = styled.button`
   text-align: center;
   font-size: 25px;
 `;
+
+const Input = styled.input`
+  display: flex;
+  width: 180px;
+  height: 30px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #919191;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const SearchRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  line-height: 20px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-wrap: wrap;
+`;
+
+const RadioBtn = styled.input`
+  display: flex;
+  margin: 3px 5px;
+`;
+const Label = styled.label`
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  white-space: nowrap;
+`;
+
+const RadioBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+const Form = styled.form``;
 
 export default AdminUserDelete;

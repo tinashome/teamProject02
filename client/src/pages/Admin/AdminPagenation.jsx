@@ -145,7 +145,7 @@ const Pagenation = ({ lastPage }) => {
           value='last'
           currentPage={currentPage}
           onClick={handleClick}
-          disabled={pageList + 8 === lastPage && 'disabled'}
+          disabled={currentPage === lastPage && 'disabled'}
         >
           &gt;&gt;
         </Page>
