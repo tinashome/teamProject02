@@ -41,7 +41,7 @@ const KakaoMap = ({ address, name }) => {
       }
     });
   }, [address, name]);
-  return <div id='map' style={{ width: '100%', height: '350px' }} />;
+  return <div id='map' style={{ width: '100%', height: '250px' }} />;
 };
 
 export default KakaoMap;
