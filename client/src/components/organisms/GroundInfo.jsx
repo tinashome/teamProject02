@@ -65,9 +65,9 @@ const GroundInfo = ({ info }) => {
         </GroundInfoTitle>
 
         {actInfo?.map((list, idx) => (
-          <GroundText key={idx}>
-            {list === '' ? '정보없음' : <li key={idx}>{list}</li>}
-          </GroundText>
+          <GroundListText key={idx}>
+            {list === '' ? '정보없음' : <p key={idx}>- {list}</p>}
+          </GroundListText>
         ))}
 
         <GroundInfoTitle>
@@ -90,10 +90,10 @@ const IconCards = styled.div`
 `;
 
 const GroundIconList = styled.div`
-  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   margin: 0 1rem 0 1rem;
   padding: 1.5rem 1rem;
+  background-color: #f8f9fa;
 `;
 
 const GroundSubTitle = styled.h2`
@@ -104,24 +104,41 @@ const GroundSubTitle = styled.h2`
 `;
 
 const GroundDetailInformation = styled.div`
-  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   margin: 1rem;
   padding: 1.5rem 0;
+  background-color: #f8f9fa;
 `;
 
 const GroundInfoTitle = styled.h3`
   font-size: 25px;
   text-align: left;
   font-weight: bold;
-  margin: 0rem 0 1rem 2rem;
+  margin: 2rem 0 1rem 2rem;
 `;
 
 const GroundText = styled.p`
+  display: flex;
   font-size: 1.2rem;
-  margin: 1rem 2rem 2rem 3rem;
+  margin: 1rem 2rem 0rem 3rem;
   line-height: 23px;
   color: #212529;
+  svg {
+    width: 25px;
+    height: 25px;
+  }
+`;
+
+const GroundListText = styled.p`
+  font-size: 1.2rem;
+  margin: 1rem 3rem;
+  color: #212529;
+
+  p {
+    &:last-child {
+      margin-bottom: 1rem;
+    }
+  }
 `;
 
 const BoxBlanckIcon = styled(RiCheckboxBlankFill)`
