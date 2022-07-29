@@ -20,12 +20,18 @@ const IconCard = ({ info }) => {
         <GroundIcon key={list.id}>
           <IconContainer>
             <Icon>{iconStateFlag[idx] ? ' ' : <CgClose />}</Icon>
-            {list.icon}
+            <InfoIcon opacity={iconStateFlag[idx] ? 1 : 0.4}>
+              {list.icon}
+            </InfoIcon>
           </IconContainer>
           {list.iconName === '경기장크기' ? (
-            <IconText>{groundSize}(m)</IconText>
+            <IconText opacity={iconStateFlag[idx] ? 1 : 0.4}>
+              {groundSize}(m)
+            </IconText>
           ) : (
-            <IconText>{list.iconName}</IconText>
+            <IconText opacity={iconStateFlag[idx] ? 1 : 0.4}>
+              {list.iconName}
+            </IconText>
           )}
         </GroundIcon>
       ))}
@@ -36,26 +42,37 @@ const IconCard = ({ info }) => {
 const IconContainer = styled.div`
   position: relative;
   width: 100%;
+  height: auto;
+  color: #343a40;
+`;
+
+const InfoIcon = styled.div`
+  opacity: ${(props) => props.opacity};
 `;
 
 const Icon = styled.div`
   position: absolute;
+  right: 15%;
   color: red;
-  opacity: 0.3;
+  opacity: 0.7;
+  margin-left: 0.5rem;
 `;
 
 const IconText = styled.div`
-  font-size: 10px;
+  font-size: 13px;
+  margin-top: 0.5rem;
   font-weight: bold;
   text-align: center;
+  opacity: ${(props) => props.opacity};
 `;
 
 const GroundIcons = styled.div`
-  display:flex;
-  justify-content:center;
+  display: flex;
+  /* justify-content: center; */
   width: 100%;
-  height: 6rem;
-  margin: 0 1.5rem 0.3rem 2rem;
+  height: 5rem;
+  margin-bottom: 2rem;
+  margin-left: 1.5rem;
 `;
 
 const GroundIcon = styled.div`
@@ -63,10 +80,10 @@ const GroundIcon = styled.div`
   padding: 0.2rem;
   margin: 0.2rem;
   width: 6rem;
-  height: 6.5rem;
-  border: solid #bdbdbd;
+  height: 6rem;
+  /* border: solid #bdbdbd; */
   border-radius: 5px;
-  font-size: 70px;
+  font-size: 65px;
 `;
 
 export default IconCard;

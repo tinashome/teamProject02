@@ -65,18 +65,15 @@ const TimeButton = styled.button`
   height: 2rem;
   font-size: 0.7rem;
   font-weight: bold;
-  background-color: ${(props) =>
-
-    {
-      if(props.disabled){
-      return '#ced4da'
-    }if(props.isSelect){
-      return  '#748ffc'
+  background-color: ${(props) => {
+    if (props.disabled) {
+      return '#ced4da';
     }
-      return '#b2f2bb'
-  }
-    
-    };
+    if (props.isSelect) {
+      return '#748ffc';
+    }
+    return '#b2f2bb';
+  }};
   border: solid 1px #bdbdbd;
   border-radius: 3px;
   margin: 3px;

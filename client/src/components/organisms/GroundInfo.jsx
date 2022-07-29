@@ -67,36 +67,49 @@ const GroundInfo = ({ info }) => {
         </GroundInfoTitle>
 
         {actInfo?.map((list) => (
-          <GroundText>{list==='' ? '정보없음' : <li>{list}</li>}</GroundText>
+          <GroundText>{list === '' ? '정보없음' : <li>{list}</li>}</GroundText>
         ))}
+
+        <GroundInfoTitle>
+          <BoxBlanckIcon />
+          경기장 위치 Map
+        </GroundInfoTitle>
+        <GroundText>
+          {/* <KakaoMap
+            address={info.groundAddress?.address1}
+            name={info.groundName}
+          /> */}
+        </GroundText>
       </GroundDetailInformation>
     </>
   );
 };
 const IconCards = styled.div`
-  display:flex;
-  justify-content:center;
+  display: flex;
+  /* justify-content: center; */
+  text-align: center;
 `;
 
 const GroundIconList = styled.div`
-  text-align: center;
-  border: solid 1px #ced4da;
+  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   margin: 0 1rem 0 1rem;
-  height: 14rem;
+  padding: 1.5rem 1rem;
 `;
 
 const GroundSubTitle = styled.h2`
   font-size: 2rem;
-  text-align: center;
+  /* text-align: center; */
   font-weight: bold;
-  margin: 2rem 0.3rem 1.5rem 1rem;
+  margin: 0.5rem 0.3rem 2rem 2rem;
+  height: auto;
 `;
 
 const GroundDetailInformation = styled.div`
-  border: solid 1px #ced4da;
+  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   margin: 1rem;
+  padding: 1.5rem 0;
 `;
 
 const GroundInfoTitle = styled.h3`
