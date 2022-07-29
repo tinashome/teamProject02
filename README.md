@@ -24,6 +24,7 @@
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=js,react,styledcomponents" />
     <img width="50px" height="50px" src="https://cdn.discordapp.com/attachments/994130334604066837/996660977472905276/recoil_icon.png" />
+    <img width="50px" height="50px" src="/image/eslint.png" />
   </a>
 </p>
 
@@ -32,7 +33,6 @@
 <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,aws,redis" />
-    <img width="50px" height="50px" src="/image/eslint.png" />
   </a>
 </p>
 
