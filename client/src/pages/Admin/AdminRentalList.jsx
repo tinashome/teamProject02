@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { adminContentState, adminCurrentPage } from 'stores/adminUserStore';
+import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
 import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
@@ -18,10 +18,9 @@ const AdminRentalList = () => {
   const [lastPage, setLastPage] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
+  // const [content, setContent] = useRecoilState(adminContentState);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [content, setContent] = useRecoilState(adminContentState);
   // 예약시간상세확인용 상태 id값이면 리스트를 open
   const [openTimes, setOpenTimes] = useState(null);
 
@@ -124,13 +123,28 @@ const AdminRentalList = () => {
       </ModalWrapper>
 
       <TitleRow>
-        <Text>작성일</Text>
-        <Text>이름</Text>
-        <Text width='170'>경기장명</Text>
-        <Text>날짜</Text>
+        <InColumn>
+          <InRow>
+            <Text width='100' style={{ justifyContent: 'center' }}>
+              작성일
+            </Text>
+            <Text width='150' style={{ justifyContent: 'center' }}>
+              이름
+            </Text>
+          </InRow>
+          <InRow>
+            <Text width='100' style={{ justifyContent: 'center' }}>
+              경기장명
+            </Text>
+            <Text width='150' style={{ justifyContent: 'center' }}>
+              날짜
+            </Text>
+          </InRow>
+        </InColumn>
         <Text width='120' style={{ justifyContent: 'flex-end' }}>
           예약시간
         </Text>
+
         <Text width='40' />
         <Text>취소</Text>
       </TitleRow>
@@ -139,12 +153,24 @@ const AdminRentalList = () => {
         {rentals &&
           rentals.map((e) => (
             <Row key={e._id}>
-              <Text>{getCurrentDate(e.createdAt)}</Text>
-              <Text>{!!e.userId && e.userId.name}</Text>
-              <TextWide width='170'>{e.groundName}</TextWide>
-              <Text>
-                {`${e.reservationDate && dateAddDash(e.reservationDate)}`}
-              </Text>
+              <InColumn>
+                <InRow>
+                  <Text width='100' style={{ justifyContent: 'center' }}>
+                    {getCurrentDate(e.createdAt)}
+                  </Text>
+                  <Text width='150' style={{ justifyContent: 'center' }}>
+                    {!!e.userId && e.userId.name}
+                  </Text>
+                </InRow>
+                <InRow>
+                  <TextWide width='100' style={{ justifyContent: 'center' }}>
+                    {e.groundName}
+                  </TextWide>
+                  <Text width='150' style={{ justifyContent: 'center' }}>
+                    {`${e.reservationDate && dateAddDash(e.reservationDate)}`}
+                  </Text>
+                </InRow>
+              </InColumn>
 
               <TextList width='120'>
                 <TextList id={e._id} open={openTimes} width='120'>
@@ -183,7 +209,7 @@ const AdminRentalList = () => {
                 {e.reservationTime && e.reservationTime.length}h
               </Text>
 
-              <Text width='80'>
+              <Text width='100'>
                 <Button
                   id={e._id}
                   name={!!e.userId && e.userId.name}
@@ -197,7 +223,7 @@ const AdminRentalList = () => {
               </Text>
             </Row>
           ))}
-        <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
+        <Row style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }} />
       </Wrapper>
       {rentals.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
@@ -206,25 +232,33 @@ const AdminRentalList = () => {
 
 const TitleRow = styled.div`
   display: flex;
-  padding: 10px;
-  border-bottom: 2px solid black;
   font-weight: 600;
-  font-size: 20px;
-  justify-content: space-between;
+  font-size: 16px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #adb5bd;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Wrapper = styled.div`
   display: flex;
-  height: ${(props) => `${45 * props.pageSize}px`};
-  align-self: end;
   flex-direction: column;
+  margin-bottom: 50px;
+  font-size: 14px;
+  letter-spacing: -1px;
+  width: 100%;
 `;
 
 const Row = styled.div`
   display: flex;
-  padding: 10px;
+  flex-direction: row;
+  padding: 10px 0;
+  line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 14px;
 `;
 
 const Text = styled.div`
@@ -233,7 +267,20 @@ const Text = styled.div`
   height: 24px;
   letter-spacing: 0.5px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+`;
+
+const InRow = styled.div`
+  display: flex;
+  width: 250px;
+  justify-content: space-around;
+  justify-content: space-between;
+`;
+
+const InColumn = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 `;
 
 const TextWide = styled(Text)`
@@ -252,6 +299,7 @@ const TextList = styled(TextWide)`
   line-height: 24px;
   user-select: none;
 `;
+
 const TextListOpen = styled(TextList)`
   display: ${(props) => (props.id === props.open ? 'flex' : 'none')};
   width: 100px;
@@ -270,7 +318,8 @@ const Button = styled.button`
   border-radius: 4px;
   background: ${(props) => (props.disabled ? '#D9D9D9' : '#3563e9')};
   color: ${(props) => (props.disabled ? '#919191' : '#fff')};
-  font-size: 16px;
+  font-size: 14px;
+  white-space: nowrap;
 `;
 
 const ModalWrapper = styled.div`
@@ -282,7 +331,7 @@ const ModalWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,0.4);
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: -2px;
   align-content: center;
@@ -292,42 +341,38 @@ const ModalDiv = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 350px;
-  height: 250px;
-  margin-left: -175px;
-  margin-top: -125px;
+  width: 300px;
+  height: 200px;
+  margin-left: -155px;
+  margin-top: -100px;
   padding: 30px 10px;
   border: solid 10px #3563e9;
   border-radius: 3px;
   background-color: #fff;
-  font-size: 24px;
+  font-size: 16px;
   text-align: center;
   white-space: pre-wrap;
 `;
 
 const ModalButton = styled.button`
-  width: 80px;
-  height: 50px;
   padding: 5px 10px;
   margin-top: 20px;
   border-radius: 4px;
   background: #3563e9;
   color: white;
   text-align: center;
-  font-size: 25px;
+  font-size: 16px;
 `;
 
 const OpenIcon = styled(IoIosArrowDown)`
   display: ${(props) => (props.id === props.open ? 'none' : 'flex')};
-  font-size: 20px;
+  font-size: 16px;
   margin-top: 3px;
   cursor: pointer;
 `;
 const CloseIcon = styled(IoIosArrowUp)`
   display: ${(props) => (props.id === props.open ? 'flex' : 'none')};
-  font-size: 20px;
-  // background-color: #dc5d5d;
-  // border-radius: 50%;
+  font-size: 16px;
   margin-top: 3px;
   cursor: pointer;
 `;

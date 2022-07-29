@@ -54,7 +54,7 @@ const SidemenuName = styled.div`
   align-items: center;
   color: #000000;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 2rem;
   letter-spacing: -0.0625rem;
   text-align: center;
@@ -73,7 +73,7 @@ const SideTitle = styled.div`
   align-items: center;
   color: #000000;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.0625rem;
   text-align: right;

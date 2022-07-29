@@ -92,27 +92,36 @@ const AdminPayment = () => {
         </ModalDiv>
       </ModalWrapper>
       <TitleRow>
-        <Text width='80'>이름</Text>
-        <Text width='200'>이메일</Text>
-        <Text width='100'>주문일자</Text>
-        <Text width='100'>주문P</Text>
-        <Text width='80'>예금주</Text>
+        <InColumn>
+          <InRow>
+            <Text width='80'>이름</Text>
+            <Text width='200'>이메일</Text>
+          </InRow>
+          <InRow>
+            <Text width='80'>예금주</Text>
+            <Text width='100'>주문일자</Text>
+            <Text width='80'>주문P</Text>
+          </InRow>
+        </InColumn>
         <Text width='100'>승인</Text>
       </TitleRow>
       <Wrapper pageSize={pageSize}>
         {charge &&
           charge.map((e) => (
             <Row key={e._id}>
-              <Text width='80'>{e.user.name}</Text>
-              <Text width='200'>{e.user.email}</Text>
-              <Text width='100'>{getCurrentDate(e.createdAt)}</Text>
-              <Text
-                width='100'
-                style={{ justifyContent: 'flex-end', paddingRight: '5px' }}
-              >
-                {e.paymentAmount && addCommas(e.paymentAmount)}P
-              </Text>
-              <Text width='80'>{e.payName}</Text>
+              <InColumn>
+                <InRow>
+                  <Text width='80'>{e.user.name}</Text>
+                  <Text width='200'>{e.user.email}</Text>
+                </InRow>
+                <InRow>
+                  <Text width='80'>{e.payName}</Text>
+                  <Text width='100'>{getCurrentDate(e.createdAt)}</Text>
+                  <Text width='80' style={{ justifyContent: 'flex-end' }}>
+                    {e.paymentAmount && addCommas(e.paymentAmount)} P
+                  </Text>
+                </InRow>
+              </InColumn>
               <Text width='100'>
                 <Button
                   id={e._id}
@@ -126,35 +135,42 @@ const AdminPayment = () => {
               </Text>
             </Row>
           ))}
-        <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
+        <Row style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }} />
+        {charge.length !== 0 && <Pagenation lastPage={lastPage} />}
       </Wrapper>
-      {charge.length !== 0 && <Pagenation lastPage={lastPage} />}
     </>
   );
 };
 
 const TitleRow = styled.div`
   display: flex;
-  padding: 10px;
-  border-bottom: 2px solid black;
   font-weight: 600;
-  font-size: 20px;
-  justify-content: space-between;
+  font-size: 16px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #adb5bd;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${(props) => `${45 * props.pageSize}px`};
-  align-self: end;
+  margin-bottom: 50px;
+  font-size: 14px;
+  letter-spacing: -1px;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  padding: 10px 0;
+  line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Text = styled.p`
@@ -163,7 +179,19 @@ const Text = styled.p`
   height: 24px;
   letter-spacing: 0.5px;
   align-items: center;
+  white-space: nowrap;
   justify-content: center;
+`;
+const InRow = styled.div`
+  display: flex;
+  width: 250px;
+  justify-content: space-around;
+  justify-content: space-between;
+`;
+const InColumn = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 `;
 
 const Button = styled.button`
@@ -172,7 +200,7 @@ const Button = styled.button`
   border-radius: 4px;
   background: ${(props) => (props.disabled ? '#D9D9D9' : '#3563e9')};
   color: ${(props) => (props.disabled ? '#919191' : '#fff')};
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const ModalWrapper = styled.div`
