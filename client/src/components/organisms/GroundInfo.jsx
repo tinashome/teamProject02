@@ -75,7 +75,10 @@ const GroundInfo = ({ info }) => {
           경기장 위치 Map
         </GroundInfoTitle>
         <GroundText>
-          <KakaoMap address ={info.groundAddress.address1} name={info.groundName} />
+          <KakaoMap
+            address={info.groundAddress?.address1}
+            name={info.groundName}
+          />
         </GroundText>
       </GroundDetailInformation>
     </>
@@ -83,29 +86,28 @@ const GroundInfo = ({ info }) => {
 };
 const IconCards = styled.div`
   display: flex;
-  justify-content: center;
+  text-align: center;
 `;
 
 const GroundIconList = styled.div`
-  text-align: center;
-  border: solid 1px #ced4da;
+  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   margin: 0 1rem 0 1rem;
-  height: 11rem;
+  padding: 1.5rem 1rem;
 `;
 
 const GroundSubTitle = styled.h2`
   font-size: 2rem;
-  text-align: center;
   font-weight: bold;
-  margin: 0.5rem 0.3rem 1rem 1rem;
+  margin: 0.5rem 0.3rem 2rem 2rem;
   height: auto;
 `;
 
 const GroundDetailInformation = styled.div`
-  border: solid 1px #ced4da;
+  border: solid 1px #e9ecef;
   border-radius: 0.7rem;
   margin: 1rem;
+  padding: 1.5rem 0;
 `;
 
 const GroundInfoTitle = styled.h3`
@@ -118,6 +120,8 @@ const GroundInfoTitle = styled.h3`
 const GroundText = styled.p`
   font-size: 1.2rem;
   margin: 1rem 2rem 2rem 3rem;
+  line-height: 23px;
+  color: #212529;
 `;
 
 const BoxBlanckIcon = styled(RiCheckboxBlankFill)`

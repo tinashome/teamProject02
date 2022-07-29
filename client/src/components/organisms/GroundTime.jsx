@@ -76,36 +76,45 @@ const ReservationPaymentText = styled.div`
 
 const TimeText = styled.h1`
   display: flex;
+  align-items: center;
   font-size: 20px;
   text-align: left;
   height: 2rem;
+  padding: 1rem;
+
+  svg {
+    margin-right: 0.5rem;
+  }
 `;
 
 const Container = styled.div`
   width: 100%;
-  height: 25.5rem;
-  margin-bottom:1rem;
+  margin-bottom: 1rem;
 `;
 
 const Title = styled.h1`
-  margin-left: 0.4rem;
+  margin-top: 2rem;
+  margin-left: 1rem;
   font-size: 1rem;
+  font-weight: 550;
 `;
 
 const TimeBtns = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 90%;
-  margin: 1rem 0 1rem 1rem;
+  margin: 1rem 0 1.5rem 1rem;
   gap: 0.4rem 0;
-  border: solid 1px #dee2e6;
-  padding: 1rem;
+  &:last-child {
+    margin-bottom: 4rem;
+  }
 `;
 
 const DateTimeNavbar = styled.div`
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #ced4da;
+  padding-bottom: 0.5rem;
   margin: 2rem 0 1rem 0;
   cursor: pointer;
 `;
@@ -114,6 +123,7 @@ const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
   margin-right: 0.8rem;
+  margin-top: 5px;
 `;
 
 export default GroundTime;

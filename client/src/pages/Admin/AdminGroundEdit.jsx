@@ -23,7 +23,7 @@ const AdminGroundEdit = ({ groundId }) => {
     formState: { errors },
   } = useForm({ reValidateMode: 'onChange' });
   const fileInput = useRef(null);
-  const [ground, setGround] = useRecoilState(adminGround);
+  const [ground, setGround] = useState(null);
   const setContent = useSetRecoilState(adminContentState);
   const setCurentPage = useSetRecoilState(adminCurrentPage);
   const [postCode, setPostCode] = useState([]);
