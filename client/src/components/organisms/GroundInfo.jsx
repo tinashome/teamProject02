@@ -86,7 +86,6 @@ const GroundInfo = ({ info }) => {
 };
 const IconCards = styled.div`
   display: flex;
-  /* justify-content: center; */
   text-align: center;
 `;
 
@@ -99,7 +98,6 @@ const GroundIconList = styled.div`
 
 const GroundSubTitle = styled.h2`
   font-size: 2rem;
-  /* text-align: center; */
   font-weight: bold;
   margin: 0.5rem 0.3rem 2rem 2rem;
   height: auto;

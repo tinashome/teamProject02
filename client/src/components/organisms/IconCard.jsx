@@ -68,7 +68,6 @@ const IconText = styled.div`
 
 const GroundIcons = styled.div`
   display: flex;
-  /* justify-content: center; */
   width: 100%;
   height: 5rem;
   margin-bottom: 2rem;
@@ -81,7 +80,6 @@ const GroundIcon = styled.div`
   margin: 0.2rem;
   width: 6rem;
   height: 6rem;
-  /* border: solid #bdbdbd; */
   border-radius: 5px;
   font-size: 65px;
 `;
