@@ -105,13 +105,13 @@ const Header = () => {
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px 120px;
+  padding: 10px 40px;
   background: #ffffff;
   z-index: 99;
   border-bottom: 1px solid #e9ecef;
+  justify-content: space-between;
 
   img {
     width: 100%;
@@ -121,9 +121,8 @@ const Container = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 40%;
+  gap: 32px;
 `;
 
 const UserProfile = styled.div`
