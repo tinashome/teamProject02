@@ -174,7 +174,7 @@ const AdminUserDelete = () => {
                     id='email'
                     {...register('search', { required: true })}
                   />
-                  email
+                  이메일
                 </Label>
                 <Label>
                   <RadioBtn
