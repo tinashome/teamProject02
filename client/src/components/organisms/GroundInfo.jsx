@@ -76,7 +76,7 @@ const GroundInfo = ({ info }) => {
         </GroundInfoTitle>
         <GroundText>
           <KakaoMap
-            address={info.groundAddress.address1}
+            address={info.groundAddress?.address1}
             name={info.groundName}
           />
         </GroundText>
@@ -122,6 +122,8 @@ const GroundInfoTitle = styled.h3`
 const GroundText = styled.p`
   font-size: 1.2rem;
   margin: 1rem 2rem 2rem 3rem;
+  line-height: 23px;
+  color: #212529;
 `;
 
 const BoxBlanckIcon = styled(RiCheckboxBlankFill)`
