@@ -111,6 +111,8 @@ const SideMenuLink = styled.button`
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid #adb5bd;
+  border-top: 2px solid #3563e9;
+  border-bottom: 2px solid #3563e9;
   background-color: #fff;
   &:hover {
     background-color: #f2f4f6;

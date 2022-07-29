@@ -40,9 +40,10 @@ const AdminPageWrapper = styled.div`
 `;
 
 const AdminPageContentContainer = styled.div`
-  max-width: 100vh;
+  // max-width: 100vh;
   // min-width: 700px;
   margin: 50px 0;
+  // background-color: #caffbf; //초
 `;
 
 const AdminPageContentTitleBox = styled.div`
