@@ -1,18 +1,13 @@
-// 관리자페이지 메뉴0 대쉬보드 AdminDashboard
-// 대쉬보드는 관리자페이지의 첫페이지이며 각종정보를 요약하여 나타냅니다.
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import { addCommas } from 'util/useful-functions';
 import AdminPayment from './AdminPayment';
-import AdminRentalList from './AdminRentalList';
 
 const AdminDashboard = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [content, setContent] = useRecoilState(adminContentState);
+  const setContent = useSetRecoilState(adminContentState);
   // 조회한 유저목록을 저장하는 상태
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(null);
@@ -169,8 +164,7 @@ const AdminDashboard = () => {
             오늘 가입<Text>{todaySignUp} 명</Text>
           </TextBold>
         </Block>
-
-        <Block width='350'>
+        <Block>
           <Title>충전내역</Title>
           <TextBold>
             승인 대기
@@ -182,14 +176,15 @@ const AdminDashboard = () => {
               >
                 {unCharged}
               </TextLink>
-              /{totalUsers} 건
+              {` / ${totalUsers} 건`}
             </Text>
           </TextBold>
           <TextBold>
             총 예치금 잔고<Text>{points && addCommas(points)} 원</Text>
           </TextBold>
         </Block>
-
+      </Container>
+      <Container>
         <Block>
           <Title>예약정보</Title>
           <TextBold>
@@ -199,8 +194,7 @@ const AdminDashboard = () => {
             어제 예약<Text>{rentalsOfDay && rentalsOfDay[1]} 건</Text>
           </TextBold>
         </Block>
-
-        <Block width='350'>
+        <Block>
           <Title>매출정보(당일예약건)</Title>
           <TextBold>
             오늘 매출
@@ -216,8 +210,6 @@ const AdminDashboard = () => {
           </TextBold>
         </Block>
       </Container>
-      <ModalDiv />
-      <ModalWrapper />
     </Wrapper>
   );
 };
@@ -234,55 +226,50 @@ const Wrapper = styled.div`
 `;
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 620px;
-  font-size: 20px;
+  flex-flow: row wrap;
+  font-size: 14px;
   letter-spacing: -1px;
-  margin: 50px 0;
+  margin: 20px 0;
   gap: 30px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   align-content: center;
   align-self: center;
 `;
+
 const Block = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${(props) => props.width ?? '200'}px;
-  height: 150px;
-  padding: 20px 0px;
+  min-width: 200px;
+  padding: 20px 0;
   border: 1px solid #adb5bd;
   border-radius: 4px;
-  font-size: 20px;
-  line-height: 1.2;
   justify-content: space-between;
   white-space: pre-wrap;
+  white-space: pre;
 `;
 
 const Title = styled.div`
   display: flex;
-  color: #3563e9;
-  padding-bottom: 10px;
-  font-size: 25px;
-  text-align: center;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+  font-size: 16px;
   font-weight: 600;
-  border-bottom: 1px solid #919191;
+  border-bottom: 1px solid #adb5bd;
   justify-content: center;
-  align-items: center;
 `;
 
 const TextBold = styled.div`
   display: flex;
   font-weight: 600;
-  margin: 0 20px;
+  margin: 5px 15px;
   justify-content: space-between;
 `;
 
 const Text = styled.div`
   display: flex;
   font-weight: 400;
-  margin: 0 20px;
+  margin-left: 10px;
   align-self: center;
 `;
 
@@ -293,42 +280,5 @@ const TextLink = styled.div`
   border-bottom: 2px solid #3563e9;
   align-self: center;
   cursor: pointer;
-`;
-
-const ModalDiv = styled.div`
-  display: ${(props) => (props.modal ? 'flex' : 'none')}};
-  flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  height: 600px;
-  margin-left: -250px;
-  margin-top: -400px;
-  padding: 20px 10px;
-  border: solid 10px #3563e9;
-  border-radius: 5px;
-  background-color: #fff;
-  font-size: 20px;
-  line-height: 1.2;
-  justify-content: center;
-  align-items: center;
-  
-  z-index: 9000;
-  white-space: pre-wrap;
-`;
-const ModalWrapper = styled.div`
-  display: ${(props) => (props.modal ? 'flex' : 'none')}};
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: -2px;
-  align-content: center;
 `;
 export default AdminDashboard;

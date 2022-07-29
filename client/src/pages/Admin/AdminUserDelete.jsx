@@ -1,7 +1,7 @@
 // 관리자페이지본문 메뉴1 회원탈퇴 AdminUserDelete
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 import Pagenation from './AdminPagenation';
@@ -14,7 +14,7 @@ const AdminUserDelete = () => {
   const [totalCount, setTotalCount] = useState(null);
   const [lastPage, setLastPage] = useState(9);
   // eslint-disable-next-line no-unused-vars
-  const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
+  const currentPage = useRecoilValue(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
 
@@ -65,7 +65,7 @@ const AdminUserDelete = () => {
 
   return (
     users && (
-      <>
+      <Wrapper>
         <ModalWrapper
           modal={modal}
           onClick={() => {
@@ -92,83 +92,137 @@ const AdminUserDelete = () => {
           </ModalDiv>
         </ModalWrapper>
         <TitleRow>
-          <Text width='200'>이메일</Text>
-          <Text width='80'>이름</Text>
-          <Text>연락처</Text>
-          <Text width='100'>포인트</Text>
+          <InColumn>
+            <InRow>
+              <Text>이메일</Text>
+              <Text>이름</Text>
+            </InRow>
+            <InRow>
+              <Text>연락처</Text>
+              <Text>포인트</Text>
+            </InRow>
+          </InColumn>
           <Text>삭제(탈퇴)</Text>
         </TitleRow>
-        <Wrapper pageSize={pageSize}>
+        <Container pageSize={pageSize}>
           {users &&
             users.map((e) => (
               <Row key={e._id}>
-                <Text width='200'>{e.email}</Text>
-                <Text width='80'>{e.name}</Text>
-                <Text>
-                  {e.phoneNumber &&
-                    e.phoneNumber.replace(
-                      /^(\d{2,3})(\d{3,4})(\d{4})$/,
-                      `$1-$2-$3`,
-                    )}
-                </Text>
-                <Text width='100'>
-                  {e.totalPoint && e.totalPoint.toLocaleString()}P
-                </Text>
-                <Text>
+                <InColumn>
+                  <InRow>
+                    <TextLeft>{e.email}</TextLeft>
+                    <Text>{e.name}</Text>
+                  </InRow>
+                  <InRow>
+                    <Text>
+                      {e.phoneNumber &&
+                        e.phoneNumber.replace(
+                          /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                          `$1-$2-$3`,
+                        )}
+                    </Text>
+                    <TextRight width={30}>
+                      {e.totalPoint && e.totalPoint.toLocaleString()} P
+                    </TextRight>
+                  </InRow>
+                </InColumn>
+                <TextRight>
                   <Button id={e._id} name={e.name} onClick={handleClick}>
-                    회원삭제
+                    계정삭제
                   </Button>
-                </Text>
+                </TextRight>
               </Row>
             ))}
-          <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
-        </Wrapper>
+          <Row
+            style={{ borderTop: '1px solid #bdbdbd', borderBottom: 'none' }}
+          />
+        </Container>
         {users.length !== 0 && <Pagenation lastPage={lastPage} />}
-      </>
+      </Wrapper>
     )
   );
 };
 
-const TitleRow = styled.div`
-  display: flex;
-  padding: 10px;
-  border-bottom: 2px solid black;
-  font-weight: 600;
-  font-size: 20px;
-  justify-content: space-between;
-`;
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${(props) => `${45 * props.pageSize}px`};
-  align-self: end;
+  margin-bottom: 50px;
+  font-size: 14px;
+  letter-spacing: -1px;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+`;
+
+const TitleRow = styled.div`
+  display: flex;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #adb5bd;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  padding: 10px 0;
+  line-height: 20px;
   border-bottom: 1px solid #bdbdbd;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+const InRow = styled.div`
+  display: flex;
+  width: 250px;
+  justify-content: space-around;
   justify-content: space-between;
 `;
-
-const Text = styled.p`
+const InColumn = styled.div`
   display: flex;
-  width: ${(props) => props.width ?? '150'}px;
-  height: 24px;
-  letter-spacing: 0.5px;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
 `;
 
+const Text = styled.div`
+  display: flex;
+  width: 90px;
+  letter-spacing: 0.5px;
+  align-items: center;
+  white-space: nowrap;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  align-items: center;
+`;
+
+const TextLeft = styled(Text)`
+  display: block;
+  justify-content: flex-start;
+  width: 160px;
+  white-space: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 24px;
+`;
+const TextRight = styled(Text)`
+  justify-content: flex-end;
+  width: ${(props) => props.width ?? '80'}px;
+  margin-rignt: 10px;
+`;
 const Button = styled.button`
   display: flex;
   padding: 5px 10px;
   border-radius: 4px;
   background: #3563e9;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const ModalWrapper = styled.div`
@@ -177,9 +231,8 @@ const ModalWrapper = styled.div`
   z-index: 1000;
   top:0;
   left:0;
-  width: 100%;
+  width: auto;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
   font-size: 24px;
   font-weight: 400;
   letter-spacing: -2px;
@@ -187,7 +240,6 @@ const ModalWrapper = styled.div`
   `;
 
 const ModalDiv = styled.div`
-  // display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: absolute;
   top: 50%;
   left: 50%;
@@ -198,7 +250,6 @@ const ModalDiv = styled.div`
   padding: 30px 10px;
   border: solid 10px #3563e9;
   border-radius: 3px;
-  background-color: #fff;
   font-size: 24px;
   text-align: center;
   white-space: pre-wrap;

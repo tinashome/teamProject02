@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RiCheckboxBlankFill } from '@react-icons/all-files/ri/RiCheckboxBlankFill';
-
+import KakaoMap from 'pages/KakaoMap';
 import IconCard from './IconCard';
 
 const GroundInfo = ({ info }) => {
@@ -34,12 +34,10 @@ const GroundInfo = ({ info }) => {
       text: toilet,
     },
   ];
-
   return (
     <>
       <GroundIconList>
         <GroundSubTitle>경기장 정보</GroundSubTitle>
-        {/* 아이콘  */}
         <IconCards>
           <IconCard info={info} />
         </IconCards>
@@ -49,14 +47,14 @@ const GroundInfo = ({ info }) => {
 
         {infoContents?.map((list) => (
           <>
-            <GroundInfoTitle key={list.id}>
-              <BoxBlanckIcon />
+            <GroundInfoTitle key={list}>
+              <BoxBlanckIcon key={list.title} />
               {list.title}
             </GroundInfoTitle>
             {list.text === '' ? (
-              <GroundText>정보없음</GroundText>
+              <GroundText key={list.id}>정보없음</GroundText>
             ) : (
-              <GroundText>{list.text}</GroundText>
+              <GroundText key={list.text}>{list.text}</GroundText>
             )}
           </>
         ))}
@@ -66,8 +64,10 @@ const GroundInfo = ({ info }) => {
           기타
         </GroundInfoTitle>
 
-        {actInfo?.map((list) => (
-          <GroundText>{list === '' ? '정보없음' : <li>{list}</li>}</GroundText>
+        {actInfo?.map((list, idx) => (
+          <GroundText key={idx}>
+            {list === '' ? '정보없음' : <li key={idx}>{list}</li>}
+          </GroundText>
         ))}
 
         <GroundInfoTitle>
@@ -75,10 +75,10 @@ const GroundInfo = ({ info }) => {
           경기장 위치 Map
         </GroundInfoTitle>
         <GroundText>
-          {/* <KakaoMap
-            address={info.groundAddress?.address1}
+          <KakaoMap
+            address={info.groundAddress.address1}
             name={info.groundName}
-          /> */}
+          />
         </GroundText>
       </GroundDetailInformation>
     </>
@@ -121,7 +121,7 @@ const GroundInfoTitle = styled.h3`
 
 const GroundText = styled.p`
   font-size: 1.2rem;
-  margin: 1rem 0 2rem 4rem;
+  margin: 1rem 2rem 2rem 3rem;
 `;
 
 const BoxBlanckIcon = styled(RiCheckboxBlankFill)`

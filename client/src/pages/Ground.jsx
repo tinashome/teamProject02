@@ -12,6 +12,7 @@ import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import moment from 'moment';
 import { useSetRecoilState } from 'recoil';
 import { userPointState } from 'stores/userStore';
+import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
 import GroundInfo from '../components/organisms/GroundInfo';
 
 const Ground = () => {
@@ -71,14 +72,20 @@ const Ground = () => {
         setTotalPoint((prev) => ({ ...prev, isChange: true }));
         alert('예약되었습니다.');
         navigate('/');
-      } else {
-        alert('예약시간을 선택 해주세요.');
       }
     } catch (err) {
       alert(err.response.data.reason);
+      setModalShow(!modalShow);
     }
   };
 
+  const reservationBtn = () => {
+    if (reservationTime.length > 0) {
+      setModalShow(!modalShow);
+    } else {
+      alert('예약시간을 선택해주세요.');
+    }
+  };
   useEffect(() => {
     getInfoList();
   }, []);
@@ -87,6 +94,20 @@ const Ground = () => {
     getReservation();
     setFormatDate(moment(dateValue).format('MM월 DD일'));
   }, [dateValue]);
+
+  useEffect(() => {
+    if (modalShow) {
+      document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+    }
+  }, [modalShow]);
 
   return isLoading ? (
     <Spinner />
@@ -123,25 +144,24 @@ const Ground = () => {
           <BackBtn>
             <Link to='/'>돌아가기</Link>{' '}
           </BackBtn>
-          <ReservationBtn onClick={() => setModalShow(!modalShow)}>
-            예약하기
-          </ReservationBtn>
+          <ReservationBtn onClick={reservationBtn}>예약하기</ReservationBtn>
         </ReservationList>
 
         {modalShow && (
           <ModalWrapper onClick={() => setModalShow(!modalShow)}>
-            <ReservationCheckModal>
+            <ReservationCheckModal onClick={(e) => e.stopPropagation()}>
+              <AiOutlineClose onClick={() => setModalShow(!modalShow)} />
               <MainTitle>[ 예약 확인 ]</MainTitle>
               <InfoDetail>
-                <SubTitle>경기장 이름 :</SubTitle>
+                <SubTitle>경기장 이름&nbsp; :</SubTitle>
                 <Info>{detailInfo.groundName}</Info>
               </InfoDetail>
               <InfoDetail>
-                <SubTitle>예약 날짜 :</SubTitle>
+                <SubTitle>예약 날짜&nbsp; :</SubTitle>
                 <Info>{formatDate}</Info>
               </InfoDetail>
               <InfoDetail>
-                <SubTitle>예약 시간 :</SubTitle>
+                <SubTitle>예약 시간&nbsp; :</SubTitle>
                 <Info>
                   {reservationTime.map((list) => (
                     <ReservationTimeList>{list}&nbsp;</ReservationTimeList>
@@ -149,7 +169,7 @@ const Ground = () => {
                 </Info>
               </InfoDetail>
               <InfoDetail>
-                <SubTitle>결제 포인트 :</SubTitle>
+                <SubTitle>결제 포인트&nbsp; :</SubTitle>
                 <Info>
                   {(
                     detailInfo.paymentPoint * reservationTime.length
@@ -162,7 +182,9 @@ const Ground = () => {
                 <CheckButton onClick={() => reservationClick()}>
                   확인
                 </CheckButton>
-                <CancelButton>취소</CancelButton>
+                <CancelButton onClick={() => setModalShow(!modalShow)}>
+                  취소
+                </CancelButton>
               </ButtonList>
             </ReservationCheckModal>
           </ModalWrapper>
@@ -219,39 +241,58 @@ const ReservationList = styled.div`
 `;
 
 const ReservationCheckModal = styled(ModalDiv)`
+  position: fix;
   justify-content: center;
-  width: 45%;
-  height: 50%;
-  margin-left: -20rem;
+  width: 50rem;
+  height: 23rem;
+  margin-left: -25rem;
   margin-top: -10rem;
+  svg {
+    top: 25px;
+    position: absolute;
+    font-size: 20px;
+    right: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    opacity: 0.6;
+    &:hover {
+      background: #ced4da;
+    }
+  }
 `;
 
 const MainTitle = styled.h1`
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
 `;
 
 const InfoDetail = styled.div`
   display: flex;
   align-items: flex-end;
-  margin: 0.5rem 0 0.5rem 0;
   width: 100%;
   height: 80%;
+  margin: 0.5rem;
 `;
 
 const SubTitle = styled.h2`
   font-size: 1.35rem;
   font-weight: bold;
-  width: 11rem;
+  width: 21%;
   text-align: right;
+  margin-left: 1rem;
+  margin-bottom: auto;
 `;
 
 const Info = styled.p`
   display: flex;
+  width: 70%;
   font-size: 1.3rem;
   text-align: left;
   margin-left: 0.5rem;
+  margin-bottom: auto;
   flex-wrap: wrap;
+  gap: 0.5rem;
 `;
 
 const ReservationTimeList = styled.div`

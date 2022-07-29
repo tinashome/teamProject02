@@ -5,8 +5,8 @@ import { userPointState, userState } from 'stores/userStore';
 import styled from 'styled-components';
 import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown';
 import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
+import Pagination from 'components/organisms/Pagination';
 import * as Api from '../api/api';
-import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const RentalManagement = () => {
   const [rental, setRental] = useState([]);
@@ -93,16 +93,22 @@ const RentalManagement = () => {
     <Container>
       <Title>예약 조회</Title>
       <Wrapper>
+        <PointHeader>
+          <p style={{ paddingLeft: '0.875rem' }}>예약 날짜</p>
+          <p style={{ paddingLeft: '0.125rem' }}>구장 이름</p>
+          <p style={{ paddingLeft: '0.75rem' }}>예약 시간</p>
+          <p style={{ width: '6.005rem' }} />
+        </PointHeader>
         <Contents>
           {rental.slice(offset, offset + listPerPage).map((item) => (
             <Content key={item._id}>
-              <RentalDate>
-                {`${time.getFullYear()}-${item.reservationDate.slice(
-                  0,
-                  2,
-                )}-${item.reservationDate.slice(2, 4)}`}
-              </RentalDate>
               <RentalInfo>
+                <RentalDate>
+                  {`${time.getFullYear()}-${item.reservationDate.slice(
+                    0,
+                    2,
+                  )}-${item.reservationDate.slice(2, 4)}`}
+                </RentalDate>
                 <GroundName>
                   <NavLink to={`/grounds/${item.groundId._id}`}>
                     {item.groundName}
@@ -163,7 +169,15 @@ const RentalManagement = () => {
                     ? `0${time.getHours()}`
                     : `${time.getHours()}`
                 }` ? (
-                  <div style={{ width: '8.640625rem', height: '2.225rem' }} />
+                  <div
+                    style={{
+                      width: '7.140625rem',
+                      height: '2.225rem',
+                      paddingLeft: '0.5rem',
+                    }}
+                  >
+                    <Approval>변경취소 불가</Approval>
+                  </div>
                 ) : (
                   <div>
                     <Button>
@@ -181,7 +195,7 @@ const RentalManagement = () => {
           ))}
         </Contents>
       </Wrapper>
-      <MyinfoPagination
+      <Pagination
         totalPage={totalPage}
         limit={5}
         page={page}
@@ -234,6 +248,7 @@ const Content = styled.div`
 
 const RentalInfo = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1.75rem;
 
@@ -243,25 +258,46 @@ const RentalInfo = styled.div`
 `;
 
 const RentalDate = styled.div`
-  margin-bottom: 0.75rem;
+  width: 7.75rem;
 `;
 
 const GroundName = styled.div`
-  width: 21.875rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+
+  & a {
+    width: 12.5rem;
+    text-align: center;
+    width: 12.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const Time = styled.div`
   display: flex;
-  width: 8.375rem;
-  margin: auto;
+  width: 9.625rem;
+`;
+
+const Approval = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.25em 0.4375rem;
+  border: 1px solid #3563e9;
+  border-radius: 0.25rem;
+  color: #3563e9;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.1875rem;
+  text-align: center;
+  letter-spacing: -0.03125rem;
 `;
 
 const Button = styled.button`
   display: flex;
-  margin-left: 1.25rem;
+  margin-left: 0.5rem;
   padding: 0.3125rem 0.5rem;
   border-radius: 0.25rem;
   color: white;
@@ -295,6 +331,21 @@ const CloseIcon = styled(IoIosArrowUp)`
   font-size: 1.25rem;
   margin-top: 0.1875rem;
   cursor: pointer;
+`;
+
+const PointHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.5rem;
+  margin-bottom: 1.125rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 0.0625rem solid #9e9e9e;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.02875rem;
 `;
 
 export default RentalManagement;

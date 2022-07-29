@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PointChargeTitle from 'components/organisms/PointChargeTitle';
 import PointChargeCard from 'components/organisms/PointChargeCard';
@@ -14,6 +14,9 @@ import {
 } from 'stores/pointChargeStore';
 import ClipboardCopy from 'components/atoms/ClipboardCopy';
 import Button from 'components/atoms/Button';
+import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
+import {useNavigate} from 'react-router-dom';
+
 
 const PointCharge = () => {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
@@ -21,17 +24,31 @@ const PointCharge = () => {
   const [orderNum, setOrderNum] = useRecoilState(orderNumber);
   const [createdDate, setCreatedDate] = useRecoilState(issuedDate);
 
+  const [payName, setPayName] = useState('');
+  const [paymentOption, setPaymentOption] = useState(false);
+  const [checkValid, setCheckValid] = useState(false);
+  const navigate = useNavigate();
   const modalClose = () => {
     setModalOpen(!modalOpen);
+    navigate('/');
   };
+
   return (
     <Container>
       <PointChargeTitle />
       <PointChargeCard />
-      <PointChargeCheck />
+      <PointChargeCheck
+        payName={payName}
+        setPayName={setPayName}
+        paymentOption={paymentOption}
+        setPaymentOption={setPaymentOption}
+        checkValid={checkValid}
+        setCheckValid={setCheckValid}
+      />
       {modalOpen && (
         <ModalWrapper onClick={modalClose}>
           <PointModalDiv onClick={(e) => e.stopPropagation()}>
+            <AiOutlineClose onClick={modalClose} />
             <MainTitle>포인트 충전 정보</MainTitle>
             <InfoDetail>
               <Title>주문번호&nbsp;: </Title>
@@ -58,11 +75,7 @@ const PointCharge = () => {
               <Title>발급일시&nbsp;: </Title>
               <Info>{createdDate}</Info>
             </InfoDetail>
-            <InfoDetail>
-              <Title>발급일시&nbsp;: </Title>
-              <Info>{createdDate}</Info>
-            </InfoDetail>
-            <CheckBtn onClick={() => setModalOpen(!modalOpen)}> 확인</CheckBtn>
+            <CheckBtn onClick={modalClose}> 확인</CheckBtn>
           </PointModalDiv>
         </ModalWrapper>
       )}
@@ -92,15 +105,15 @@ const InfoDetail = styled.div`
   display: flex;
   margin-right: auto;
   margin-left: 6rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: auto;
 `;
 const Title = styled.div`
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: bold;
 `;
 const Info = styled.div`
-  font-size: 1.4rem;
-  margin: 0.1rem 0 0 0.7rem;
+  font-size: 1.2rem;
+  margin: 0.2rem 0 0.7rem 0.5rem;
 `;
 
 const PointModalDiv = styled(ModalDiv)`
@@ -110,5 +123,17 @@ const PointModalDiv = styled(ModalDiv)`
   height: 24rem;
   margin-left: -20rem;
   margin-top: -10rem;
+  svg {
+    top: 25px;
+    position: absolute;
+    font-size: 20px;
+    right: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    opacity: 0.6;
+    &:hover {
+      background: #ced4da;
+    }
+  }
 `;
 export default PointCharge;

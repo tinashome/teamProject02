@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import jwtDecode from 'jwt-decode';
-import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Input from 'components/atoms/Input';
@@ -14,14 +13,19 @@ import {
 } from 'stores/pointChargeStore';
 import * as Api from 'api/api';
 
-const PointChargeCheck = () => {
-  const [payName, setPayName] = useState('');
-  const [paymentOption, setPaymentOption] = useState(false);
-  const [checkValid, setCheckValid] = useState(false);
+const PointChargeCheck = ({
+  payName,
+  setPayName,
+  paymentOption,
+  setPaymentOption,
+  checkValid,
+  setCheckValid,
+}) => {
   const [paymentAmount, setPaymentAmount] = useRecoilState(pointSelected);
   const [modalShow, setModalShow] = useRecoilState(modalState);
   const [orderNum, setOrderNum] = useRecoilState(orderNumber);
   const [createdDate, setCreatedDate] = useRecoilState(issuedDate);
+  const navigate = useNavigate();
 
   const getCurrentDate = (data) => {
     const date = new Date(data);
@@ -30,8 +34,6 @@ const PointChargeCheck = () => {
     const day = String(date.getDate()).padStart(2, 0);
     return `${year}년 ${month}월 ${day}일`;
   };
-
-  const navigate = useNavigate();
 
   const handleClick = async () => {
     try {
@@ -87,11 +89,17 @@ const PointChargeCheck = () => {
           />
           입금자명과 입금 금액을 확인하였습니다.
         </CheckValue>
-        <ChargeBtn onClick={handleClick}>충전하기</ChargeBtn>
+        <BtnList>
+          <ChargeBtn onClick={handleClick}>충전하기</ChargeBtn>
+        </BtnList>
       </Rcontainer>
     </Container>
   );
 };
+
+const BtnList = styled.div`
+  display: flex;
+`;
 
 const Container = styled.div`
   width: 100%;

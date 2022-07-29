@@ -5,8 +5,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import ModalDiv from 'components/atoms/AdminModalDiv';
-
-// 처음 mount 될 때는 undefined였다가 부모컴포넌트가 비동기처리를 끝내고 나면 다시 받아온다.
+import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
 
 const GroundSlide = ({
   info,
@@ -31,9 +30,14 @@ const GroundSlide = ({
   }, [showImgModal]);
 
   useEffect(() => {
-    setInfoState(info);
+    if (info?.length === 0) {
+      setInfoState([
+        'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658996302599_%242b%2410%24rIhiVSGRVkoJaSGvrCZvyObIknd7JcjKtSD/YtUXd3BjxZ/vR6l9u.png',
+      ]);
+    } else {
+      setInfoState(info);
+    }
   }, [info]);
-
   const imgClick = () => {
     setShowImgModal(!showImgModal);
   };
@@ -62,7 +66,8 @@ const GroundSlide = ({
 
       {showImgModal && (
         <ModalWrapper onClick={imgClick}>
-          <SlideImgModalDiv>
+          <SlideImgModalDiv onClick={(e) => e.stopPropagation()}>
+            <AiOutlineClose onClick={imgClick} />
             <ModalImgs>
               {infoState?.map((data) => (
                 <ModalImg key={data} src={data} />
@@ -76,13 +81,25 @@ const GroundSlide = ({
 };
 
 const SlideImgModalDiv = styled(ModalDiv)`
+  position: relative;
   max-height: 100%;
   overflow: auto;
   width: 50rem;
   height: 70%;
   left: 30%;
   top: 30%;
-  z-index: 100;
+  svg {
+    top: 25px;
+    position: absolute;
+    font-size: 20px;
+    right: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    opacity: 0.6;
+    &:hover {
+      background: #ced4da;
+    }
+  }
 `;
 
 const ModalImgs = styled.div`
@@ -98,7 +115,9 @@ const ModalImg = styled.img`
 
 const StyleSlider = styled(Slider)`
   width: 100%;
+  margin-top: 0.1px;
   margin-bottom: 4rem;
+  border: solid 0.1px #f1f3f5;
   .slick-prev {
     left: 3% !important;
     z-index: 1;

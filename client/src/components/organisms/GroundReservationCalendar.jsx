@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment';
 import { BiCalendarCheck } from '@react-icons/all-files/bi/BiCalendarCheck';
+import 'react-calendar/dist/Calendar.css';
 import { FaAngleDown } from '@react-icons/all-files/fa/FaAngleDown';
 import { FaAngleUp } from '@react-icons/all-files/fa/FaAngleUp';
-import DatePicker, { registerLocale } from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import ko from 'date-fns/locale/ko';
-
-registerLocale('ko', ko);
 
 const GroundReservationCalendar = ({
   info,
@@ -19,6 +16,7 @@ const GroundReservationCalendar = ({
   setDateValue,
 }) => {
   const [calendarShowBtn, setCalendarShowBtn] = useState(true);
+
   useEffect(() => {
     const dateFormat = moment(dateValue).format('MMDD');
     const result = reservationinfo
@@ -48,14 +46,13 @@ const GroundReservationCalendar = ({
         style={calendarShowBtn ? { display: 'flex' } : { display: 'none' }}
       >
         <StyleCalendar
-          inline
           onChange={setDateValue}
           minDate={new Date()}
           value={dateValue}
-          locale='ko'
-          dayClassName={(date) => {
-            console.log(date)
-          }}
+          formatDay={(locale, date) => moment(date).format('DD')}
+          tileClassName={(activeStartDate, date, view) =>
+            view === 'month' && date.getDay() === 3 ? 'Wednesday' : ''
+          }
         />
       </CalendarUI>
     </Container>
@@ -69,9 +66,27 @@ const DateSelectText = styled.div`
   margin-left: 5rem;
 `;
 
-const StyleCalendar = styled(DatePicker)`
+const StyleCalendar = styled(Calendar)`
+  width: 100%;
   border: solid 1px #dee2e6;
-  height: 100%;
+
+  button:disabled {
+    color: #1010104d !important;
+  }
+
+  .react-calendar__month-view {
+    & div div :nth-child(2) {
+      & :nth-child(7n) {
+        color: red;
+      }
+      & :nth-child(7n - 1) {
+        color: blue;
+      }
+    }
+  }
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: #757575 !important;
+  }
 `;
 
 const Container = styled.div`

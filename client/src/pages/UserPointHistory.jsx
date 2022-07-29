@@ -1,11 +1,18 @@
+import Pagination from 'components/organisms/Pagination';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { AiOutlineQuestionCircle } from '@react-icons/all-files/ai/AiOutlineQuestionCircle';
+import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
+import ModalWrapper from '../components/atoms/AdminModalWrapper';
+import ModalDiv from '../components/atoms/AdminModalDiv';
+import ClipboardCopy from '../components/atoms/ClipboardCopy';
+import Button from '../components/atoms/Button';
 import * as Api from '../api/api';
-import MyinfoPagination from '../components/organisms/MyinfoPagination';
 
 const UserPointHistory = () => {
   const [pointHistory, setPointHistory] = useState([]);
   const [page, setPage] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
   const listPerPage = 10;
   const totalPage = Math.ceil(pointHistory.length / listPerPage);
   const offset = (page - 1) * listPerPage;
@@ -31,13 +38,30 @@ const UserPointHistory = () => {
     return dateString;
   };
 
+  const modalClose = () => {
+    setModalOpen(!modalOpen);
+  };
+
   useEffect(() => {
     getPoint();
   }, []);
 
   return (
     <Container>
-      <Title>포인트 충전 내역</Title>
+      <Title>
+        포인트 충전 내역
+        <ChargeInfoBtn>
+          <button
+            type='button'
+            onClick={() => {
+              setModalOpen(!modalOpen);
+            }}
+          >
+            <AiOutlineQuestionCircle />
+            <span>입금계좌</span>
+          </button>
+        </ChargeInfoBtn>
+      </Title>
       <Wrapper>
         <PointHeader>
           <p>충전 날짜</p>
@@ -69,12 +93,30 @@ const UserPointHistory = () => {
           ))}
         </Contents>
       </Wrapper>
-      <MyinfoPagination
+      <Pagination
         totalPage={totalPage}
         limit={5}
         page={page}
         setPage={setPage}
       />
+      {modalOpen && (
+        <ModalWrapper onClick={modalClose}>
+          <PointModalDiv onClick={(e) => e.stopPropagation()}>
+            <AiOutlineClose onClick={modalClose} />
+            <MainTitle>입금계좌 정보</MainTitle>
+            <InfoDetail>
+              <SubTitle>계좌주명 (사업자)&nbsp;: </SubTitle>
+              <Info>풋살예약닷컴(주)</Info>
+            </InfoDetail>
+            <InfoDetail>
+              <SubTitle>고정 가상 계좌&nbsp;: </SubTitle>
+              <Info>[국민은행] 104440-00-288818</Info>
+              <ClipboardCopy />
+            </InfoDetail>
+            <CheckBtn onClick={modalClose}> 확인</CheckBtn>
+          </PointModalDiv>
+        </ModalWrapper>
+      )}
     </Container>
   );
 };
@@ -87,6 +129,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   display: flex;
+  position: relative;
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
@@ -98,6 +141,20 @@ const Title = styled.div`
   font-weight: 700;
   font-size: 2rem;
   letter-spacing: -0.0625rem;
+`;
+
+const ChargeInfoBtn = styled.div`
+  position: absolute;
+  right: 3.125rem;
+  opacity: 0.7;
+  div {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+  span {
+    margin: 0 0.3rem;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -163,6 +220,54 @@ const Approval = styled.div`
   line-height: 1.1875rem;
   text-align: center;
   letter-spacing: -0.03125rem;
+`;
+
+const PointModalDiv = styled(ModalDiv)`
+  display: flex;
+  justify-content: center;
+  width: 45rem;
+  height: 24rem;
+  margin-left: -20rem;
+  margin-top: -10rem;
+  svg {
+    top: 25px;
+    position: absolute;
+    font-size: 20px;
+    right: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    opacity: 0.6;
+    &:hover {
+      background: #ced4da;
+    }
+  }
+`;
+
+const MainTitle = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 2rem 1rem 4rem 0;
+`;
+
+const InfoDetail = styled.div`
+  display: flex;
+  margin-right: auto;
+  margin-left: 6rem;
+  margin-bottom: auto;
+`;
+
+const SubTitle = styled.div`
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
+const Info = styled.div`
+  font-size: 1.2rem;
+  margin: 0.2rem 0 0.7rem 0.5rem;
+`;
+
+const CheckBtn = styled(Button)`
+  margin-top: 2rem;
 `;
 
 export default UserPointHistory;
