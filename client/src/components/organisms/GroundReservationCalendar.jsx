@@ -84,6 +84,9 @@ const StyleCalendar = styled(Calendar)`
       }
     }
   }
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: #757575 !important;
+  }
 `;
 
 const Container = styled.div`
@@ -107,12 +110,18 @@ const DateText = styled.h1`
   font-size: 20px;
   text-align: left;
   height: 2rem;
+  padding: 0 1rem;
+
+  svg {
+    margin-right: 0.5rem;
+  }
 `;
 
 const ShowBtn = styled.button`
   font-size: 20px;
   text-align: right;
   margin-right: 0.8rem;
+  margin-bottom: 0.8rem;
 `;
 
 export default GroundReservationCalendar;

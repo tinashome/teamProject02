@@ -27,7 +27,7 @@ const GroundInfoModal = ({
       <ModalDiv modal={modal}>
         <TextContainers
           style={{
-            fontSize: '28px',
+            fontSize: '24px',
             textAlign: 'center',
             height: '40px',
           }}
@@ -117,7 +117,7 @@ const GroundInfoModal = ({
             textAlign: 'right',
             fontWeight: '600',
             color: '#3563e9',
-            fontSize: '16px',
+            fontSize: '14px',
             paddingTop: '15px',
             marginRight: '-15px',
           }}
@@ -139,7 +139,7 @@ const ModalWrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  font-size: 18px;
+  font-size: 14px;
   justify-content: center;
   align-items: center;
 `;
@@ -151,9 +151,9 @@ const ModalDiv = styled.div`
   top: 50%;
   left: 50%;
   width: 400px;
-  height: 600px;s
-  margin-left: -250px;
-  margin-top: -400px;
+  height: 600px;
+  margin-left: -200px;
+  margin-top: -300px;
   padding: 5px 20px;
   border: solid 10px #3563e9;
   border-radius: 5px;
@@ -208,6 +208,7 @@ const Img = styled.img`
   display: flex;
   width: 89px;
   height: 89px;
+  object-fit: cover;
 `;
 
 const ModalImage = styled.img`

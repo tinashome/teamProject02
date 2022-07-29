@@ -30,7 +30,7 @@ const GroundSlide = ({
   }, [showImgModal]);
 
   useEffect(() => {
-    if (info.length === 0) {
+    if (info?.length === 0) {
       setInfoState([
         'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658996302599_%242b%2410%24rIhiVSGRVkoJaSGvrCZvyObIknd7JcjKtSD/YtUXd3BjxZ/vR6l9u.png',
       ]);

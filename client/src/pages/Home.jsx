@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BiPhotoAlbum } from '@react-icons/all-files/bi/BiPhotoAlbum';
-import { HiOutlineViewList } from '@react-icons/all-files/hi/HiOutlineViewList';
+import { FaListUl } from '@react-icons/all-files/fa/FaListUl';
 import styled, { keyframes } from 'styled-components';
 import locationList from 'constants/locationList';
 import { bannerList } from 'constants/imgList';
@@ -100,7 +100,7 @@ const Home = () => {
           <SearchBar placeholder='구장 찾기' onKeyDown={handleSearch} />
           <ListTypeButton>
             {listType === 'photo' ? (
-              <HiOutlineViewList
+              <FaListUl
                 onClick={handleListType}
                 disabled={listType === 'text'}
               />
@@ -183,8 +183,9 @@ const ListTypeButton = styled.div`
     height: 40px;
     font-size: 1.7rem;
     cursor: pointer;
-    padding: 0.2rem;
+    padding: 0.3rem;
     border: 1px solid #ced4da;
+    border-radius: 4px;
 
     &:hover {
       color: #f06595;

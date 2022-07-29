@@ -37,8 +37,9 @@ const Ground = () => {
   const params = useParams();
   const groundId = params.id;
   const navigate = useNavigate();
-  const warningText = '※ 예약 시간 중 제일 빠른 예약시간 기준 24시간 전까지만 예약취소, 변경이 가능합니다.'
-  
+  const warningText =
+    '※ 예약 시간 중 제일 빠른 예약시간 기준 24시간 전까지만 예약취소, 변경이 가능합니다.';
+
   const getInfoList = async () => {
     try {
       setIsLoading(true);
@@ -119,6 +120,9 @@ const Ground = () => {
         imgModalCurser={imgModalCurser}
       />
       <InfoMainTitle>{detailInfo.groundName}</InfoMainTitle>
+      <OperatedTime>
+        운영 시간 {detailInfo.startTime} ~ {detailInfo.endTime}
+      </OperatedTime>
       <Container>
         <GroundInfoList>
           <GroundInfo info={detailInfo} />
@@ -176,9 +180,7 @@ const Ground = () => {
                   P
                 </Info>
               </InfoDetail>
-              <WarningText>
-                {warningText}
-              </WarningText>
+              <WarningText>{warningText}</WarningText>
               <ButtonList>
                 <CheckButton onClick={() => reservationClick()}>
                   확인
@@ -195,6 +197,13 @@ const Ground = () => {
   );
 };
 
+const OperatedTime = styled.div`
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #adb5bd;
+`;
+
 const Container = styled.div`
   display: flex;
   position: relative;
@@ -207,10 +216,11 @@ const InfoMainTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   text-align: center;
-  margin: 1rem 1rem 2rem 1rem;
+  margin-bottom: 1.2rem;
 `;
 const GroundInfoList = styled.div`
   width: 50%;
+  margin-bottom: 3rem;
 `;
 
 const ReservationBtn = styled(Button)`
@@ -218,7 +228,7 @@ const ReservationBtn = styled(Button)`
   font-weight: bold;
   float: right;
   border: solid 1px #adb5bd;
-  margin: 1rem 1.5rem 2rem 0;
+  margin: 1rem 0.5rem 2rem 0;
 `;
 const BackBtn = styled(Button)`
   font-size: 0.8rem;
@@ -227,17 +237,17 @@ const BackBtn = styled(Button)`
   background-color: white;
   border: solid 1px #adb5bd;
   float: right;
-  margin: 1rem 1rem 0 0;
+  margin: 1rem 2rem 0 0;
 `;
 
 const ReservationList = styled.div`
   position: sticky;
   top: 0;
-  border: solid 1px #ced4da;
   border-radius: 0.7rem;
   width: 30%;
   height: 60%;
-  margin-bottom: 1rem;
+  margin-bottom: 4rem;
+  background-color: #f8f9fa;
 `;
 
 const ReservationCheckModal = styled(ModalDiv)`
@@ -305,7 +315,9 @@ const ReservationTimeList = styled.div`
 `;
 
 const ButtonList = styled.div`
+  display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 0.5rem;
   font-weight: bold;
 `;

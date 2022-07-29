@@ -4,9 +4,12 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { adminCurrentPage } from 'stores/adminUserStore';
 import * as Api from 'api/api';
+import { useForm } from 'react-hook-form';
 import Pagenation from './AdminPagenation';
 
 const AdminUserDelete = () => {
+  const { register, handleSubmit, reset } = useForm();
+
   // 조회한유저목록을 저장하는 상태
   const [users, setUsers] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -17,14 +20,20 @@ const AdminUserDelete = () => {
   const [currentPage, setcurrentPage] = useRecoilState(adminCurrentPage);
   // api요청 결과 모달창 display 변경을 위한상태 빈값이면 none
   const [modal, setModal] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const getUsers = async () => {
     // 사용자목록조회 api요청
     // users?name=이름&email=이메일&phoneNumber=연락처&offset=시작번호&count=조회할갯수
+    const url = `users?${userName ? `&name=${userName}` : ''}${
+      email ? `&email=${email}` : ''
+    }${phoneNumber ? `&phoneNumber=${phoneNumber}` : ''}&offset=${
+      currentPage * pageSize
+    }&count=${pageSize}`;
     try {
-      const result = await Api.get(
-        `users?offset=${currentPage * pageSize}&count=${pageSize}`,
-      );
+      const result = await Api.get(url);
       const resultData = await result.data;
       setUsers(resultData.users);
       setTotalCount(resultData.length);
@@ -63,9 +72,25 @@ const AdminUserDelete = () => {
     }
   };
 
+  // 찾기 클릭시
+  const handleSearch = async (data) => {
+    reset();
+    setcurrentPage(0);
+    const { searchFor, search } = data;
+    if (!searchFor) return;
+    if (search === 'name') setUserName(searchFor);
+    if (search === 'email') setEmail(searchFor);
+    if (search === 'phoneNumber')
+      setPhoneNumber(searchFor.trim().replace('-', ''));
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, [userName, email, phoneNumber]);
+
   return (
     users && (
-      <>
+      <Wrapper>
         <ModalWrapper
           modal={modal}
           onClick={() => {
@@ -92,74 +117,161 @@ const AdminUserDelete = () => {
           </ModalDiv>
         </ModalWrapper>
         <TitleRow>
-          <Text width='200'>이메일</Text>
-          <Text width='80'>이름</Text>
-          <Text>연락처</Text>
-          <Text width='100'>포인트</Text>
+          <InColumn>
+            <InRow>
+              <Text width='200'>이메일</Text>
+              <Text>이름</Text>
+            </InRow>
+            <InRow>
+              <Text width='200'>연락처</Text>
+              <Text>포인트</Text>
+            </InRow>
+          </InColumn>
           <Text>삭제(탈퇴)</Text>
         </TitleRow>
-        <Wrapper pageSize={pageSize}>
+        <Container pageSize={pageSize}>
           {users &&
             users.map((e) => (
               <Row key={e._id}>
-                <Text width='200'>{e.email}</Text>
-                <Text width='80'>{e.name}</Text>
-                <Text>
-                  {e.phoneNumber &&
-                    e.phoneNumber.replace(
-                      /^(\d{2,3})(\d{3,4})(\d{4})$/,
-                      `$1-$2-$3`,
-                    )}
-                </Text>
-                <Text width='100'>
-                  {e.totalPoint && e.totalPoint.toLocaleString()}P
-                </Text>
+                <InColumn>
+                  <InRow>
+                    <TextLeft width='200'>{e.email}</TextLeft>
+                    <Text>{e.name}</Text>
+                  </InRow>
+                  <InRow>
+                    <Text width='200'>
+                      {e.phoneNumber &&
+                        e.phoneNumber.replace(
+                          /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                          `$1-$2-$3`,
+                        )}
+                    </Text>
+                    <Text>
+                      {e.totalPoint && e.totalPoint.toLocaleString()} P
+                    </Text>
+                  </InRow>
+                </InColumn>
                 <Text>
                   <Button id={e._id} name={e.name} onClick={handleClick}>
-                    회원삭제
+                    계정삭제
                   </Button>
                 </Text>
               </Row>
             ))}
-          <Row style={{ borderTop: '2px solid black', borderBottom: 'none' }} />
-        </Wrapper>
+          <Row style={{ borderTop: '2px solid #000', borderBottom: 'none' }} />
+        </Container>
         {users.length !== 0 && <Pagenation lastPage={lastPage} />}
-      </>
+
+        <Form onSubmit={handleSubmit(handleSearch)}>
+          <SearchRow>
+            <InColumn>
+              <RadioBox>
+                <Label>
+                  <RadioBtn
+                    type='radio'
+                    name='search'
+                    value='email'
+                    id='email'
+                    {...register('search', { required: true })}
+                  />
+                  이메일
+                </Label>
+                <Label>
+                  <RadioBtn
+                    type='radio'
+                    name='search'
+                    value='name'
+                    id='name'
+                    {...register('search', { required: true })}
+                  />
+                  이름
+                </Label>
+                <Label>
+                  <RadioBtn
+                    type='radio'
+                    name='search'
+                    value='phoneNumber'
+                    id='phoneNumber'
+                    {...register('search', { required: true })}
+                  />
+                  연락처
+                </Label>
+              </RadioBox>
+              <RadioBox>
+                <Input {...register('searchFor')} />
+                <Button type='submit'>찾기</Button>
+                <Button
+                  type='button'
+                  onClick={() => {
+                    setUserName(null);
+                    setEmail(null);
+                    setPhoneNumber(null);
+                  }}
+                >
+                  전체보기
+                </Button>
+              </RadioBox>
+            </InColumn>
+          </SearchRow>
+        </Form>
+      </Wrapper>
     )
   );
 };
 
-const TitleRow = styled.div`
-  display: flex;
-  padding: 10px;
-  border-bottom: 2px solid black;
-  font-weight: 600;
-  font-size: 20px;
-  justify-content: space-between;
-`;
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${(props) => `${45 * props.pageSize}px`};
-  align-self: end;
+  margin-bottom: 50px;
+  font-size: 14px;
+  letter-spacing: -1px;
+  justify-content: space-between;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  padding: 10px 0;
   border-bottom: 1px solid #bdbdbd;
   justify-content: space-between;
+  align-items: center;
 `;
 
-const Text = styled.p`
+const TitleRow = styled(Row)`
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  border-bottom: 2px solid #000;
+`;
+
+const InRow = styled.div`
   display: flex;
-  width: ${(props) => props.width ?? '150'}px;
-  height: 24px;
+  justify-content: space-between;
+`;
+const InColumn = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+`;
+
+const Text = styled.div`
+  display: flex;
+  width: ${(props) => props.width ?? '100'}px;
   letter-spacing: 0.5px;
   align-items: center;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
   justify-content: center;
+`;
+
+const TextLeft = styled(Text)`
+  justify-content: flex-start;
 `;
 
 const Button = styled.button`
@@ -168,7 +280,8 @@ const Button = styled.button`
   border-radius: 4px;
   background: #3563e9;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
+  white-space: nowrap;
 `;
 
 const ModalWrapper = styled.div`
@@ -177,9 +290,8 @@ const ModalWrapper = styled.div`
   z-index: 1000;
   top:0;
   left:0;
-  width: 100%;
+  width: auto;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
   font-size: 24px;
   font-weight: 400;
   letter-spacing: -2px;
@@ -187,7 +299,6 @@ const ModalWrapper = styled.div`
   `;
 
 const ModalDiv = styled.div`
-  // display: ${(props) => (props.modal ? 'flex' : 'none')}};
   position: absolute;
   top: 50%;
   left: 50%;
@@ -198,7 +309,6 @@ const ModalDiv = styled.div`
   padding: 30px 10px;
   border: solid 10px #3563e9;
   border-radius: 3px;
-  background-color: #fff;
   font-size: 24px;
   text-align: center;
   white-space: pre-wrap;
@@ -215,5 +325,44 @@ const ModalButton = styled.button`
   text-align: center;
   font-size: 25px;
 `;
+
+const Input = styled.input`
+  display: flex;
+  width: 180px;
+  height: 30px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #919191;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const SearchRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  line-height: 20px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-wrap: wrap;
+`;
+
+const RadioBtn = styled.input`
+  display: flex;
+  margin: 3px 5px;
+`;
+const Label = styled.label`
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  white-space: nowrap;
+`;
+
+const RadioBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+const Form = styled.form``;
 
 export default AdminUserDelete;

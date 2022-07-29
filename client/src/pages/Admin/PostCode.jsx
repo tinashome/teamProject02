@@ -37,17 +37,14 @@ const Postcode = ({ setPostCode, setFindAddressRequired }) => {
 
 const AdressButton = styled.button`
   display: flex;
-  width: 300px;
-  height: 45px;
-  padding-bottom: 2px;
+  width: 120px;
+  height: 30px;
+  padding: 3px;
   margin-left: 10px;
   border-radius: 4px;
   background: #3563e9;
   color: white;
-  font-size: 24px;
-  font-weight: 600;
-  align-items: center;
-  align-self: center;
+  font-size: 14px;
   justify-content: center;
 `;
 

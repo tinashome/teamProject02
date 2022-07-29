@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { adminContentState } from 'stores/adminUserStore';
 import * as Api from 'api/api';
 // eslint-disable-next-line import/no-cycle
@@ -12,7 +12,7 @@ import AdminGroundEdit from './AdminGroundEdit';
 
 const AdminGroundInfo = ({ groundId }) => {
   // eslint-disable-next-line no-unused-vars
-  const [content, setContent] = useRecoilState(adminContentState);
+  const setContent = useSetRecoilState(adminContentState);
   const [ground, setGround] = useState([]);
   const [postCode, setPostCode] = useState([]);
   const [actInfo, setActInfo] = useState([]);
@@ -100,7 +100,7 @@ const AdminGroundInfo = ({ groundId }) => {
           {modalImage.image && (
             <ModalImage modalImage={modalImage.image} src={modalImage.url} />
           )}
-          <ModalDiv modal={modal}>
+          <ModalInputContainer modal={modal}>
             {modal.success &&
               `${modal.groundName}\n\n삭제에 ${
                 modal.success ? '성공' : '실패'
@@ -115,133 +115,187 @@ const AdminGroundInfo = ({ groundId }) => {
             >
               목록으로 돌아가기
             </ModalButton>
-          </ModalDiv>
+          </ModalInputContainer>
         </ModalWrapper>
-        <TitleRow style={{ borderTop: 'none' }}>필수 정보</TitleRow>
-        <Row>
-          <Text>경기장 이름</Text>
 
-          <Div>
-            <StyledP> {ground.groundName} </StyledP>
-          </Div>
-        </Row>
-        <Row>
-          <Text>결제 포인트</Text>
+        <PageWrapper>
+          <Wrapper>
+            <TitleRow>필수 정보</TitleRow>
+            <Row>
+              <TextContainer>
+                <Text>경기장 이름</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text> {ground.groundName} </Text>
+              </InputContainer>
+            </Row>
 
-          <Div>
-            <StyledP>
-              {ground.paymentPoint && ground.paymentPoint.toLocaleString()}
-            </StyledP>
-          </Div>
-        </Row>
-        <Row>
-          <Text>경기장 주소</Text>
+            <Row>
+              <TextContainer>
+                <Text>결제 포인트</Text>
+              </TextContainer>
 
-          <Div>
-            <StyledP>
-              {postCode[0] || ''}
-              {postCode[1] || ''}
-            </StyledP>
-          </Div>
-        </Row>
-        <Row>
-          <Text />
+              <InputContainer>
+                <Text>
+                  {ground.paymentPoint && ground.paymentPoint.toLocaleString()}
+                </Text>
+              </InputContainer>
+            </Row>
 
-          <Div>
-            <StyledP> {ground.groundAddress&&ground.groundAddress.address2} </StyledP>
-          </Div>
-        </Row>
+            <Row>
+              <TextContainer>
+                <Text>경기장 주소</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>
+                  ({postCode[0] || ''}){postCode[1] || ''}
+                </Text>
+              </InputContainer>
+            </Row>
 
-        <TitleRow>경기장 이미지</TitleRow>
+            <Row>
+              <TextContainer />
+              <InputContainer>
+                <Text>
+                  {ground.groundAddress && ground.groundAddress.address2}{' '}
+                </Text>
+              </InputContainer>
+            </Row>
+          </Wrapper>
 
-        <Row>
-          <ImgBoxContainers>
-            <ImgBox>
-              {ground.groundImg &&
-                ground.groundImg.map((e, i) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <Img
-                    key={i}
-                    src={e}
-                    alt={`img${i}`}
-                    onClick={handleClickImage}
-                  />
-                ))}
-            </ImgBox>
-          </ImgBoxContainers>
-        </Row>
+          <Wrapper>
+            <TitleRow>예약가능 시간</TitleRow>
+            <Row>
+              <TextContainer>
+                <Text>시작/종료시간</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text style={{ width: 'auto', whiteSpace: 'nowrap' }}>
+                  {ground.startTime} 부터
+                </Text>
+                <Text>{ground.endTime} 까지</Text>
+              </InputContainer>
+            </Row>
 
-        <TitleRow>경기장 정보</TitleRow>
-        <Row>
-          <Text>경기장 크기</Text>
-          <Div>
-            <StyledP>{ground.groundSize}</StyledP>
-          </Div>
-        </Row>
-        <Row>
-          <Text>기타정보</Text>
-          <Div>
-            <StyledP>샤워실사용 {ground.showerPlace ? `O` : `X`}</StyledP>
-            <StyledP>무료주차 {ground.parking ? `O` : `X`}</StyledP>
-            <StyledP>운동복대여 {ground.sportswearRental ? `O` : `X`}</StyledP>
-            <StyledP>풋살화대여 {ground.shoesRental ? `O` : `X`}</StyledP>
-          </Div>
-        </Row>
+            <TitleRow>경기장 정보</TitleRow>
+            <Row>
+              <TextContainer>
+                <Text>경기장 크기</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>{ground.groundSize}</Text>
+              </InputContainer>
+            </Row>
+            <Row>
+              <TextContainer>
+                <Text>기타정보</Text>
+              </TextContainer>
+              <ChechkboxContainer>
+                <Label>
+                  <Text>샤워실 {ground.showerPlace ? `O` : `X`}</Text>
+                </Label>
+                <Label>
+                  <Text>무료주차 {ground.parking ? `O` : `X`}</Text>
+                </Label>
+              </ChechkboxContainer>
+            </Row>
+            <Row>
+              <TextContainer>
+                <Text />
+              </TextContainer>
+              <ChechkboxContainer>
+                <Label>
+                  <Text>운동복대여 {ground.sportswearRental ? `O` : `X`}</Text>
+                </Label>
+                <Label>
+                  <Text>풋살화대여 {ground.shoesRental ? `O` : `X`}</Text>
+                </Label>
+              </ChechkboxContainer>
+            </Row>
+          </Wrapper>
+        </PageWrapper>
 
-        <TitleRow>경기장 특이사항</TitleRow>
+        <PageWrapper>
+          <Wrapper>
+            <TitleRow>경기장 특이사항</TitleRow>
 
-        <Row>
-          <Text>풋살장 가는 길</Text>
-          <Div>
-            <StyledP>{ground.wayTo}</StyledP>
-          </Div>
-        </Row>
+            <Row>
+              <TextContainer>
+                <Text>풋살장 가는 길</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>{ground.wayTo}</Text>
+              </InputContainer>
+            </Row>
 
-        <Row>
-          <Text>주차장</Text>
-          <Div>
-            <StyledP>{ground.parkingInfo}</StyledP>
-          </Div>
-        </Row>
+            <Row>
+              <TextContainer>
+                <Text>주차장</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>{ground.parkingInfo}</Text>
+              </InputContainer>
+            </Row>
 
-        <Row>
-          <Text>흡연</Text>
-          <Div>
-            <StyledP>{ground.smoking}</StyledP>
-          </Div>
-        </Row>
+            <Row>
+              <TextContainer>
+                <Text>흡연</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>{ground.smoking}</Text>
+              </InputContainer>
+            </Row>
 
-        <Row>
-          <Text>풋살화대여</Text>
-          <Div>
-            <StyledP>{ground.shoesRentallInfo}</StyledP>
-          </Div>
-        </Row>
+            <Row>
+              <TextContainer>
+                <Text>풋살화대여</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>{ground.shoesRentallInfo}</Text>
+              </InputContainer>
+            </Row>
 
-        <Row>
-          <Text>화장실</Text>
-          <Div>
-            <StyledP>{ground.toilet}</StyledP>
-          </Div>
-        </Row>
+            <Row>
+              <TextContainer>
+                <Text>화장실</Text>
+              </TextContainer>
+              <InputContainer>
+                <Text>{ground.toilet}</Text>
+              </InputContainer>
+            </Row>
 
-        <Row>
-          <Text>기타</Text>
+            <Row>
+              <TextContainer>
+                <Text>기타</Text>
+              </TextContainer>
 
-          <Div style={{ flexDirection: 'column' }}>
-            {actInfo && actInfo.map((e, i) => <StyledP key={i}>{e}</StyledP>)}
-          </Div>
-        </Row>
+              <InputContainer style={{ flexDirection: 'column' }}>
+                {actInfo && actInfo.map((e, i) => <Text key={i}>{e}</Text>)}
+              </InputContainer>
+            </Row>
+          </Wrapper>
 
-        <Row>
-          <Text>시작/종료시간</Text>
-          <Div>
-            <StyledP style={{ width: 'auto', whiteSpace: 'nowrap' }}>
-              {ground.startTime} 부터
-            </StyledP>
-            <StyledP>{ground.endTime} 까지</StyledP>
-          </Div>
-        </Row>
+          <Wrapper>
+            <TitleRow>경기장 이미지</TitleRow>
+
+            <Row>
+              <ImgBoxContainers>
+                <ImgBox>
+                  {ground.groundImg &&
+                    ground.groundImg.map((e, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <Img
+                        key={i}
+                        src={e}
+                        alt={`img${i}`}
+                        onClick={handleClickImage}
+                      />
+                    ))}
+                </ImgBox>
+              </ImgBoxContainers>
+            </Row>
+          </Wrapper>
+        </PageWrapper>
 
         <Row style={{ justifyContent: 'center' }}>
           <ButtonWrap>
@@ -265,49 +319,43 @@ const AdminGroundInfo = ({ groundId }) => {
     )
   );
 };
+const PageWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 620px;
-  margin-bottom: 50px;
-  font-size: 18px;
+  min-width: 300px;
+  padding: 20px 40px;
+  font-size: 14px;
   letter-spacing: -1px;
-  gap: 5px;
+  gap: 10px;
 `;
 
 const TitleRow = styled.div`
+  display: flex;
+  height: 30px;
   font-weight: 600;
-  padding: 10px;
-  margin-top: 20px;
-  border-bottom: 1px solid #919191;
+  font-size: 16px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #adb5bd;
+  align-items: flex-end;
 `;
 
 const Row = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: right;
-  align-items: flex-start;
 `;
 
-const Text = styled.div`
+const Text = styled.p`
   display: flex;
-  align-self: center;
-  padding: 0 20px;
+  // align-self: center;
+  white-space: wrap;
 `;
 
-const Div = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 450px;
-`;
-
-const StyledP = styled.p`
-  display: flex;
-  width: ${(props) => props.width || '100%'};
-  padding: 5px;
-  font-size: 18px;
-`;
 const ButtonWrap = styled.div`
   display: flex;
   width:100%
@@ -322,13 +370,13 @@ const ButtonWrap = styled.div`
 
 const Button = styled.button`
   display: flex;
-  padding: 10px;
-  margin: 0 10px;
+  padding: 5px 20px;
+  margin: 30px 20px;
   border-radius: 5px;
   background: #3563e9;
   color: white;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 600;
   align-items: center;
   align-self: center;
   justify-content: center;
@@ -336,20 +384,29 @@ const Button = styled.button`
 
 const ImgBoxContainers = styled.div`
   display: flex;
-  width: 100%;
-  overflow-x: scroll;
+  position: relative;
+  width: 300px;
+  height: 115px;
+  overflow-y: hidden;
+  background-image: url(${(props) => props.imgbox});
+  background-size: 100px;
+  background-repeat: no-repeat;
+  gap: 5px;
 `;
 
 const ImgBox = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: flex-end;
+  z-index: 100;
 `;
 
 const Img = styled.img`
   display: flex;
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
   object-fit: cover;
+  user-select: none;
 `;
 
 const ModalWrapper = styled.div`
@@ -368,7 +425,7 @@ const ModalWrapper = styled.div`
   align-items: center;
 `;
 
-const ModalDiv = styled.div`
+const ModalInputContainer = styled.div`
   display: ${(props) => (props.modal.success ? 'flex' : 'none')}};
   flex-direction: column;
   position:absolute;
@@ -406,4 +463,28 @@ const ModalButton = styled.button`
   font-size: 25px;
 `;
 
+const TextContainer = styled.div`
+  display: flex;
+  width: 100px;
+`;
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 200px;
+  justify-content: flex-start;
+`;
+
+const ChechkboxContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 200px;
+  align-items: center;
+`;
+
+const Label = styled.label`
+  display: flex;
+  width: 100px;
+  padding: 5px;
+  user-select: none;
+`;
 export default AdminGroundInfo;

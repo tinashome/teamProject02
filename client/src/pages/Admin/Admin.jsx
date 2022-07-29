@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { adminContentState } from 'stores/adminUserStore';
 import { useRecoilState } from 'recoil';
-
+import { adminContentState } from 'stores/adminUserStore';
 import AdminSidemenu from './AdminSidemenu';
 import AdminDashboard from './AdminDashboard';
+import MenuToggle from './MenuToggle';
 
 const Admin = () => {
   const [content, setContent] = useRecoilState(adminContentState);
@@ -14,15 +14,23 @@ const Admin = () => {
   }, []);
 
   return (
-    <AdminPageWrapper>
-      <AdminSidemenu />
-      <AdminPageContentContainer>
-        <AdminPageContentTitleBox>{content[0]}</AdminPageContentTitleBox>
-        <AdminPageContentBox>{content[1]}</AdminPageContentBox>
-      </AdminPageContentContainer>
-    </AdminPageWrapper>
+    <Wrapper>
+      <MenuToggle />
+      <AdminPageWrapper>
+        <AdminSidemenu />
+        <AdminPageContentContainer>
+          <AdminPageContentTitleBox>{content[0]}</AdminPageContentTitleBox>
+          <AdminPageContentBox>{content[1]}</AdminPageContentBox>
+        </AdminPageContentContainer>
+      </AdminPageWrapper>
+    </Wrapper>
   );
 };
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+`;
 
 const AdminPageWrapper = styled.div`
   display: flex;
@@ -32,20 +40,19 @@ const AdminPageWrapper = styled.div`
 `;
 
 const AdminPageContentContainer = styled.div`
-  width: 770px;
-  margin: 50px;
+  // max-width: 100vh;
+  // min-width: 700px;
+  margin: 50px 0;
+  // background-color: #caffbf; //초
 `;
 
 const AdminPageContentTitleBox = styled.div`
   text-align: center;
-  padding: 30px 50px;
-  font-size: 40px;
-  font-weight: 700;
+  padding: 30px;
+  font-size: 24px;
+  font-weight: 600;
 `;
 
-const AdminPageContentBox = styled.div`
-  // height: auto;
-  height: 100%;
-`;
+const AdminPageContentBox = styled.div``;
 
 export default Admin;

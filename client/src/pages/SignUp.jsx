@@ -16,7 +16,9 @@ const SignUp = () => {
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: 'onTouched',
+  });
 
   const navigate = useNavigate();
   const [isEmailValid, setIsEmailValid] = useState(false);

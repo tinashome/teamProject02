@@ -113,7 +113,7 @@
 
 <br>
 
-### 1. 메인페이지 페이지에서 구장정보 간략하게 보기, 이미지 보기를 할 수 있다.
+### 1. 다양한 풋살 경기장을 카드 형식과 리스트 형식으로 한눈에 볼 수 있습니다.
 
 </br></br>
 
@@ -139,19 +139,21 @@
 
 <br>
 
-### 1. 포인터를 해당 금액 만큼 충전 할 수 있다.
+### 1. 포인터 충전 페이지에서 충전을 할 수 있습니다.
 
 </br></br>
 
-## 구장 예약하기
+## 구장 상세 페이지(경기장 정보 조회 & 예약)
 
 <p align="center">
-  <img src="/image/groundAdd.gif" alt="text" width="number" />
+  <img src="/image/rentals.gif" alt="text" width="number" />
 </p>
 
 <br>
 
-### 1. 구장을 날짜, 시간을 선택하여 예약 할 수 있다.
+### 1. 예약을 원하는 경기장을 선택하고, 해당 경기자으이 정보를 확인
+
+### 2. 날짜 별로 예약 상태와 시간을 선택해서 경기장 예약을 합니다.
 
 </br></br>
 
@@ -171,17 +173,29 @@
 
 <br>
 
-## 관리자 페이지
+## 관리자 페이지1
 
 <p align="center">
-  <img src="/image/admin.gif" alt="text" width="number" />
+  <img src="/image/admin2.gif" alt="text" width="number" />
 </p>
 
 <br>
 
-### 1. 관리자 페이지에서 사용자 관리, 경기장 관리, 예약 관리, 포인트 관리를 할 수 있다.
+### 1. 관리자 페이지에서 사용자 관리, 경기장 관리
 
 ### 2. 구장 생성에서 이미지 업로드시 s3 서버를 통해 url의 값을 받고, 구장 생성 해당 값들을 DB에 저장하게 된다.
+
+</br></br>
+
+## 관리자 페이지2
+
+<p align="center">
+  <img src="/image/admin4.gif" alt="text" width="number" />
+</p>
+
+<br>
+
+### 1. 관리자 페이지에서 예약 관리, 포인트 관리
 
 </br></br>
 
