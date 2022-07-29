@@ -171,17 +171,30 @@
 
 <br>
 
-## 관리자 페이지
+## 관리자 페이지1
 
 <p align="center">
-  <img src="/image/admin.gif" alt="text" width="number" />
+  <img src="/image/admin2.gif" alt="text" width="number" />
 </p>
 
 <br>
 
-### 1. 관리자 페이지에서 사용자 관리, 경기장 관리, 예약 관리, 포인트 관리를 할 수 있다.
+### 1. 관리자 페이지에서 사용자 관리, 경기장 관리
 
 ### 2. 구장 생성에서 이미지 업로드시 s3 서버를 통해 url의 값을 받고, 구장 생성 해당 값들을 DB에 저장하게 된다.
+
+</br></br>
+
+## 관리자 페이지2
+
+<p align="center">
+  <img src="/image/admin4.gif" alt="text" width="number" />
+</p>
+
+<br>
+
+### 1. 관리자 페이지에서 예약 관리, 포인트 관리
+
 
 </br></br>
 
