@@ -146,7 +146,7 @@
 ## 구장 예약하기
 
 <p align="center">
-  <img src="/image/groundAdd.gif" alt="text" width="number" />
+  <img src="/image/rental.gif" alt="text" width="number" />
 </p>
 
 <br>
@@ -194,7 +194,6 @@
 <br>
 
 ### 1. 관리자 페이지에서 예약 관리, 포인트 관리
-
 
 </br></br>
 
