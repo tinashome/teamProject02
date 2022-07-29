@@ -151,9 +151,9 @@ const ModalDiv = styled.div`
   top: 50%;
   left: 50%;
   width: 400px;
-  height: 600px;s
-  margin-left: -250px;
-  margin-top: -400px;
+  height: 600px;
+  margin-left: -200px;
+  margin-top: -300px;
   padding: 5px 20px;
   border: solid 10px #3563e9;
   border-radius: 5px;

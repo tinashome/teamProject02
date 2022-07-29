@@ -266,7 +266,6 @@ const GroundName = styled.div`
   justify-content: center;
 
   & a {
-    width: 12.5rem;
     text-align: center;
     width: 12.5rem;
     white-space: nowrap;

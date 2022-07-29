@@ -198,7 +198,7 @@ const AdminRentalList = () => {
                       )}
                     </TextList>
                     <TextListOpen id={e._id} open={openTimes}>
-                      {e.reservationTime.slice(1).join('\n')}
+                      {e.reservationTime.join('\n')}
                     </TextListOpen>
                   </TextList>
 

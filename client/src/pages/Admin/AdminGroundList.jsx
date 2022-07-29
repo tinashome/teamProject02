@@ -157,6 +157,7 @@ const AdminGroundList = () => {
                 <InRow>
                   <TextLeft
                     width='150'
+                    id={e._id}
                     onClick={handleClickInfo}
                     style={{ cursor: 'pointer' }}
                   >
