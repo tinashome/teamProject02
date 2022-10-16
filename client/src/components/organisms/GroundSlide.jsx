@@ -6,6 +6,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import ModalWrapper from 'components/atoms/AdminModalWrapper';
 import ModalDiv from 'components/atoms/AdminModalDiv';
 import { AiOutlineClose } from '@react-icons/all-files/ai/AiOutlineClose';
+import { defaultSlideImg } from 'constants/imgList';
 
 const GroundSlide = ({
   info,
@@ -31,9 +32,7 @@ const GroundSlide = ({
 
   useEffect(() => {
     if (info?.length === 0) {
-      setInfoState([
-        'https://futsal-bucket-web.s3.ap-northeast-2.amazonaws.com/1658996302599_%242b%2410%24rIhiVSGRVkoJaSGvrCZvyObIknd7JcjKtSD/YtUXd3BjxZ/vR6l9u.png',
-      ]);
+      setInfoState([ defaultSlideImg ]);
     } else {
       setInfoState(info);
     }
