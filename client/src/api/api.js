@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 // .env에서 백엔드 포트번호를 설정해야 함.
-// const backendPort = process.env.REACT_APP_BACKEND_PORT || 5000;
+const backendPort = process.env.PORT || 5000;
 // const baseUrl = `http://${window.location.hostname}:${backendPort}/api/`;
 // const baseUrl = `http://kdt-sw2-busan-team04.elicecoding.com:5000/api/`;
 // const baseUrl = `http://localhost:5000/api/`;
-const baseUrl = `http://3.39.193.152:5000/api/`;
+// const baseUrl = `http://3.39.193.152:5000/api/`;
+const baseUrl = `http://${process.env.REACT_APP_BACKEND_URL}:${backendPort}/api/`;
 
 async function get(endpoint) {
   return axios.get(baseUrl + endpoint, {
