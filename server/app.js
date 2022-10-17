@@ -88,7 +88,7 @@ app.use(errorHandler);
 
 app.get('/', async function (req, res, next) {
   const http = `<h1>안녕하세요 여기를 누르세요</h1>
-  <h2><a href="http://3.39.193.152:5000/api-docs/">풋닷컴 api주소</a></h2>
+  <h2><a href="http://ec2-15-164-164-202.ap-northeast-2.compute.amazonaws.com:5000/api-docs/">풋닷컴 api주소</a></h2>
   `;
   res.send(http);
 });
